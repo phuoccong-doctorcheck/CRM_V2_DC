@@ -1,0 +1,36 @@
+.p-profile {
+    @include flex-box(flex-start, center);
+
+    &_left,
+    &_right {
+        height: calc(100vh - 120px);
+    }
+    
+    &_left {
+        width: rem(240);
+        min-width: rem(240);
+
+        .a-typography {
+            padding: 0 12px;
+        }
+
+        .a-input p {
+            font-size: 18px;
+            margin-top: 16px;
+            word-break: break-word;
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: $main-color;
+        }
+        
+    }
+
+    &_right {
+        width: 100%;
+
+        .o-tabs_panel {
+            width: 100%;
+            height: 100%;
+        }
+    }
+}

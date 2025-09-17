@@ -1,0 +1,344 @@
+/* stylelint-disable scss/selector-no-redundant-nesting-selector */
+/* stylelint-disable max-nesting-depth */
+.t-public_header {
+    padding: 4px 6px 6px 8px;
+    box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.1);
+    background-color: $white;
+    border-radius: rem(8);
+    outline: 1px solid #ced4da;
+    margin-bottom: 6px;
+    min-height: 32px !important;
+
+    &_top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &_left {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 8px;
+
+        &_filter_icon {
+            margin-left: 6px;
+        }
+
+        
+
+        .a-typography {
+            min-width: max-content;
+            margin-right: 12px;
+        }
+
+        .a-input-search_categories {
+            width: 100%;
+            min-width: 500px;
+            height: 36px;
+            position: relative;
+
+            .a-dropdown {
+                .ant-select ,
+                .ant-select-selector {
+                    height: 30px !important;
+                }
+
+            }
+        }
+
+        .a-input {
+            margin: 0 0 0 20px;
+            min-width: 330px;
+            
+            &_input {
+                height: 32px;
+                border-color: $button-blue !important;
+            }
+
+            &_error {
+                display: none;
+            }
+        }
+        
+
+        .a-button {
+            padding: 8px !important;
+
+            .a-typography {
+                margin-right: 0;
+            }
+        }
+    }
+
+    &_right {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+        height: 100%;
+
+        &_total {
+            position: relative;
+
+            &_data {
+                position: absolute;
+                z-index: 100;
+                height: 40px;
+                overflow: hidden;
+                width: fit-content;
+                min-width: fit-content;
+                top: 39px;
+                background-color: $white;
+                padding: 4px 8px;
+                border-radius: 4px;
+                box-shadow: 1px 4px 6px 1px rgba(0, 0, 0, 0.1);
+                right: 0;
+                transition: width 0.5s ease;
+                display: flex;
+                align-items: center;
+            }
+        }
+
+        &_filter {
+            background-color: $blue-main;
+            height: 30px;
+            width: fit-content !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+            margin-right: 4px;
+            padding: 0 6px;
+
+            &-active {
+                .a-icon {
+                    animation: loadin 0.5s linear infinite;
+                }
+            }
+        }
+
+        &_library {
+            background-color: $green;
+            padding: 2px 6px;
+            height: 28px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.2);
+
+        }
+
+        .a-group_radio {
+            width: fit-content;
+        }
+
+        .a-button {
+            padding: 8px !important;
+            height: 32px;
+            border-radius: 8px;
+            
+            .a-typography {
+                font-size: 13px !important;
+            }
+            
+        }
+        
+        &_services {
+            background-color: $blue-main;
+            padding: 4px 6px;
+            border-radius: 8px;
+            height: 30px;
+            @include flex-box(center, center); 
+            box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+            cursor: pointer;
+        }
+        
+        &_dial {
+            box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+            background-color: $blue-main;
+            height: 32px;
+            padding: 2px 4px;
+            width: 32px !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    }
+
+    &_bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &-loading {
+        position: relative;
+        overflow: hidden;
+
+        &::after {
+            content: '';
+            animation-duration: 8s;
+            animation-fill-mode: forwards;
+            animation-iteration-count: infinite;
+            animation-name: slideTextRevert;
+            animation-timing-function: ease;
+            background-color: $white;
+            background: linear-gradient(to right, #00ccffd8 2%, #fff 100%);
+            background-size: 1920px 10px;
+            position: absolute;
+            height: 5px;
+            width: calc(100% - 5px);
+            bottom: -2px;
+            overflow: hidden;
+            transform: translateX(5px);
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            transition: animation 8s ease;
+        }
+    }
+
+    &_document {
+        height: calc(100vh - 175px) !important;
+
+        .m-public_table {
+            .ant-table-wrapper {
+                .ant-table {
+                    .ant-table-header {
+                        .ant-table-thead {
+                            tr th > * {
+                                transform: translateY(-2px) !important;
+                            }
+                        }
+                    }
+
+                    .ant-table-body {
+                        overflow-y: scroll;
+                    }
+                }
+            }
+        }
+    }
+
+    &_setting {
+        padding-top: 10px;
+
+        .o-collapse {
+            margin: 0 2px;
+            width: calc(100% - 6px);
+            outline: 1px solid$gray-border;
+            border-radius: 4px;
+            overflow: hidden;
+
+            .ant-collapse-content-box {
+                box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.12);
+                padding: 6px 4px;
+            }
+
+            .ant-collapse-item-active {
+                .ant-collapse-header {
+                    border-bottom: 1px solid$gray-border;
+                }
+            }
+            
+            .ant-collapse-header {
+                padding: 4px !important;
+                border-radius: 0 !important;
+                height: 32px;
+    
+                .ant-collapse-expand-icon {
+                    transform: scale(0.6);
+                    display: none !important;
+
+                    img {
+                        background-color: #27acfdd6;
+                    }
+                }
+    
+                .ant-collapse-header-text {
+                    .a-typography {
+                        font-size: 15px;
+                        font-weight: 600;
+                        font-style: normal;
+                    }
+                }
+            }
+        }   
+
+        .a-group_checkbox {
+            .ant-checkbox-group {
+                display: block !important;
+
+                .ant-checkbox-wrapper {
+                    display: flex !important;
+                    margin: 4px 0;
+                    gap: 8px;
+                }
+            }
+        }
+    }
+
+    &_hospital {
+        height: calc(100vh - 120px);
+        overflow: hidden;
+        
+        &_content {
+            height: calc(100vh - 170px);
+            overflow-y: scroll;
+
+            li {
+                margin: 4px 0;
+                padding: 2px 6px;
+
+                .a-typography {
+                    font-size: 15px;
+                    font-weight: 500;
+                    color: $blue-main;
+                }
+
+                span {
+                    font-size: 14px;
+                    font-style: italic;
+                }
+
+                &:hover {
+                    background-color: $bg-gray-blur;
+                    border-radius: 8px;
+                }
+            }
+        }
+    }
+
+    .m-cdrawer_content {
+        height: calc(100vh - 120px) !important;
+    }
+}
+
+@keyframes slideTextRevert {
+    0% {
+        transform: translateX(100%);
+        opacity: 0.5;
+    }
+    
+    100% {
+        transform: translateX(-100%);
+        opacity: 1;
+    }
+}
+
+
+@keyframes showBox {
+    0% {
+        width: 0;
+    }
+    
+    100% {
+        width: 100%;
+    }
+}

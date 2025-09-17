@@ -1,0 +1,182 @@
+.a-textarea {
+    $root: &;
+    position: relative;
+
+    &_label {
+        @include font-base(12, 16);
+        color: $white;
+        margin-bottom: rem(2);
+        display: flex;
+        align-items: center;
+
+        &-required {
+            color: $cg-red;
+            margin-left: rem(1);
+            transform: translateY(-1px);
+            font-size: 16px;
+        }
+
+        .a-typography {
+            min-width: fit-content;
+            display: block;
+            color: $jet;
+            text-transform: capitalize;
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        &-error {
+            color: $sinopia;
+        }
+    }
+
+    &_error {
+        @include font-base(12, 18);
+        color: $sinopia;
+        margin-top: rem(4);
+    }
+
+
+   
+
+    &_input {
+        border-radius: rem(2);
+        font-family: inherit;
+        margin: 0;
+        outline: none;
+        width: 100%;
+        vertical-align: bottom;
+        resize: none;
+        border-color: #ced4da;
+        padding: 5px 8px;
+        color: #495057;
+        background-color: #fff !important;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        box-shadow: inset 0 0 0 transparent;
+        transition: border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out;
+        font-size: rem(14);
+        font-weight: 400;
+        line-height: 1.5;
+        overflow-y: scroll;
+
+        &-error {
+            border-color: $sinopia;
+            color: $sinopia;
+        }
+
+        &:focus {
+            border-color: $button-blue;
+        }
+
+        &::placeholder {
+            color: #838689 !important;
+        }
+    }
+
+    &_icon {
+        background: transparent;
+        cursor: pointer;
+        @include flex-box();
+        border: 0;
+        height: rem(24);
+        width: rem(24);
+        padding: 0;
+        position: absolute;
+        right: rem(8);
+        top: 20%;
+        transform: translate(-12%, -50%);
+
+        .a-icon {
+            margin: auto;
+        }
+    }
+
+    &-error {
+        .a-textarea_label {
+            .a-typography {
+                color: $cg-red;
+            }
+        }
+
+        .a-textarea_input {
+            border-color: $cg-red !important;
+        }
+
+        .a-textarea_error {
+            font-size: 13px;
+            color: $cg-red;
+        }
+    }
+
+    &-bgtransparent {
+        #{$root}_input {
+            background: transparent;
+        }
+    }
+
+    &-contact {
+        #{$root}_input {
+            background: $white;
+            border: 1px solid $cool-black;
+            border-radius: rem(4);
+            @include font-base(12, 20);
+            border-color: #00b3ff31;
+            border-radius: rem(4);
+            padding: rem(11) rem(16);
+            font-size: rem(14);
+            background-color: $lavender !important;
+            transition: background-color 0.5s ease-out;
+
+            &::placeholder {
+                color: $taupe-gray;
+            }
+
+            &:focus {
+                border-color: $button-blue !important;
+            }
+        }
+
+        #{$root}_label {
+            .a-typography {
+                text-transform: none !important;
+            }
+        }
+    }
+
+    &-chat {
+        max-height: 40px;
+
+        .a-textarea_input {
+            padding: 4px 8px !important;
+            font-size: 18px;
+            border-color: $blue-main;
+
+            &::placeholder {
+                color: $taupe-gray;
+                font-size: 18px;
+            }
+
+            &:focus {
+                border-color: $may-green;
+            }
+        }
+    }
+
+    &_input {
+        @include style-font-weight();
+        @include style-color();
+    }
+
+    &-resize {
+        .a-textarea_input {
+            resize: horizontal;
+            min-height: 200px;
+            transition: all 0.5s ease;
+        }
+    }
+}
+
+.a-textarea-resize .a-textarea_input {
+    min-height: 45px !important;
+}

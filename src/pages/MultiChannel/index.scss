@@ -1,0 +1,125 @@
+.p-channel {
+    $root: &;
+    width: calc(100vw - 55px);
+    height: calc(100vh - 62px);
+    position: relative;
+    border-radius: rem(2);
+    gap: rem(2);
+    display: grid;
+    grid-template-columns: 1fr rem(400);
+    padding-right: 2px;
+    overflow: hidden;
+    
+    @include break-max(1280px) {
+        width: calc(100vw) !important;
+        grid-template-columns: 1fr rem(300);
+    }
+    
+    &_wrap {
+        display: block;
+        width: calc(100vw - 450px);
+        overflow-x: scroll;
+        padding: 0 2px;
+
+        &_top {
+            background-color: rgb(255, 255, 255);
+            border-radius: 4px;
+            margin: 2px 0 4px 2px;
+            padding: 0 6px;
+            align-items: center;
+            display: flex;
+            justify-content: flex-start;
+            height: 38px;
+            max-width: calc(100vw - 390px);
+            outline: 1px solid $gray-border;
+            overflow-x: scroll;
+            
+            &_page {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                width: max-content;
+                gap: 4px;
+                margin-right: 6px;
+                cursor: pointer;
+                transition: width 0.5s ease-in-out;
+                padding: 2px;
+                
+                .a-typography {
+                    font-weight: 400;
+                    font-size: 13px;
+                    
+                    @include text-overflow(1); 
+                }
+                
+                &-active {
+                    background-color: $cornflowerblue;
+                    border-radius: 8px;
+                    color: $white;
+                }
+
+                &-loading {
+                    img {
+                        height: 20px !important;
+                        width: 20px !important;
+
+                        object-fit: cover;
+                        padding: 0;
+                    }
+                }
+            }
+
+            &_tooltip {
+                color: $jet;
+            }
+
+            @include break-max(1280px) {
+                max-width: calc(100vw - 305px);
+            }
+        }
+
+        &_bottom {
+            display: grid;
+            grid-template-columns: rem(310) calc(100vw - 625px);
+            gap: 6px;
+            @include break-max(1280px) {
+                width: calc(100vw - 305px);
+            }
+        }
+
+        @include break-max(1280px) {
+            width: calc(100vw - 305px);
+        }
+    }
+
+    &_message {
+        width: 100%;
+        background-color: transparent !important;
+        padding: 2px;
+    }
+    
+    &_info {
+        max-width: rem(410);
+        width: rem(410);
+        transition: width 0.2s ease;
+        margin-left: 2px;
+
+        &-hide {
+            width: 0;
+            visibility: hidden;
+            opacity: 0;
+        }
+
+        @include break-max(1280px) {
+            max-width: rem(300);
+            width: rem(300);
+        }
+
+    }
+
+    &_contact {
+        width: rem(300);
+    }
+}
+
+

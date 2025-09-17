@@ -1,0 +1,170 @@
+.m-editor_chat {
+    width: 100%;
+    background-color: $white;
+    border: 1px solid $gray-border;
+    transition: all 0.5s linear;
+    border-radius: 2px;
+    border-radius: 4px;
+
+    &_item {
+        cursor: pointer;
+
+        &_input {
+            width: 100%;
+            position: relative;
+            border-radius: 8px;
+            height: fit-content;
+            transition: all 0.5s ease;
+            margin-bottom: unset;
+
+            .a-input_error {
+                display: none;
+            }
+
+            .a-input_input {
+                padding: 8px 40px 8px 20px;
+            }
+
+            img {
+                height: 50px;
+                width: 50px;
+                object-fit: cover;
+                border-radius: 8px;
+            }
+
+            &_image_preview {
+                position: relative;
+                width: fit-content;
+
+                &_close {
+                    position: absolute;
+                    top: 0;
+                    right: -5px;
+                }
+            }
+
+            
+        }
+        
+        &:hover {
+            opacity: 0.7;
+        }
+    }
+    
+    &_input_emoji {
+        position: relative;
+        border-bottom: 1px solid$gray-border;
+        transition: all 0.2s linear;
+
+        .m-emoji {
+            position: absolute;
+            top: -452px;
+            right: 0;
+            z-index: 100;
+        }
+        
+        .a-textarea_input {
+            position: relative;
+            border: unset;
+            padding: 5px 35px 5px 12px;
+            @include scroll-bars(3,3); 
+            background-color: #333;
+            box-shadow: unset;
+            transition: height 0.2s linear;
+            z-index: 0;
+            transition: height 0.5s ease;
+        }
+
+    }
+
+    &_input_btn {
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-end;
+        height: 36px;
+
+        &_action {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 2px;
+            padding-right: 12px;
+            // width: calc(100vw - (28.125rem + 25rem));
+        }
+
+        &_quit_chat {
+            max-height: 450px;
+            min-width: 450px;
+            overflow-y: scroll;
+            padding: 8px;
+
+            &_item {
+                width: 550px;
+                margin-bottom: 4px;
+                cursor: pointer;
+                padding: 2px 6px;
+                border-bottom: 1px solid $gray-border;
+
+                &:hover {
+                    border-radius: 4px;
+                    background-color: $bg-gray-blur;
+                    color: #000;
+
+                    p {
+                        span {
+                            background-color: $button-blue;
+                            color: #333;
+                            @include text-overflow();
+                        }
+                    }
+                }
+
+                p {
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: flex-start;
+                    gap: 4px;
+
+                    span {
+                        background-color: $bg-gray-blur;
+                        padding: 0 4px;
+                        border-radius: 4px;
+                    }
+                }
+
+                &:last-child {
+                    border-bottom: unset;
+                }
+            }
+        }
+    }
+
+    &-file {
+        align-items: flex-end;
+
+
+        .m-editor_item {
+            margin-bottom: 5px;
+
+            &_input {
+                img {
+                    margin: 2px;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    &-fit {
+        transition: height 0.5s ease;
+
+        .m-editor_chat_input_emoji {
+            .a-textarea_input {
+                height: 198px;
+                transform-origin: bottom;
+                transition: height 0.2s linear;
+            }
+        }
+    }
+}

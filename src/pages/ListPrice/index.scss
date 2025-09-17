@@ -1,0 +1,206 @@
+/* stylelint-disable max-nesting-depth */
+.p-after_examination {
+    height: calc(100vh - 55px);
+
+    &_content {
+        width: 100%;
+        height: calc(100% - 140px);
+        background-color: $white;
+        @include  border-shadow();
+        margin-top: 4px;
+        padding: 0 !important;
+        overflow: hidden;
+
+        .m-public_table {
+            margin-top: 0;
+        }
+   
+        .ant-table {
+            height: calc(100% - 40px);
+
+            .ant-table-tbody>tr>td {
+                padding: 2px 8px !important;
+
+                .ant-select .ant-select-arrow .anticon {
+                    color: #fff;
+                }
+            }
+        }
+
+        .a-dropdown {
+            width: fit-content;
+
+            .ant-select ,
+            .ant-select-selector {
+                width: 155px !important;
+            }
+        }
+    }
+
+    .p-header-statistic {
+        justify-content: space-between;
+        overflow: hidden;
+    }
+
+    &_column_center {
+        padding: 0 !important;
+        height: 100%;
+        cursor: pointer;
+
+        p {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    .t-public_header_right {
+        .a-button-p-after_examination_header_question {
+            display: flex;
+            align-items: center;
+            background-color: $green;
+            color: $white;
+            padding: 4px 8px;
+            gap: 6px;
+            border-radius: 8px;
+            height: 32px;
+            width: fit-content;
+        }
+    }
+
+    &_document {
+        height: calc(100vh - 110px);
+    }
+
+    &_filter {
+        width: 100%;
+        display: flex;
+        align-items: flex-end;
+        gap: 2px;
+        margin-bottom: 2px;
+
+        .a-range_time {
+            min-width: 250px;
+            max-width: 250px;
+            margin-bottom: 2px;
+
+            .ant-picker {
+                height: 32px !important;
+                @include  border-shadow();
+            }
+        }
+
+        .a-input {
+            &_input {
+                min-width: 300px !important;
+                height: 32px !important;
+                border-color: $gray-border !important;
+                border-radius: 8px !important;
+                font-weight: 400;
+                font-size: 0.85rem;
+                background: #e8e8e8;
+                border: 1px solid #c5c5c5 !important;
+                box-shadow: 2px 2px 5px #c5c5c5,
+                    -2px -2px 5px #fff;
+                white-space: nowrap;
+                color: $blue-main;
+                    
+                &::placeholder {
+                    color: $blue-main;
+                }
+            }
+    
+            &_error {
+                display: none;
+            }
+        }
+
+        &_bottom {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 8px;
+
+            .m-multi_select,
+            .a-dropdown {
+                padding: 0;
+                height: 32px;
+                max-width: 190px;
+                min-width: 190px;
+                margin-bottom: 2px;
+                
+                .ant-select-selector {
+                    height: 32px !important;
+                    @include  border-shadow();
+                }
+
+                .ant-select-selection-placeholder {
+                    color: $blue-main !important;
+                    font-weight: 400;
+                }
+            }
+    
+            .m-multi_select {
+                max-width: 210px;
+                min-width: 210px;
+            }
+
+            .m-multi_select {
+                transform: translateY(2px);
+            }
+    
+            
+        }
+
+    }
+
+    &_form_export {
+        position: relative;
+        height: calc(100vh - 100px);
+
+        &_btn {
+            position: absolute;
+            bottom: 0;
+            display: flex;
+            width: 100%;
+            gap: 10px;
+        }
+
+        &_time {
+            margin-top: 20px;
+
+            .a-group_radio {
+                margin-bottom: 20px;
+            }
+        }
+    }
+
+    &_total {
+        display: flex;
+        align-items: center;
+
+        &_item {
+            display: flex;
+            align-items: center;
+            padding-left: 8px;
+
+            span {
+                display: flex;
+                width: max-content;
+                gap: 6px;
+                font-size: 15px;
+            }
+
+            &:last-child {
+                margin-right: 4px;
+            }
+        }
+
+        &_header {
+            @include  border-shadow();
+        }
+    }
+}

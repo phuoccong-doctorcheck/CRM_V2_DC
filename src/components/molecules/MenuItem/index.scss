@@ -1,0 +1,129 @@
+.m-menuitem {
+    width: 100%;
+    padding: rem(12) rem(5);
+    margin: 0 auto;
+    height: 60px;
+    align-items: center;
+    border-radius: 8px;
+    transform: translateY(2px);
+
+    &_item {
+        width: 100%;
+        position: relative;
+        align-items: center;
+        margin: 0 4px 0 0;
+        padding: 8px 6px 8px 2px;
+
+        a {
+            width: 100%;
+            cursor: pointer;
+            padding: 0 rem(8) 0 0;
+            display: flex;
+            align-items: center;
+            transition: all 0.5s ease-in-out;
+            gap: 8px;
+            min-width: max-content;
+            
+            .a-icon {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 20px;
+            }
+        
+            .a-typography {
+                width: 100%;
+                text-align: center;
+                margin-left: 8;
+                color: #000;
+                min-width: 100%;
+            }
+        
+            &-short {
+                padding: rem(4);
+                transition: all 0.5s ease-in-out;
+            }
+        }
+
+        &_title {
+            display: flex;
+            justify-content: flex-start;
+            cursor: pointer;
+            width: 100%;
+
+            .a-typography {
+                font-size: 15px;
+                width: max-content;
+                text-align: left !important;
+                color: #fff;    
+            }
+        }
+
+
+        &:hover {
+            color: #3e79f7 !important;
+            background-color: #ebf1fe;
+            border-radius: 4px;
+            border-right: 3px solid #3e79f7;
+        }
+
+        &_child {
+            width: 100%;
+            list-style-type: circle !important;
+            margin: 6px 0;
+            
+
+            a {
+                width: 100%;
+                color: $black;
+                transform: translateX(30px);
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 8px;
+
+                span {
+                    background-color: $black;
+                    width: 8px;
+                    height: 8px;
+                    border-radius: 50%;
+                }
+
+                &:hover p {
+                    color: #3e79f7 !important;
+                    text-decoration: underline;
+                }
+
+                &:hover span {
+                    background-color: #3e79f7 !important;
+                }
+            }
+        }
+    }
+
+    &-full {
+        width: rem(220);
+        margin: 0 10px;
+
+        .m-menuitem_item {
+            a {
+                .a-typography {
+                    margin-left: 10px;
+                }
+            }
+        }
+    }
+
+    &-hover {
+        background-color: rgba(244, 241, 241, 0.6117647059);
+        transition: background-color 0.5s ease;
+    }
+
+    &_item-active {
+        .m-menuitem_item_title {
+            .a-typography {
+                color: #3e79f7 !important;
+            }
+        }
+    }
+}

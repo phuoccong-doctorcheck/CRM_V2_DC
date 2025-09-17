@@ -1,0 +1,100 @@
+.m-form_add_contact {
+    &_flex {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 8px;
+
+        @include break-max(600px) {
+            display: block;
+        }
+
+        .a-dropdown {
+            transform: translateY(-4px);
+        }
+
+        .a-input {
+            width: 100%;
+
+            &_input {
+                width: 100%;
+
+            }
+        }
+    }
+
+
+    &_btn {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 32px;
+        justify-content: center;
+
+        .a-button {
+            width: 40%;
+            height: 28px;
+            border-radius: 4px;
+        }
+    }
+
+    &_booking {
+        margin-top: 12px;
+
+        .a-group_radio {
+            .ant-radio-group {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+
+                .ant-radio-wrapper {
+                    margin-left: 10px;
+                }
+            }
+        }
+    }
+
+    &_purpose {
+        margin-top: 12px;
+
+        &_label {
+            margin-bottom: 4px;
+
+            .a-typography {
+                font-weight: 500;
+                font-size: 15px;
+            }
+
+            &-error {
+                text-decoration: underline #f00;
+
+                .a-typography {
+                    color: #f00 !important;
+                }
+            }
+        }
+
+        .a-group_radio {
+            .ant-radio-group {
+                width: 100%;
+                display: flex !important;
+                justify-content: center !important;
+            }
+        }
+    }
+    
+    .a-checkbox {
+        margin-top: 8px;
+
+        &_text {
+            color: $button-blue;
+        }
+    }
+
+    &_partner {
+        .a-dropdown {
+            &_error {
+                display: block;
+                position: relative;
+            }
+        }
+    }
+}

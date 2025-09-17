@@ -1,0 +1,83 @@
+.a-birth_day {
+    $root: &;
+    width: 100%;
+    position: relative;
+
+    &_input {
+        display: flex !important;
+        width: fit-content !important;
+        align-items: center !important;
+        gap: 8px;
+
+        p {
+            display: flex !important;
+            width: fit-content !important;
+            align-items: center !important;
+        }
+
+        &_input {
+            width: 60px !important;
+            height: 32px !important;
+            text-align: center;
+            border-radius: 4px !important;
+            border: 1px solid$gray-border !important;
+            color: $blue-main;
+            font-weight: 400;
+            font-size: 15px;
+
+            &:focus {
+                border: 1px solid $button-blue;
+                outline: unset;
+            }
+            
+            &:focus-visible {
+                outline: unset;
+            }
+
+            &::placeholder {
+                color: rgb(189, 189, 189);
+                font-weight: 400;
+                font-size: 15px;
+
+            }
+        }
+
+        input {
+            &:focus {
+                outline: 1px solid $button-blue;
+                border: unset;
+                box-shadow: unset;
+            }
+        }
+    }
+
+    &-error {
+        .a-birth_day_input_input {
+            border-color: $cg-red !important;
+        }
+    }
+
+    &_error {
+        font-size: 13px;
+        color: $cg-red;
+        position: absolute;
+    }
+
+    &_label {
+        @include font-base(14, 20);
+        font-weight: 400;
+        display: block;
+        color: $jet;
+        margin-bottom: rem(2);
+        text-transform: capitalize;
+
+        #{$root}-error & {
+            color: $bright-red;
+        }
+
+        span {
+            margin-left: rem(2);
+            color: $cg-red;
+        }
+    }
+}

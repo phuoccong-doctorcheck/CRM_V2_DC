@@ -1,0 +1,103 @@
+.t-infors_user {
+    width: 100%;
+    height: calc(100vh - 120px);
+    position: relative;
+
+    &_tab {
+        @include flex-box(center, center);
+        gap: rem(40);
+
+        &_item {
+            font-weight: 500;
+            @include font-base(18,30);
+            color: $taupe-gray;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.5s ease;
+
+            &-active {
+                color: $blue-main;
+
+                &::after {
+                    content: '';
+                    height: rem(1);
+                    position: absolute;
+                    bottom: -2px;
+                    left: 0;
+                    background-color: $main-color;
+                    z-index: 100;
+                    transition: all 0.4s ease;
+                    transition-delay: 1s;
+                    animation: tabs 0.5s ease-in-out forwards;
+                }
+            }
+        }
+    }
+
+    &_content {
+        width: 100%;
+
+
+        form {
+            margin: rem(30) rem(80);
+            height: 100%;
+            gap: 20px;
+
+            .o-collapse {
+                margin-bottom: rem(20);
+
+               
+            }
+
+            .o-collapse-state {
+                .a-typography {
+                    font-weight: 500;
+                }
+
+                p {
+                    font-weight: 400;
+                    color: $green;
+                }
+            }
+        }
+
+        &_btn {
+            position: absolute;
+            bottom: 0;
+            background-color: #fff;
+            padding: 12px 24px;
+            width: fit-content;
+            left: 25%;
+            @include flex-box();
+            gap: 10px;
+            border-radius: 8px;
+            transition: all 0.5s ease;
+            transition-delay: 0.5s;
+
+            .a-button {
+                width: fit-content;
+                min-width: 170px;
+                height: 38px;
+            }
+        }
+    }
+}
+
+
+@keyframes tabs {
+    from {
+        width: 0%;
+    }
+
+    to {
+        width: 100%;
+    }
+}
+
+.profile_state_active {
+    color: $green;
+}
+
+.profile_state_lose {
+    color: $sinopia;
+}

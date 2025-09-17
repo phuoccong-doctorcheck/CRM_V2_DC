@@ -1,0 +1,19 @@
+.a-group_checkbox {
+    &-flex {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 20px;
+    }
+
+    &_label {
+        .a-typography {
+            color: $button-blue;
+        }
+    }
+
+    .ant-checkbox-group {
+        column-gap: unset !important;
+        gap: 6px !important;
+    }
+}

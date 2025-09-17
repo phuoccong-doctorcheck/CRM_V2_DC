@@ -1,0 +1,179 @@
+/* stylelint-disable scss/selector-no-redundant-nesting-selector */
+.o-categories_customer {
+    width: 100%;
+    height: calc(100vh - 450px);
+    display: grid;
+    grid-template-columns: 3fr 8fr;
+    gap: 4px;
+    transition: all 0.5s ease;
+    
+    &_right {
+        border-left: 1px solid #ced4da;
+        border-left-style: dotted;
+        height: 100%;
+        margin-left: 4px;
+        padding: 6px;
+        overflow-y: scroll;
+        transition: width 0.5s ease;
+        position: relative;
+        width: 100%;
+
+        &_toggle {
+            position: sticky;
+            top: 0;
+            left: 0;
+            transition: all 0.5s ease;
+            z-index: 100;
+            background-color: $blue-main;
+            width: fit-content;
+            padding: 2px;
+            border-radius: 4px;
+            box-shadow: 0 0 6px 1px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+
+        & > * {
+            margin-bottom: 6px;
+        }
+
+        &_title {
+            text-align: center;
+            font-size: 20px;
+
+            .a-typography {
+                text-transform: uppercase;
+                color: $main-color;
+            }
+        }
+
+        &_info {
+            display: flex;
+            justify-content: space-around;
+
+            &_item {
+                display: flex;
+                justify-content: flex-start;
+                gap: 4px;
+                
+
+                .a-typography {
+                    font-size: 16px;
+                    font-weight: 400;
+                }
+            }
+        }
+    }
+    
+    &_left {
+        padding: 10px 2px 0;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        position: relative;
+        width: 100%;
+        padding-bottom: 60px;
+
+        &_item {
+            margin-bottom: 8px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-bottom: 1px #ced4da;
+            border-bottom-style: dotted;
+            transition: all 0.5s ease;
+
+            &_title {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 6px;
+            }
+
+            &:hover {
+                transform: translateX(6px);
+                transition: transform 0.5s ease;
+                background-color: rgba(244, 241, 241, 0.6117647059);
+            }
+           
+        }
+
+        &_child {
+            margin: 4px 0 12px 20px;
+            transition: all 0.5s ease;
+
+            &-done {
+                color: $green;
+            }
+
+            span {
+                margin: 0;
+            }
+
+            &-inprogress {
+                color: $cg-red;
+            }
+
+            &:hover {
+                transform: translateX(6px);
+                transition: transform 0.5s ease;
+                background-color: $white;
+            }
+        }
+
+        
+        &_btn {
+            position: fixed;
+            bottom: 10px;
+            width: 100%;
+
+            .a-button {
+                width: calc(((73%) / 11) * 3);
+
+                &-loading {
+                    img {
+                        height: 30px;
+                    }
+                }
+            }
+        }
+    }
+
+    @include break-max(1280px) {
+        grid-template-columns: 300px fit-content;
+
+        &_right {
+            margin-left: 0;
+        }
+    }
+
+    &_loading {
+        width: 100%;
+        height: calc(100vh - 225px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .a-typography {
+            font-weight: 400;
+            text-align: center;
+            color: $cg-red;
+        }
+    }
+
+    &-close {
+        grid-template-columns: 1px 8fr;
+        transition: all 0.2s ease;
+        
+        .o-categories_customer_right,
+        .o-categories_customer_left {
+            transition: width 0.2s ease;
+        }
+
+        .o-categories_customer_right {
+            border-left: unset;
+        }
+
+        .o-categories_customer_left {
+            opacity: 0;
+        }
+
+    }
+}

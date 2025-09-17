@@ -1,0 +1,18 @@
+.a-upload {
+    &_icon {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 8px;
+    }
+
+    .ant-upload {
+        padding: 4px 0 !important;
+    }
+
+    &_label {
+        .a-typography {
+            color: $button-blue;
+        }
+    }
+}

@@ -1,0 +1,18 @@
+.ant-float-btn-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .ant-float-btn-icon {
+        width: 26px !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+    }
+}
+
+.ant-float-btn-group {
+    inset-inline-end: 10px !important;
+    inset-block-end: 5px !important;
+}

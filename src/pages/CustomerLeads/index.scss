@@ -1,0 +1,112 @@
+/* stylelint-disable scss/selector-no-redundant-nesting-selector */
+.p-customer_leads {
+    height: 100%;
+
+    &_table {
+        @include border-shadow();
+        height: calc(100vh - 154px);
+        padding: 0 !important;
+        overflow: hidden;
+
+        .m-public_table {
+            margin: 0;
+        }
+    }
+
+    &_header {
+        &_total {
+            @include  border-shadow();
+            height: 32px;
+            background-color: $white;
+            box-shadow: unset;
+            border-radius: 4px;
+        }
+    }
+
+    .p-header-statistic {
+        height: 36px;
+        border-radius: 4px;
+        padding: 1px 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+
+        .p-header-statistic_left {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 8px;
+
+            .a-input {
+                height: 30px;
+
+                &_input {
+                    height: 30px !important;
+                    min-width: 300px;
+                    border-radius: 4px;
+                }
+                
+
+                &_error {
+                    display: none;
+                }
+
+            }
+
+            .a-dropdown {
+                margin-top: 0;
+                min-width: 180px;
+
+                .ant-select-selector,
+                .ant-select {
+                    height: 30px !important;
+                    border-radius: 4px;
+                }
+            }
+
+            .a-range_time .ant-picker {
+                border-radius: 4px;
+                min-width: 240px;
+                    
+            }
+        }
+
+        .p-header-statistic_right {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+    }
+
+    &_form_sms {
+        &_header {
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #dbdbdb;
+
+            &_item {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 6px;
+
+                span {
+                    min-width: 180px;
+                }
+
+                
+                p {
+                    font-weight: 600;
+                    color: $cg-red;
+                }
+            }
+        }
+
+        .a-dropdown {
+            margin-bottom: 16px;
+        }
+    }
+
+}

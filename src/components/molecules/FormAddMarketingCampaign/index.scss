@@ -1,0 +1,129 @@
+.m-form_marketing {
+    position: relative;
+
+    &-data {
+        display: grid;
+        grid-template-columns: 540px 1fr;
+        transition: display 0.5s ease, grid-template-columns 0.5s ease;
+
+        .m-form_marketing_table {
+            margin-left: 12px;
+            margin-top: 40px;
+            height: calc(100vh - 100px);
+
+        }
+    }
+
+    &_header {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #dbdbdb;
+        padding-bottom: 8px;
+
+        &_excel {
+            background-color: $blue-main;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-weight: 400;
+            outline: 0;
+            overflow: hidden;
+            padding: rem(4) rem(16);
+            @include font-base(15, 20);
+            @include flex-box();
+            @include transition(all $transition ease-in-out);
+            @include reset-button();
+            box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+            width: fit-content;
+            border-radius: 2px;
+            cursor: pointer;
+            
+            .a-typography {
+                cursor: pointer;
+                color: $white;
+            }
+        }
+
+        &_actions {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            margin-top: 20px;
+
+            .a-button {
+                border-radius: 2px;
+                min-width: 160px;
+                width: fit-content;
+
+                .a-typography {
+                    font-weight: 400;
+                }
+            }
+        }
+    }
+
+    &_body {
+        .a-dropdown {
+            padding: 0;
+            margin-bottom: 16px;
+        }
+
+        .a-textarea textarea {
+            min-height: 160px;
+            border-radius: 4px;
+        }
+    }
+
+    &_table {
+        @include border-shadow();
+        padding: 0 !important;
+        margin-top: 20px;
+        height: calc(50vh - 70px);
+        overflow: hidden;
+        background-color: $white;
+        box-shadow: unset;
+        border-radius: 2px !important;
+
+        &-other {
+            height: calc(50vh + 5px);
+
+        }
+
+        .m-public_table {
+            margin-top: 0;
+
+            .ant-table {
+                height: 100% !important;
+
+                .ant-table-body {
+                    overflow: hidden;
+                    overflow-x: hidden !important;
+                    overflow-y: scroll;
+                }
+            }
+        }
+    }
+
+    &_sms {
+        margin-bottom: 8px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid #dbdbdb;
+
+        &_item {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 6px;
+
+            span {
+                min-width: 180px;
+            }
+
+            p {
+                font-weight: 600;
+                color: $cg-red;
+            }
+        }
+    }
+}

@@ -1,0 +1,86 @@
+.o-cmodal {
+    &_custom {
+        .ant-modal-content {
+            padding: 12px;
+            border-radius: 8px !important;
+            height: fit-content;
+            max-height: calc(100vh - 20px);
+            overflow-y: hidden;
+
+            .ant-modal-header {
+                .a-typography {
+                    color: #333;
+                    font-weight: 600;
+                    font-size: 14px;
+                    text-transform: uppercase;
+                }
+            }
+
+            .ant-modal-body {
+                padding: 4px;
+                min-height: 80px;
+                max-height: calc(100vh - 10px);
+                overflow: scroll;
+            }
+
+            .ant-modal-footer {
+                margin-top: 4px;
+
+                button {
+                    width: fit-content;
+                    min-width: 120px;
+                }
+            }
+        }
+
+        &-hide_cancel {
+            .ant-modal-content {
+                .ant-modal-footer {
+                    .ant-btn-default {
+                        display: none !important;
+                    }
+                }
+            }
+        }
+
+        &-hide_footer {
+            .ant-modal-content {
+                .ant-modal-footer {
+                    display: none !important;
+                }
+            }
+        }
+
+        &-hide_ok {
+            .ant-modal-content {
+                .ant-modal-footer {
+                    .ant-btn-primary {
+                        display: none !important;
+                    }
+
+                    .ant-btn-default {
+                        background-color: #f5394cd5 !important;
+                        color: #fff !important;
+                    }
+
+                    :where(.css-dev-only-do-not-override-1m62vyb).ant-btn-default:not(:disabled):not(.ant-btn-disabled):hover {
+                        border-color: unset !important;
+                    }
+                }
+            }
+
+        }
+
+        &-higher {
+            .ant-modal-content {
+                height: 90vh !important;
+                
+                .ant-modal-body {
+                    max-height: calc(100vh - 130px);
+                }
+            }
+        }
+    }
+
+    
+}

@@ -1,0 +1,502 @@
+/* stylelint-disable scss/selector-no-redundant-nesting-selector */
+.a-input {
+    $root: &;
+    position: relative;
+
+    &_wrap {
+        position: relative;
+    }
+
+    &_input {
+        @include font-base(12, 20);
+        width: -webkit-fill-available;
+        border: 1px solid #00b3ff31;
+        background-color: $white;
+        padding: rem(6) rem(11) rem(7) rem(11);
+        appearance: none;
+        font-family: inherit;
+        outline: none;
+        transition: all $transition linear;
+        color: $jet;
+        height: 32px !important;
+
+        #{$root}-simple & {
+            border-radius: 4px;
+            border-color: #ced4da;
+            padding: 5px 8px;
+            color: #495057;
+            background-color: #fff !important;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            box-shadow: inset 0 0 0 transparent;
+            transition: border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out;
+            font-size: rem(14);
+            font-weight: 400;
+            line-height: 1.5;
+
+            &:focus {
+                color: #495057;
+                border-color: #80bdff !important;
+                outline: 0;
+                box-shadow: inset 0 0 0 transparent;
+            }
+
+            &:disabled {
+                background-color: $gray-border !important;
+            }
+
+            .a-input_label {
+                font-weight: 400;
+                color: $button-blue;
+            }
+
+            .a-input_error {
+                max-height: rem(14);
+                line-height: rem(14);
+                font-size: rem(12);
+                color: $cg-red;
+                margin: rem(1) rem(2) !important;
+            }
+        }
+
+        #{$root}-borderRadius & {
+            border-color: $dark-gray;
+            border-radius: rem(4);
+            padding: rem(8);
+
+            &:focus {
+                border-color: $blue-main;
+            }
+        }
+
+        #{$root}-hasIcon & {
+            border-radius: 4px;
+            border-color: #ced4da;
+            padding: 5px 32px 5px 5px;
+            color: #495057;
+            background-color: #fff !important;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            box-shadow: inset 0 0 0 transparent;
+            transition: border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out;
+            font-size: rem(14);
+            font-weight: 400;
+            line-height: 1.5;
+            height: 36px !important;
+
+            &:focus {
+                background-color: $white;
+            }
+        }
+
+        #{$root}-inputSearch & {
+            border-color: $main-color;
+            background-color: $white;
+            border-radius: rem(8);
+            padding: rem(6) rem(12);
+            color: $dark-gray;
+            @include font-base(14, 20);
+
+            &:focus {
+                border-color: $main-color;
+                background-color: $lavender;
+            }
+
+            .a-icon {
+                background-color: $blue-main;
+            }
+        }
+
+        #{$root}-text_editor & {
+            border-color: $blue-main;
+            background-color: $bg-gray-blur;
+            border-radius: rem(8);
+            padding: rem(6) rem(12);
+            color: $dim-gray;
+            transition: background-color 0.5s ease-out;
+            @include font-base(14,20);
+
+            .a-icon {
+                background-color: $blue-main;
+            }
+        }
+
+        #{$root}-todo_list & {
+            border: unset;
+            background-color: #d6dcf4;
+            border-radius: rem(3);
+            padding: rem(12) rem(12);
+            color: #18191c;
+            transition: background-color 0.5s ease-out;
+            @include font-base(14,20);
+            
+            .a-input_wrap-todo_list {
+                .a-input_input {
+                    position: relative;
+                }
+
+                .icon_todo {
+                    width: fit-content;
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                }
+            }
+
+            // .a-input_icon {
+            //     top: 60% !important;
+            // }
+
+            .a-input_error {
+                display: none;
+            }
+
+            .a-icon {
+                background-color: $cg-red;
+            }
+
+            &:focus {
+                background-color: #d6dcf4;
+            }
+        }
+
+        #{$root}-border8 & {
+            height: 38px;
+            border-color: #00b3ff31;
+            border-radius: rem(4);
+            padding: rem(11) rem(16);
+            font-size: rem(14);
+            background-color: $lavender;
+            transition: background-color 0.5s ease-out;
+            // height: 40px;
+        }
+
+        #{$root}-phone_number & {
+            height: 60px;
+            border-color: transparent;
+            border-radius: rem(0);
+            padding: rem(8) rem(35) rem(8) rem(8);
+            font-size: rem(28);
+            font-weight: 700;
+            background-color: $bg-gray-blur;
+            transition: background-color 0.5s ease-out;
+            color: $jetSub;
+
+            &:focus {
+                border-color: transparent;
+            }
+
+        }
+
+        #{$root}-boxNote & {
+            border-color: $dark-gray;
+            border-radius: rem(8);
+            height: 130px;
+            font-size: rem(14);
+            padding: none;
+        }
+
+        #{$root}-contactForm & {
+            border-color: $dim-gray;
+            border-radius: rem(2);
+            padding: rem(5) rem(11);
+            @include mobile-down {
+                padding: rem(3) rem(7);
+            }
+        }
+        
+        #{$root}-normal & {
+            border-color: #ced4ce;
+            border-radius: rem(4);
+            padding: rem(5) rem(11);
+
+            &:focus {
+                border: 1px solid #ced4ce !important;
+                outline: unset !important;
+            }   
+        }
+
+        #{$root}-isError & {
+            border-color: $sinopia !important;
+            color: $sinopia !important;
+        }
+
+        #{$root}-readOnly & {
+            cursor: no-drop;
+            background-color: $bg-gray-blur;
+
+            &:focus {
+                border-color: $dark-gray;
+            }
+        }
+
+        &::placeholder {
+            color: rgb(189, 189, 189);
+            font-weight: 400;
+            @include font-base(14, 18);
+        }
+
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            display: none;
+        }
+
+        &:focus {
+            border-color: $button-blue;
+        }        
+    }
+
+    &_wrap_phone_number {
+        border: 1px solid $dark-Gray;
+        background-color: $white;
+        border-radius: rem(8);
+        display: flex;
+
+        &:focus {
+            background-color: #ccc;
+        }
+        
+        .a-input_input {
+            border: unset;
+
+        }
+
+        .m-dropdown_phone_number {
+            .a-typography {
+                width: 30px;
+            }
+
+            .m-dropdown_list {
+                left: 0;
+                top: 0;
+                right: unset;
+                position: absolute;
+                min-width: 150px;
+
+                .m-dropdown_item {
+                    width: 100%;
+
+                    div {
+                        width: 100%;
+
+                        .a-typography {
+                            width: max-content;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &_icon {
+        background: transparent;
+        cursor: pointer;
+        @include flex-box();
+        border: 0;
+        height: rem(24);
+        width: rem(24);
+        padding: 0;
+        position: absolute;
+        right: rem(8);
+        top: 50%;
+        transform: translate(-12%, -50%);
+
+        .a-icon {
+            margin: auto;
+        }
+    }
+
+    &-search {
+        .a-input_icon {
+            left: rem(12);
+            top: 50%;
+        }
+
+        .a-input_input {
+            padding: rem(4) rem(4) rem(4) rem(36);
+        }
+    }
+
+    &_label {
+        @include font-base(14, 20);
+        font-weight: 400;
+        display: block;
+        color: $jet;
+        margin-bottom: rem(0);
+        text-transform: capitalize;
+        
+        #{$root}-isError & {
+            color: $bright-red;
+        }
+        
+        span {
+            margin-left: rem(2);
+            color: $cg-red;
+        }
+        
+        &_count {
+            text-transform: normal;
+            margin-left: 10px !important;
+            text-align: end;
+            width: 50%;
+            font-size: 12px;
+            width: max-content;
+
+            &-done {
+                color: $green !important;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+        }
+
+        &-flex {
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    &_error {
+        color: $sinopia;
+        display: block;
+        min-height: rem(16);
+        line-height: rem(16);
+        font-size: rem(12);
+        color: $cg-red;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+        margin: rem(1) rem(4) 0;
+    }
+
+    &-disabled {
+        #{$root}_input {
+            background-color: $bg-gray-blur;
+            transition: background-color 0.5s ease-out;
+            cursor: no-drop;
+        }
+    }
+
+    &-hide {
+        #{$root}_input {
+            visibility: hidden;
+        }
+        #{$root}_icon {
+            visibility: hidden;
+        }
+    }
+
+    &-flexbox {
+        display: flex !important;
+        align-items: flex-end;
+
+        label {
+            font-size: rem(14);
+            margin: auto 6px;
+        }
+    }
+
+    &-date {
+        input {
+            text-transform: uppercase;
+            width: fit-content !important;
+        }
+        
+    }
+
+    &-search_categories {
+
+        width: 100%;
+        border: 1px solid $dark-gray;
+        height: 38px;
+        border-color: $blue-main;
+        border-radius: rem(8);
+        font-size: rem(14);
+        background-color: $lavender;
+        transition: background-color 0.5s ease-out;
+        
+
+        .a-input_wrap-categories {
+            display: flex;
+            align-items: center;
+            // background-color: $lavender;
+            transition: background-color 0.5s ease-out;
+
+
+            .a-dropdown {
+                width: rem(200);
+                margin: 0;
+                padding: 0;
+                
+                .a-typography {
+                    display: none;
+                }
+                
+                .ant-select {
+                    height: 36px !important;
+                }
+
+                .ant-select-selector {
+                    background-color: transparent !important;
+                    border: unset;
+                    height: 36px !important;
+                }
+
+                .ant-select-focused {
+                    border: unset !important;
+                    outline: unset !important;
+                }
+            }
+        }
+
+        .a-input_input {
+            border: unset;
+            border-left: 1px solid $blue-main;
+            background-color: transparent;
+
+        }
+
+        .a-input_error {
+            display: none;
+        }
+
+        
+    }
+
+    &-loading {
+        .a-input_icon {
+            .a-icon {
+                animation: loadin 0.5s ease infinite;
+            }
+        }
+    }
+}
+
+
+
+// .a-input-border8 {
+//     $root: &;
+//     background-color: #f5f6fa;
+//     border-radius: rem(8);
+//     border: 1px solid rgba(0, 177, 255, 0.1);
+//     height: rem(64);
+//     padding: rem(8) rem(12);
+
+//     .a-input_input {
+//         border: unset;
+//         background-color: transparent;
+//         padding: 8px 0;
+
+//         &:hover + #{$root} {
+//             border-color: #000;
+//         }
+//     }
+
+//     .a-input_label {
+//         font-size: rem(12);
+//         line-height: rem(18);
+//         font-weight: 500;
+//         color: rgb(69, 69, 69);
+//         margin-bottom: unset;
+//     }
+// }

@@ -1,0 +1,180 @@
+.p-report_channel {
+    width: 100%;
+
+    .t-public_header_left {
+        .a-button {
+            height: 32px;
+            width: 50px;
+            padding: 4px 8px 4px 4px;
+        }
+
+        .ant-picker-multiple {
+            height: 32px;
+            max-width: 380px;
+
+            .ant-picker-selection-overflow {
+                transform: translateY(-4px);
+            }
+        }
+
+        .a-dropdown {
+            width: fit-content;
+                    
+            .ant-select,
+            .ant-select-selector {
+                min-width: 250px;
+                max-width: 250px;
+                height: 30px !important;
+                transform: translateY(-1px);
+            }
+                    
+            &_label {
+                .a-typography {
+                    font-weight: 600;
+                    transform: translateY(5px);
+                }
+            }
+
+            &:first-child {
+                .ant-select,
+                .ant-select-selector {
+                    min-width: 120px;
+                }
+
+            }
+
+        }
+
+        .ant-picker {
+            height: 32px !important;
+            max-width: 300px;
+            min-width: 180px;
+            @include  border-shadow();
+            overflow: hidden;
+            background-color: $white;
+        }
+
+    }
+
+    .t-public_header_right {
+        min-width: 300px;
+
+        .a-group_radio {
+            width: 100%;
+            @include  border-shadow();
+            height: 32px;
+            display: flex;
+            align-items: center;
+            background: $white !important;
+
+            .ant-radio-group {
+                width: 100%;
+                display: grid;
+                grid-template-columns: 70px 70px 1fr;
+            }
+
+            .ant-radio-wrapper {
+                span .a-typography {
+                    font-size: 14px;
+                }
+                        
+            }
+        }
+
+        .a-button {
+            width: max-content;
+            min-width: 100px;
+        }
+    }
+
+    &_body {
+        padding: 12px 0 30px;
+
+        &_list {
+            height: calc(100vh - 130px);
+            overflow-y: scroll;
+        }
+        
+        &_result {
+            h3 {
+                font-size: 18px;
+                color: rgb(163, 1, 1);
+                text-transform: capitalize;
+                margin: 0; 
+            }
+
+            h4 {
+                font-size: 17px;
+                color: #333;
+                text-transform: capitalize;
+                margin: 8px; 
+            }
+
+            p {
+                font-size: 18px;
+                color: $blue-main;
+                text-transform: capitalize;
+                margin: 8px; 
+            }
+
+            &_wrap {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                border-radius: 20px;
+            }
+
+            &_item {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 4px;
+                list-style: circle;
+                transform: translateX(8px);
+
+                .a-typography {
+                    color: #000;
+                }
+            }
+        }
+    }
+}
+
+.p-report_channel_header_date {
+    @include border-shadow();
+    background-color: $white;
+    min-width: 240px;
+    max-width: 400px !important;
+
+    .ant-picker {
+        height: 30px !important;
+        @include  border-shadow();
+        overflow: hidden;
+
+        input {
+            &::placeholder {
+                color: $blue-main !important;
+                font-weight: 400;
+
+            }
+        }
+    }
+
+    .ant-picker-selection-overflow {
+        height: 28px !important;
+        overflow: scroll;
+        transform: translateY(-2px);
+
+        input {
+            &::placeholder {
+                color: $blue-main !important;
+                font-weight: 400;
+
+            }
+        }
+    }
+
+    .ant-picker-selection-overflow-item {
+        margin: 2px;
+    }
+}

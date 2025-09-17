@@ -1,0 +1,26 @@
+.a-input_links {
+    width: 100%;
+    border: rem(1) dotted $jetSub;
+    padding: rem(4) rem(4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: rem(8);
+    background-color: $alice-blue;
+    stroke-width: 5px;
+    stroke-dasharray: 2,2;
+    stroke-linejoin: round;
+
+    p {
+        font-size: rem(16);
+        text-transform: capitalize;
+        font-weight: 400;
+    }
+
+    &:hover {
+        background-color: $columbia-blue;
+        color: $gray;
+        border-color: $dark-Gray;
+    }
+}

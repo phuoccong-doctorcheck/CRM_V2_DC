@@ -1,0 +1,76 @@
+.t-campaign_template {
+    &_add {
+        position: relative;
+        height: calc(100vh - 120px);
+
+        &_flex {
+            display: flex;
+            align-items: flex-end;
+
+            .a-icon {
+                transform: translateY(-3px);
+            }
+        }
+
+        .a-textarea_label {
+            .a-typography {
+                font-weight: 500;
+                display: block;
+                color: $jet;
+                margin-bottom: rem(8);
+                text-transform: capitalize;
+                font-size: 14px;
+            }
+        }
+
+        .a-textarea_input {
+            min-height: 300px;
+        }
+
+        &_btn {
+            position: absolute;
+            bottom: 0;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            gap: 20px;
+
+            .a-button {
+                height: 36px;
+                width: 40%;
+            }
+        }
+    }
+
+    &_header {
+        &_func_item {
+            background-color: rgb(255, 255, 255);
+            padding: 0.5625rem 1rem;
+            box-shadow: 0 3px 4px 1px rgba(0, 0, 0, 0.1);
+            border-radius: 2px;
+            outline: 1px solid rgba(206, 208, 212, 0.6941176471);
+            cursor: pointer;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            color: $button-blue;
+
+            &:hover {
+                outline: 1px solid #00b1ff;
+                background-color: rgba(0, 177, 255, 0.1);
+            }
+
+            &-active {
+                background-color: $main-color;
+                color: $white;
+                
+                &:hover {
+                    background-color: $button-blue;
+                    color: $white;
+                    outline: unset;
+                }
+            }
+        }
+
+    }
+}

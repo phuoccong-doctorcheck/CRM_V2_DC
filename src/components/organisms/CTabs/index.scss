@@ -1,0 +1,109 @@
+.o-tabs {
+    $root: &;
+
+    &_labels {
+        border-radius: rem(5);
+        overflow: auto hidden;
+        position: relative;
+        @include scroll-bars(0, none, none, 0, 1, 10);
+        // padding: 0 rem(6);
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+
+    }
+
+
+    &_label {
+        color: $main-color;
+        font-weight: 400;
+        text-transform: capitalize;
+        @include font-base(16,26);
+
+        &-14x20 {
+            @include font-base(14, 20);
+        }
+
+        &-16x22 {
+            @include font-base(16, 22);
+        }
+
+        &-16x24 {
+            @include font-base(16, 24);
+        }
+        
+        @include mobile-down {
+            @include font-base(14, 20);
+        }
+    }
+
+    &_tab {
+        cursor: pointer;
+        position: relative;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        height: 30px;
+        
+
+        &-default {
+            background-color: $white;
+            margin: rem(12);
+            padding: rem(9) rem(16);
+            box-shadow: 0 3px 4px 1px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            outline: 1px solid #ced0d4b1;
+
+            #{$root}_label {
+                font-weight: 600;
+            }
+        }
+
+        &-active {
+            &#{$root}_tab-default {
+                background-color: #1e3150;
+                border-bottom: 0;
+    
+                #{$root}_label {
+                    color: $white;
+                    font-weight: 700;
+                }
+            }
+
+            &:hover {
+                background-color: #1e3150 !important;
+                outline: unset !important;
+            }
+        }
+
+        &:hover {
+            outline: 1px solid #00b1ff;
+            background-color: rgba(0, 177, 255, 0.1);
+            
+            &-active {
+                background-color: #1e3150;
+                outline: unset;
+            }
+        }
+
+    }
+
+    &_panel {
+        display: none;
+        
+        &-active {
+            display: block;
+        }
+    }
+
+    &_icon {
+        position: absolute;
+        transform: translateY(10px);
+        z-index: 1000;
+
+        .a-icon {
+            transform: rotate(-90deg);
+
+        }
+    }
+}

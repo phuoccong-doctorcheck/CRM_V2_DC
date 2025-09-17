@@ -1,0 +1,122 @@
+/* stylelint-disable selector-max-id */
+.a-checkbox {
+    $root: &;
+
+    &_label {
+        align-items: center;
+        cursor: pointer;
+        display: flex;
+        min-height: rem(24);
+        position: relative;
+
+        span {
+            font-weight: 500;
+            display: block;
+            color: $jet;
+            margin-left: rem(4);
+            text-transform: capitalize;
+        }
+    }
+
+    input {
+        border: rem(1) solid $may-green;
+        padding: 2px;
+        border-radius: 50%;
+        
+        &:checked {
+            background-color: #ccc;
+        }
+
+        &:checked {
+            // color: $blue-main;
+        }
+
+    }
+
+    &_text {
+        @include font-base(14,21);
+        color: $jet;
+        transition: $transition ease;
+    }
+
+    &_checkMark {
+        background-image: url('~assets/icons/ic_square.svg');
+        background-position: center;
+        background-repeat: no-repeat;
+        height: rem(24);
+        margin-right: rem(4);
+        transition: all $transition ease-in-out;
+        width: rem(24);
+    }
+
+    &_toggle {
+        position: relative;
+        display: block;
+        width: rem(40);
+        height: rem(20);
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        transform: translate3d(0, 0, 0);
+        margin-right: rem(10);
+
+        &::before {
+            content: '';
+            position: relative;
+            top: rem(3);
+            left: rem(3);
+            width: rem(34);
+            height: rem(14);
+            display: block;
+            background: $silver;
+            border-radius: rem(8);
+            transition: all 0.2s ease;
+        }
+
+        span {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: rem(20);
+            height: rem(20);
+            display: block;
+            background: $space-cadet;
+            border-radius: rem(10);
+            box-shadow: 0 rem(3) rem(8) rgba($dim-gray, 0.5);
+            transition: all 0.2s ease;
+
+            &::before {
+                content: '';
+                position: absolute;
+                display: block;
+                margin: -rem(-18);
+                width: rem(56);
+                height: rem(65);
+                background: rgba($blue-main, 0.5);
+                border-radius: 50%;
+                transform: scale(0);
+                opacity: 1;
+                pointer-events: none;
+            }
+        }
+    }
+    #cbx:checked +  #{$root}_toggle {
+        &::before {
+            background: $main-color;
+        }
+
+        span {
+            background: $blue-info;
+            transform: translateX(rem(20));
+            transition: all 0.2s cubic-bezier(0.8, 0.4, 0.3, 1.25), background 0.15s ease;
+            box-shadow: 0 rem(3) rem(8) rgba($may-green, 0.2);
+        }
+    }
+
+    &_center {
+        @include flex-box(start,start);
+
+        input {
+            display: none;
+        }
+    }
+}

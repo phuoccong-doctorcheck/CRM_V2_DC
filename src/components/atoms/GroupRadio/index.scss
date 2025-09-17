@@ -1,0 +1,27 @@
+.a-group_radio {
+    width: 100%;
+
+    .ant-radio-group {
+        .ant-radio-wrapper {
+            .a-typography {
+                font-weight: 400;
+                font-size: rem(16);
+            } 
+
+            .ant-radio-disabled {
+                .ant-radio-inner {
+                    // border-color: #1677ff;
+                    // background-color: #1677ff;
+                } 
+            }
+        }
+
+        .ant-radio-wrapper
+        .ant-radio-checked {
+            .ant-radio-inner {
+                border-color: #1677ff;
+                background-color: #1677ff;
+            } 
+        }
+    }
+}

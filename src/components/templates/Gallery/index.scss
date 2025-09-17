@@ -1,0 +1,22 @@
+.t-gallery {
+    width: 800px;
+    height: 600px;
+
+    &_upload {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        border-bottom: 1px solid$gray-border;
+        padding-bottom: 4px;
+
+        .a-button {
+            width: fit-content;
+            height: 28px;
+            padding: 8px !important;
+        }
+    }
+
+    &_render {
+        padding-left: 8px;
+    }
+}

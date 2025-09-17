@@ -1,0 +1,169 @@
+.t-manager_task {
+    &_table {
+        height: calc(100vh - 150px);
+        @include border-shadow();
+        padding: 0 !important;
+        overflow: hidden;
+
+        .ant-table-wrapper {
+            .ant-table {
+                .ant-table-header,
+                .ant-table-header table {
+                    max-height: unset !important;
+                    min-height: unset !important;
+                    overflow: unset !important;
+                }
+
+            }
+
+            .ant-table-pagination.ant-pagination {
+                padding: 0 !important;
+            }
+        }
+    }
+
+    &_note_item {
+        span {
+            color: $green;
+            font-size: 12px;
+            text-align: left;
+        }
+
+        .a-typography {
+            font-size: 13px !important;
+            color: $main-color;
+        }
+    }
+
+    &_header {
+        margin-bottom: 4px;
+
+        &_wrapper {
+            width: 100%;
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            margin-bottom: 2px;
+
+            .a-range_time {
+                min-width: 240px;
+                max-width: 240px;
+                margin-bottom: 2px;
+
+                .ant-picker {
+                    height: 32px !important;
+                    @include  border-shadow();
+                }
+            }
+
+            .m-multi_select,
+            .a-dropdown {
+                padding: 0;
+                height: 32px;
+                max-width: 180px;
+                min-width: 180px;
+                margin-bottom: 2px;
+            
+                .ant-select-selector {
+                    height: 32px !important;
+                    @include  border-shadow();
+                }
+            }
+
+            .a-input {
+                margin-left: 0 !important;
+                min-width: 320px !important;
+
+                &_input {
+                    height: 32px !important;
+                    border-radius: 8px !important;
+                    font-weight: 400;
+                    font-size: 0.85rem;
+                    background: #e8e8e8;
+                    border: 1px solid #c5c5c5 !important;
+                    box-shadow: 2px 2px 5px #c5c5c5,
+                        -2px -2px 5px #fff;
+                    white-space: nowrap;
+                    color: $blue-main;
+                    border-color: $gray-border !important;
+                    
+                    &::placeholder {
+                        color: $blue-main;
+                    }
+                }
+                margin-bottom: 2px !important;
+
+            }
+
+            
+
+            &_bottom {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 8px;
+
+                .m-multi_select,
+                .a-dropdown {
+                    padding: 0;
+                    height: 32px;
+                    max-width: 190px;
+                    min-width: 190px;
+                
+                    .ant-select-selector {
+                        height: 32px !important;
+                        @include  border-shadow();
+                    }
+
+                    .ant-select-selection-placeholder {
+                        color: $blue-main !important;
+                        font-weight: 400;
+                    }
+                }
+
+                .m-multi_select {
+                    transform: translateY(2px);
+                }
+
+                .a-checkbox {
+                    margin-left: 4px;
+                    height: 32px;
+                    margin-bottom: 2px;
+                    @include  border-shadow();
+                    transform: translateY(4px);
+                }
+            
+                .a-input {
+                    transform: translateY(2px);
+                    min-width: 240px !important;
+            
+                    &_input {
+                        min-width: 300px !important;
+                        height: 32px !important;
+                        border-color: $gray-border !important;
+                        border-radius: 8px !important;
+                        font-weight: 400;
+                        font-size: 0.85rem;
+                        background: #e8e8e8;
+                        border: 1px solid #c5c5c5 !important;
+                        box-shadow: 2px 2px 5px #c5c5c5,
+                            -2px -2px 5px #fff;
+                        white-space: nowrap;
+                        color: $blue-main;
+                    
+                        &::placeholder {
+                            color: $blue-main;
+                        }
+                    }
+
+                    &_error {
+                        display: none;
+                    }
+                }
+            }
+            // @include break-max(1630px){
+
+            // }
+        }
+    }
+}

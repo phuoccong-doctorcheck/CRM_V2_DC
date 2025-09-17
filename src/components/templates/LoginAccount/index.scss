@@ -1,0 +1,70 @@
+.t-loginaccount {
+    width: 100%;
+    border-top: 1px solid$gray-border;
+    margin-top: 6px;
+
+    &_subbtn {
+        display: flex;
+        justify-content: flex-end;
+        cursor: pointer;
+        margin-bottom: rem(8);
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+
+    form {
+        margin-top: rem(10);
+    
+        .a-input {
+            margin: rem(6) rem(0) rem(12);
+    
+            &_input {
+                height: 34px !important;
+                border-radius: 2px;
+
+                &:hover {
+                    border-color: $button-blue;
+                }
+    
+                &:focus {
+                    border: rem(1) solid  $main-color;
+                }
+            }
+    
+            &_label {
+                margin-bottom: rem(1);
+                font-weight: 400;
+                font-size: rem(14);
+                line-height: rem(21);
+                text-transform: capitalize;
+                color: $blue-main;
+            }
+        }
+    
+        .t-loginaccount_btn {
+            @include flex-box(center, center);
+            margin: rem(15) rem(0) rem(5);
+    
+            .a-button {
+                margin: 0;
+                width: 100%;
+                box-shadow: inset rem(0) rem(4) rem(2) rgba(0, 0, 0, 0.15);
+                border-radius: rem(2);
+                padding: 4px;
+                height: 32px !important;
+
+                img {
+                    width: 40px;
+                    height: 40px;
+                }
+            }
+        }
+    }
+}
+
+
+
+
+

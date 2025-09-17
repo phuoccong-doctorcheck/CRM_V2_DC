@@ -1,0 +1,21 @@
+.p-anthentication {
+    width: 100%;
+    height: 100%;
+    background-color: #e9ecef;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .a-image {
+        width: 100%;
+        // margin-bottom: rem(6);
+        height: 100%;
+        max-height: rem(150);
+    }
+
+    .o-container-formLogin {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+}

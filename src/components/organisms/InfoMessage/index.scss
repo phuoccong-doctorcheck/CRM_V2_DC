@@ -1,0 +1,49 @@
+.m-info_message {
+    width: 385px;
+    height: calc(100vh - 66px);
+    margin: 2px 0 0;
+    outline: 1px solid $gray-border;
+    border-radius: 8px;
+    background-color: $white;
+
+    @include break-max(1280px) {
+        width: 300px;
+    }
+
+
+    .m-ctabs {
+        .ant-tabs {
+            .ant-tabs-nav {
+                height: 39px;
+                padding-left: 10px;
+                margin-bottom: 8px;
+            }
+
+            .ant-tabs-content-holder {
+                padding: 0 8px;
+
+                .m-form_add_contact {
+                    height: calc(100vh - 120px);
+                    overflow-y: scroll;
+                    padding-bottom: 20px;
+                }
+                
+            }
+        }
+    }
+
+    &_tab_infos {
+        height: calc(100vh - 110px);
+        
+        &_detail {
+            &_header {
+                margin-bottom: 4px;
+            }
+        }
+        
+        .o-customer_infos {
+            height: calc(100vh - 140px);
+
+        }
+    }
+}

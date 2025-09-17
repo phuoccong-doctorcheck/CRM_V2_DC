@@ -1,0 +1,120 @@
+/* stylelint-disable max-nesting-depth */
+/* stylelint-disable scss/selector-no-redundant-nesting-selector */
+.t-module_statistic {
+    margin: 16px 0;
+
+    &-conversion {
+        &_ratio,
+        &_growth {
+            background-color: $white;
+            border-radius: 8px;
+            padding: 8px;
+            @include shadown-box();
+
+            &_header {
+                display: flex;
+                align-items: c;
+                justify-content: center;
+                gap: 12px;
+
+                .a-typography {
+                    text-align: center;
+                    font-weight: 600;
+                    color: $blue-main;
+                    font-size: 16px;
+                    text-transform: uppercase;
+                }
+
+                span {
+                    font-style: italic;
+                    color: $green;
+                }
+            }
+
+            & > .o-render_chart {
+                & > * {
+                    height: 400px !important;
+                }
+            }
+        }
+
+        
+
+        &_ratio {
+            margin-top: 16px;
+            height: max-content;
+            min-height: 420px;
+
+            &_header {
+                margin-bottom: 12px;
+
+                .a-typography {
+                    font-size: 24px;
+                }
+            }
+
+            & > .o-render_chart {
+                & > * {
+                    height: 400px !important;
+                }
+            }
+
+            &_content {
+                display: flex;
+                align-items: center;
+
+                & > .o-render_chart {
+                    width: 50%;
+                    
+                    & > * {
+                        height: 400px !important;
+                    }
+                }
+
+                .t-module_statistic-conversion_detail {
+                    width: 49%;
+                    margin-top: 16px;
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 16px;
+    
+                    &_item {
+                        background-color: $white;
+                        border-radius: 8px;
+                        padding: 12px 8px;
+                        @include shadown-box();
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        min-height: 100px;
+                        position: relative;
+    
+                        .p {
+                            font-size: 24px !important;
+                            font-weight: 700;
+                            margin-bottom: 12px;
+                        }
+    
+                        span {
+                            font-size: 40px;
+                            font-weight: 600;
+    
+                        }
+
+                        &_flex {
+                            a {
+                                position: absolute;
+                                bottom: 20px;
+                                right: 5px;
+                                color: $jetSub;
+                                font-style: italic;
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+}

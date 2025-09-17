@@ -1,0 +1,168 @@
+/* stylelint-disable selector-max-id */
+.t-layouts {
+    height: calc(100vh);
+    display: block !important;
+    position: relative;
+    overflow: hidden;
+
+    .m-cdrawer_customize-left {
+        .ant-drawer {
+            overflow-y: hidden;
+            height: 100vh;
+        }
+    }
+    
+    &_wrapper {
+        height: calc(100% - 55px);
+        width: 100%;
+        display: flex;
+        position: relative;
+        overflow: hidden;
+
+        
+        &_note {
+            width: 240px;
+            height: 420px;
+            position: absolute;
+            top: 0;
+            right: 302px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 8px;
+            background-color: $white;
+            transform: translateX(560px);
+            transition: animation 0.3s ease;
+            z-index: 90;
+
+            &-show_note {
+                transform: translateX(0);
+                transition: transform 0.5s ease-in;
+            }
+
+
+            .a-textarea {
+                &_label {
+                    .a-typography {
+                        font-weight: 700 !important;
+                    }
+                }
+                
+                &_input {
+                    height: 330px;
+
+                }
+            }
+
+            .a-button {
+                margin-top: 8px;
+            }
+        }
+
+        &_telephone {
+            &-hide {
+                display: none;
+            }
+        }
+    }
+
+    &_facebook_login {
+        position: absolute;
+        right: 0;
+        background-color: #f00;
+        padding: 8px;
+        z-index: 100;
+        display: none;
+    }
+
+    .ant-spin {
+        height: calc(100vh) !important;
+        max-height: unset !important;
+        width: calc(100vw);
+    }
+
+    &_main {
+        width: calc(100% - 50px);
+        background-color: #f8f8f8ea;
+        overflow: hidden;
+        padding: 6px;
+        position: relative;
+        transform: translateX(48px);
+        
+        @include break-max(1280px) {
+            transform: translateX(0);
+            width: calc(100%);
+        }
+       
+
+        .t-popup_boxchat {
+            position: absolute;
+            bottom: 8px;
+            right: 4px;
+            z-index: 1000;
+        }
+    }
+
+    
+}
+
+#btn-sound-audio {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    z-index: 100000;
+}
+
+
+@keyframes scale {
+    0% {
+        transform: scale(1);
+    }
+
+    25% {
+        
+        transform: scale(0.8);
+    }
+
+    50% {
+        transform: scale(1);
+
+    }
+
+    75% {
+        
+        transform: scale(0.8);
+    }
+
+    100% {
+        
+        transform: scale(1);
+    }
+}
+
+
+@keyframes showNote {
+    0% {
+        opacity: 0;
+        transform: translateX(0);
+    }
+    
+    90% {
+        transform: translateX(0);
+        opacity: 0;
+    }
+    
+    100% {
+        transform: translateX(560px);
+        opacity: 1;
+    }
+}
+
+
+/* 
+7.8
+0.2
+0.7
+0.4
+
+
+ */

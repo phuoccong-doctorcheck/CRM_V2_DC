@@ -1,0 +1,96 @@
+.p-booking_schedule {
+    @include break-max(1740px) {
+        .p-booking_schedule_form_filter {
+            .a-date_picker,
+            .m-multi_select,
+            .a-dropdown,
+            .a-input ,
+            .ant-picker {
+                width: calc((100vw - 40px) / 8.7) !important;
+                min-width: unset !important;
+                max-width: unset !important;
+            }
+
+            .a-input_wrap ,
+            .a-input_input {
+                width: calc((100vw - 40px) / 8) !important;
+                min-width: unset !important;
+                max-width: unset !important;
+
+            }
+        }
+
+        .m-public_table .ant-table-wrapper .ant-spin-container .ant-table {
+            height: calc(100% - 5px);
+        }
+
+        .p-appointment_view_table .m-public_table .ant-table-wrapper .ant-spin-container .ant-table .ant-table-container .ant-table-body {
+            max-height: calc(100vh - 170px) !important;
+            overflow-x: scroll;
+        }
+    }
+    @include break-max(1280px) {
+        .p-booking_schedule_form_filter {
+            .a-date_picker,
+            .ant-picker {
+                width: calc((100vw - 40px) / 5) !important;
+                min-width: unset !important;
+                max-width: unset !important;
+            }
+
+            &_bottom {
+                .m-multi_select,
+                .a-dropdown,
+                .a-input {
+                    width: calc((100vw - 40px) / 5.5) !important;
+                    min-width: unset !important;
+                    max-width: unset !important;
+                }
+
+                .a-input_wrap ,
+                .a-input_input {
+                    width: calc((100vw - 40px) / 4.5) !important;
+                    min-width: unset !important;
+                    max-width: unset !important;
+
+                }
+            }
+        }
+
+        .ant-table-content {
+            overflow: auto scroll !important;
+        }
+
+        .p-header-statistic {
+            width: calc(100vw - 8px);
+        }
+
+        .p-booking_schedule_collapse {
+            width: calc(100vw - 20px);
+        }
+    }
+
+    @include break-max(1024px) {
+        .p-booking_schedule_form_filter {
+            &_bottom {
+                .m-multi_select,
+                .a-dropdown,
+                .a-input {
+                    width: calc((100vw - 40px) / 5.3) !important;
+                    min-width: unset !important;
+                    max-width: unset !important;
+                }
+
+                .a-input_wrap ,
+                .a-input_input {
+                    width: calc((100vw - 40px) / 4.5) !important;
+                    min-width: unset !important;
+                    max-width: unset !important;
+
+                }
+            }
+        }
+
+       
+    }
+}

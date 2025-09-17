@@ -1,0 +1,166 @@
+/* stylelint-disable max-nesting-depth */
+.p-campaign {
+    .t-layouts_main {
+        background-color: #fff;
+    }
+
+    &_info {
+        height: 100%;
+
+        &_header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 20px;
+            height: 35px;
+            padding: 0 4px 0 0;
+
+            &_left {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 20px;
+                height: 35px;
+            }
+
+            &_right {
+                .a-button {
+                    height: 30px;
+                    padding: 4px;
+
+                    .a-typography {
+                        font-weight: 400;
+                    }
+                }
+            }
+            
+
+            &_item {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 6px;
+                font-size: 15px;
+
+                p {
+                    font-weight: 600;
+                    color: $blue-main;
+                }
+            }
+        }
+    }
+
+    &_header {
+        .t-public_header_top .t-public_header_right {
+            width: 100%;
+
+            .a-button {
+                width: fit-content;
+            }
+        }
+    }
+
+    &_table {
+        height: calc(100vh - 115px);
+        width: calc(100vw - 60px);
+        padding: 4px 4px 20px;
+        gap: 20px;
+        overflow-y: scroll;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-auto-rows: max-content;
+
+        &_item {
+            position: relative;
+            z-index: 0;
+            cursor: pointer;
+            min-width: 320px;
+            height: 109px;
+            width: calc(fit-content + 20px);
+            @include border-shadow();
+            padding: 0;
+            margin: 0;
+            border-radius: 12px !important;
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+            background-color: $white;
+
+            &-loading {
+                background-color: #d9f3fbcd;
+                border-color: #d9f3fbcd;
+            }
+
+            &:hover {
+                background-color: #d9f3fbcd;
+                box-shadow: 0 3px 5px 2px rgba(0, 0, 0, 0.1);
+                border-color: #d9f3fbcd;
+                transition: background-color 0.2s ease;
+
+                .p-campaign_table_item_paragraph {
+                    height: 100%;
+
+                }
+            }
+
+            .ant-spin {
+                width: 100% !important;
+                height: 90% !important;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+            }
+
+            &_status {
+                z-index: 1;
+                position: absolute;
+                height: 16px;
+                width: 16px;
+                border-radius: 12px;
+                top: 4px;
+                right: 4px;
+                font-size: 11px;
+                color: $white;
+                padding: 2px;
+                display: flex;
+                align-items: center;
+            }
+
+            &_action {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 20px;
+                height: 40px;
+            }
+
+            &_paragraph {
+                height: 100%;
+
+                p {
+                    font-weight: 600;
+                    color: $main-color;
+                    margin-top: 16px;
+                    transition: all 0.4s ease;
+
+                }
+            }
+
+            &_status-active {
+                background-color: $green;
+            }
+
+            &_status-disable {
+                background-color: $cg-red;
+            }
+
+           
+        }
+    }
+
+    
+    .m-cdrawer_content {
+        height: calc(100vh - 50px) !important;
+    }
+}

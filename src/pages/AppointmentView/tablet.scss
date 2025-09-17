@@ -1,0 +1,40 @@
+.p-appointment_view {
+    .m-public_table .ant-table-wrapper .ant-spin-container .ant-table {
+        height: calc(100% - 2px);
+    }
+    
+    .p-appointment_view_table .m-public_table .ant-table-wrapper .ant-spin-container .ant-table .ant-table-container .ant-table-body {
+        max-height: calc(100vh - 160px) !important;
+        overflow-x: scroll;
+    }
+    @include break-max(1380px) {
+        .p-appointment_view_filter {
+            .a-date_picker,
+            .ant-picker {
+                width: calc((100vw - 40px) / 5) !important;
+                min-width: unset !important;
+                max-width: unset !important;
+            }
+
+            
+
+            &_bottom {
+                .m-multi_select,
+                .a-dropdown,
+                .a-input {
+                    width: calc((100vw - 40px) / 5.5) !important;
+                    min-width: unset !important;
+                    max-width: unset !important;
+                }
+
+                .a-input_wrap ,
+                .a-input_input {
+                    width: calc((100vw - 40px) / 4.7) !important;
+                    min-width: unset !important;
+                    max-width: unset !important;
+                }
+            }
+        }
+    }
+    
+}

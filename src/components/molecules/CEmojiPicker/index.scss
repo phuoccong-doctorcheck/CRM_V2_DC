@@ -1,0 +1,23 @@
+.m-emoji {
+    height: 450px !important;
+
+    .epr-main {
+        .epr-preview {
+            display: none;
+        }
+
+        .epr-header {
+            .epr-header-overlay {
+                .epr-skin-tones {
+                    display: none;
+                }
+            }
+        }
+
+        .epr-body {
+            .epr-hidden-on-search {
+                display: none;
+            }
+        }
+    }
+}

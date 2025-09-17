@@ -1,0 +1,16 @@
+/* stylelint-disable scss/selector-no-redundant-nesting-selector */
+.a-audio-player {
+    & > * {
+        height: 40px !important;
+        border-radius: 8px !important;
+        @include border-shadow();
+        border-color: #e8e7e7;
+    }
+
+    .rap-container {
+        .rap-pp-button,
+        .rap-volume {
+            transform: scale(0.8);
+        }
+    }
+}

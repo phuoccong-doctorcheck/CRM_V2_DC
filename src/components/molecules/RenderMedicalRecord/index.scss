@@ -1,0 +1,73 @@
+.m-medical_record {
+    &_chapter {
+        margin-top: 12px;
+
+        &_heading {
+            .a-typography {
+                font-size: 16px;
+            }
+
+        }
+
+        &:first-child {
+            margin-top: 0;
+        }
+
+        &_content {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 6px;
+
+            &_item {
+                display: flex;
+                align-items: flex-start;
+                justify-content: flex-start;
+
+
+            }
+
+            &_iv {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                padding-right: 40px;
+
+                &_info {
+                    width: max-content;
+                    min-width: 250px;
+                    border: 1px solid;
+                    border-radius: 8px;
+                }
+            }
+
+            &_viii {
+                &_info {
+                    margin-top: 8px;
+
+                    &_item {
+                        margin-top: 8px;
+
+                        &:first-child {
+                            margin-top: 0;
+                        }
+
+                        p {
+                            margin-left: 20px;
+                        }
+                    }
+                }
+            }
+
+            &_ix {
+                &_info_item {
+                    span {
+                        &:first-child {
+                            font-weight: 600;
+                            margin-right: 8px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

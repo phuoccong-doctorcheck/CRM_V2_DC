@@ -1,0 +1,43 @@
+.p-permission {
+    width: 100vw;
+    height: calc(100vh - 75px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &_wrap {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    &_404 {
+        font-size: 90px;
+        color: $cg-red;
+        font-weight: 700;
+    }
+
+    &_content {
+        h4 {
+            margin: 0;
+            font-size: 36px;
+            line-height: 44px;
+        }
+
+        p {
+            margin: 8px 0 12px;
+            font-size: 18px;
+        }
+
+        span {
+            display: block;
+            color: $gray;
+            max-width: 600px;
+
+            a {
+                color: $button-blue;
+                cursor: pointer;
+            }
+        }
+    }
+}

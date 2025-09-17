@@ -1,0 +1,122 @@
+.t-content_message {
+    width: calc(100vw - 772px);
+    height: calc(100vh - 110px);
+    border-radius: 4px;
+    background-color: transparent;
+    outline: 1px solid $gray-border;
+    padding: 2px;
+    overflow: hidden;
+
+    @include break-max(1280px) {
+        width: calc(100vw - 628px) !important;
+    }
+
+    &_header {
+        height: rem(36);
+        background-color: $white;
+        border-radius: rem(4);
+        padding: rem(2);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1);
+
+        &_left {
+            display: flex;
+            padding: 0 0 0 8px;
+
+            .a-icon {
+                width: 50px !important;
+                height: 50px !important;
+                margin-right: 20px;
+            }
+
+            &_title {
+                .a-typography {
+                    @include text-overflow();
+                    font-size: 18px;
+                    color: $button-blue;
+                }
+            }
+        }
+
+        &_right {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+
+            &_item {
+                padding: 8px;
+                border-radius: 50%;
+                cursor: pointer;
+
+                .a-icon {
+                    width: 25px;
+                    height: 25px;
+                    
+                }
+
+                &:hover {
+                    background-color: #e4e0e0af;
+                }
+            }
+        }
+    }
+
+    &_main {
+        height: calc(100vh - 160px);
+        width: calc(100vw - 770px);
+
+        &_editor {
+            min-height: 85px;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        @include break-max(1280px) {
+            width: calc(100vw - 635px) !important;
+        }
+    }
+
+    &_tag {
+        display: grid;
+        width: calc(100vw - 774px);
+        border-radius: 4px;
+        overflow: hidden;
+        background-color: transparent;
+
+        &-overflow {
+            height: 50px;
+        }
+
+        &_item {
+            min-width: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            height: 24px;
+            border-radius: 2px;
+            @include text-overflow(1);
+            text-align: center;
+
+            &:hover {
+                opacity: 0.8;
+            }
+        }
+        @include break-max(1440px) {
+            grid-template-columns: repeat(8, 1fr);
+            grid-column-start: auto;
+        }
+        
+        @include break-max(1280px) {
+            width: calc(100vw - 628px) !important;
+            grid-template-columns: repeat(5, 1fr) !important;
+            overflow: unset;
+
+            .t-content_message_tag_item {
+                border: 1px solid $gray-border;
+            }
+        }
+    }
+}

@@ -1,0 +1,221 @@
+.t-popup_boxchat {
+    width: 550px;
+    height: 600px;
+    background-color: $white;
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    padding: 0;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    box-shadow: -3px -4px 19px 1px rgba(0, 0, 0, 0.1);
+    outline: 1px solid #ced0d4;
+    z-index: 1000;
+    
+    &-hide {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        bottom: 20;
+        right: 20;
+        cursor: pointer;
+        background-color: $white;
+        position: relative;
+        animation-delay: 1s;
+        animation: scale 1s ease-in-out;
+        transition: all 0.3s ease;
+
+        &::after {
+            content: '';
+            background: url('~assets/icons/ic_messenger.svg') no-repeat;
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background-size: cover;
+            width: 24px;
+            height: 24px;
+        }
+    }
+
+    &_header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 40px;
+        background-color: $white;
+        outline: 1px solid #ced0d4;
+        border-top-right-radius: 8px;
+        border-top-left-radius: 8px;
+        position: relative;
+        z-index: 1001;
+
+        &_right {
+            display: flex;
+
+            &_btn {
+                padding: 4px 8px;
+                background-color: $white;
+                margin: 0 4px;
+                cursor: pointer;
+                border-radius: 6px;
+                position: relative;
+                z-index: 1000;
+
+                &:last-child {
+                    margin: 0 0 0 4px;
+                }
+
+                &:hover {
+                    background-color: $gray-blur;
+                }
+            }
+        }
+
+        &_left {
+            display: flex;
+            align-items: center;
+            width: 100%;
+
+            &_name {
+                width: 100%;
+                text-align: center;
+                font-size: 20px;
+                color: $blue-main;
+                font-weight: 600;
+            }
+        }
+    }
+
+    &_body {
+        height: 560px;
+
+        .t-boxchat {
+            height: 460px;
+            border-radius: unset;
+            margin-top: 0;
+        }
+
+        &_quit {
+            height: 50px;
+            padding: 8px 6px;
+            display: flex;
+            gap: 10px;
+
+            &_tag {
+                width: 54.5%;
+
+                .ant-select-selector {
+                    width: 100%;
+                    overflow: scroll;
+                }
+                @include break-max(rem(1280)) {
+                    width: 100%;
+                }
+
+            }
+
+            li {
+                .a-button {
+                    background-color: $green;
+                    color: $white;
+                    border-radius: 8px;
+                    @include break-max(rem(1280)) {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+
+                    .a-typography {
+                        width: fit-content;
+                    }
+                }
+            }
+        }
+
+        &_editor {
+            .m-editor_item_input {
+                height: 40px;
+            }
+        }
+    }
+
+    // @include break-max(rem(1280)) {
+    //     min-width: 400px;
+    //     width: calc(800px - (1280px - 90vh));
+    // }
+    
+    
+    .t-popup_notes {
+        position: absolute;
+        top: 0;
+        transform: translateX(900px);
+        transition: transform 0.5s ease;
+        
+        
+        &-show {
+            left: -400px;
+            width: 400px;
+            height: 600px;
+            background-color: $white;
+            padding: 20px 8px 0;
+            transform: translateX(-4px);
+            transition: all 0.4s ease;
+            position: absolute;
+            z-index: 1;
+            outline: 1px solid #ced0d4;
+            border-radius: 8px;
+        }
+    
+        .a-textarea {
+            width: 100%;
+    
+            &_input {
+                height: 490px;
+            }
+    
+            &_label {
+                .a-typography {
+                    font-weight: 700;
+                    color: $blue-main;
+                }
+            }
+        }
+    
+        .a-button {
+            margin-top: 10px;
+        }
+    
+        // @include break-max(rem(1280)) {
+        //     left: -250px;
+        //     top: 0;
+        //     width: 250px;
+        // }
+    }
+}
+
+
+@keyframes scale {
+    0% {
+        transform: scale(1);
+    }
+
+    25% {
+        
+        transform: scale(0.8);
+    }
+
+    50% {
+        transform: scale(1);
+
+    }
+
+    75% {
+        
+        transform: scale(0.8);
+    }
+
+    100% {
+        
+        transform: scale(1);
+    }
+}

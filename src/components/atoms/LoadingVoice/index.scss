@@ -1,0 +1,97 @@
+
+$height: 34%;
+
+.a-loadingVoice {
+
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    span,
+    p {
+        margin-right: rem(4);
+        border-radius: rem(20);
+    }
+    
+    &_shot {
+        display: inline-block;
+        width: rem(5);
+        height: rem(20);
+        background-color: $blue-main;
+    }
+
+    &_long {
+        display: inline-block;
+        width: rem(5);
+        height: rem(34);
+        background-color: $columbia-blue;
+    }
+
+    span:nth-of-type(1) {
+        animation: anime2 1.5s ease-in-out infinite;
+    }
+
+    span:nth-of-type(2) {
+        animation: anime1 1.5s ease-in-out 0.15s infinite;
+    }
+
+    span:nth-of-type(3) {
+        animation: anime2 1.5s ease-in-out 0.3s infinite;
+    }
+
+    span:nth-of-type(4) {
+        animation: anime1 1.5s ease-in-out 0.45s infinite;
+    }
+
+    span:nth-of-type(5) {
+        animation: anime2 1.5s ease-in-out 0.6s infinite;
+    }
+
+    span:nth-of-type(6) {
+        animation: anime1 1.5s ease-in-out 0.75s infinite;
+    }
+
+    span:nth-of-type(7) {
+        animation: anime2 1.5s ease-in-out 0.9s infinite;
+    }
+
+    @keyframes anime1 {
+        from {
+            height: height;
+        }
+
+        40% {
+            height: 60%;
+        }
+
+        80% {
+            height: height;
+        }
+
+        to {
+            height: height;
+        }
+    }
+
+    @keyframes anime2 {
+        from {
+            height: height /2;
+        }
+
+        40% {
+            height: 40%;
+        }
+
+        80% {
+            height: height;
+        }
+
+        to {
+            height: height;
+        }
+    }
+
+}

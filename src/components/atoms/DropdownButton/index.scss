@@ -1,0 +1,76 @@
+/* stylelint-disable scss/selector-no-redundant-nesting-selector */
+.a-dropdown_button {
+    width: fit-content;
+    height: fit-content;
+    transition: all 0.5s ease;
+
+    &_button {
+        border: unset;
+        background-color: $green;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        text-transform: capitalize;
+        color: $white;
+        position: relative;
+        z-index: 1;
+
+        &:hover {
+            box-shadow: 0 3px 8px 1px rgba(0, 0, 0, 0.1);
+        }
+        
+    }
+
+    &-open {
+        transition: all 0.5s ease;
+
+        &_list {
+            display: flex;
+            flex-direction: column;
+            max-width: max-content;
+            min-width: 120px;
+            height: fit-content;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+            padding: 4px 6px 4px 4px;
+            z-index: 1000;
+            position: absolute;
+            background-color: #fff;
+            top: 45px;
+            box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        &_list > * {
+            display: block;
+            padding: 4px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin: 3px 0;
+            width: 100%;
+            min-width: 110px;
+            height: 30px !important;
+            animation: showList 0.2s ease forwards;
+            transition: animation 0.2s ease;
+
+            &:hover {
+                transform: scale(0.97) !important;
+                transition: transform 0.5s ease;
+                box-shadow: 0 2px 3px 1px rgba(0, 0, 0, 0.4);
+                opacity: 0.9;
+            }
+        }
+    }
+}
+
+
+@keyframes showList {
+    from {
+        transform: translateX(100%);
+
+    }
+    
+    to {
+        transform: translateX(0%);
+    }
+}

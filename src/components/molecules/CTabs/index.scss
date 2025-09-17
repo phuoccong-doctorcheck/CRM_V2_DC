@@ -1,0 +1,29 @@
+/* stylelint-disable scss/selector-no-redundant-nesting-selector */
+.m-ctabs {
+    .ant-tabs > .ant-tabs-nav .ant-tabs-tab {
+        padding: 8px 16px !important;
+
+        &>* {
+            font-weight: 600;
+            color: $blue-main;
+        }
+    }
+
+    .ant-tabs-left >.ant-tabs-nav .ant-tabs-tab+.ant-tabs-tab {
+        margin: 8px 0 0;
+    }
+
+    .ant-tabs-top >.ant-tabs-nav .ant-tabs-tab+.ant-tabs-tab {
+        margin: 0 0 0 16px;
+    }
+
+    .ant-tabs-tab-active {
+        &>* {
+            color: $green !important;
+        }
+        background-color: $white;
+        border-radius: 4px;
+        transition: background-color 0.1s linear;
+    }
+
+}

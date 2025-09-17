@@ -1,0 +1,40 @@
+.t-result_physical {   
+    height: calc(100vh - 350px);
+
+    .o-categories_customer_right_title .a-typography {
+        text-transform: uppercase;
+        color: $main-color;
+    }
+
+    .o-categories_customer_left {margin-left: 4px;
+
+        .o-collapse {
+            width: 100%;
+            margin-bottom: 12px;
+
+            .ant-collapse {
+                &-header {
+                    background-color: #ced4da73;
+                    padding: 4px 6px;
+
+                    &-text {
+                        .a-typography {
+                            font-size: 14px !important;
+                            font-weight: 400;
+                            color: $button-blue;
+                        }
+                    }
+
+                    .ant-collapse-expand-icon {
+                        transform: scale(0.85);
+                    }
+                }
+
+                &-content {
+                    background-color: #f3f3f3;
+                    box-shadow: unset;
+                }
+            }
+        }
+    }    
+}   

@@ -1,0 +1,57 @@
+.p-comming_soon {
+    width: 100%;
+    height: calc(100vh - 80px);
+    @include flex-box(center, center);
+    
+    &_wrap {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: center;
+        align-items: center;
+        transform: translateY(-10%);
+        
+        &_title {
+            width: 100%;
+            @include flex-box(center, center);
+            flex-direction: column;
+            position: relative;
+            padding: 0 30px;
+
+            h2 {
+                text-align: center;
+                font-size: 50px;
+                width: max-content;
+                color: $blue-main;
+            }
+
+            h1 {
+                text-align: center;
+                font-size: 50px;
+                width: max-content;
+                color: $blue-main;
+                margin: 20px 0;
+                transform: translateY(-20px);
+            }
+
+            .a-button {
+                height: 40px;
+                margin-top: 50px;
+                width: max-content;
+                border-radius: 20px;
+            }
+        }
+
+        &_img {
+            width: 60%;
+            @include flex-box(center, center);
+
+            img {
+                width: 80%;
+                height: 80%;
+                object-fit: contain;
+            }
+        }
+    }
+}

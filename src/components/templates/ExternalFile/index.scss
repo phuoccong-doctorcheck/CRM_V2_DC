@@ -1,0 +1,86 @@
+.t-external_file {
+    width: 100%;
+    padding: 2px 4px;
+
+    &_header {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        
+        &_wrap {
+            width: 100%;
+            height: 36px;
+
+            .t-public_header_right {
+                .a-button {
+                    width: max-content;
+                    height: 28px;
+                }
+
+                .t-public_header_right_filter,
+                .t-public_header_right_dial {
+                    height: 28px;
+                    border-radius: 8px;
+                }
+            }
+
+        }
+    }
+
+
+    &_content {
+        width: 100%;
+        height: calc(100% - 24px);
+        @include border-shadow();
+        padding: 0 !important;
+        overflow: hidden;
+        margin-top: 4px;
+        
+        .m-public_table {
+            margin-top: 0;
+        }
+    }
+
+    &_form {
+        .a-upload {
+            margin-top: 12px;
+        }
+
+        &_btn {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-top: 12px;
+
+            .m-editor_item {
+                width: fit-content;
+                min-width: 120px;
+                background-color: $blue-main;
+                border-radius: 4px;
+                box-shadow: 0 2px 7px 1px rgba(0, 0, 0, 0.1);
+
+                label {
+                    padding: 4px 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: $white;
+                }
+            }
+
+            &_file {
+                color: $button-blue;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                transition: all 0.5s ease;
+
+                .a-icon {
+                    transition: all 0.5s ease;
+                }
+            }
+
+        }
+    }
+}

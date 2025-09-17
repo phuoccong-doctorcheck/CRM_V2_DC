@@ -1,0 +1,84 @@
+/* stylelint-disable max-nesting-depth */
+.t-price_list {
+    &_search {
+        .a-input {
+            &_input {
+                height: 32px !important;
+            }
+
+            &_error {
+                display: none;
+            }
+        }
+    }
+
+    &_content {
+        height: calc(100vh - 180px);
+        overflow-y: scroll;
+        @include scroll-bars(2, 2);
+
+        &_item {
+            margin: 8px 0;
+
+            .o-collapse {
+                .ant-collapse {
+                    border: 1px solid$gray-border !important;
+                    border-radius: 4px !important;
+                    overflow: hidden;
+
+                    .ant-collapse-header {
+                        padding: 2px;
+
+                        &-text {
+                            .a-typography {
+                                font-size: 16px;
+                                font-weight: 400;
+                                color: $blue-main;
+                            }
+                        }
+                    }   
+
+                    .ant-collapse-content-box {
+                        padding: 4px 2% 4px 2px !important;
+                    }
+                }
+
+                .ant-collapse-item-active {
+                    .ant-collapse-header {
+                        border-bottom: 1px solid$gray-border;
+                    }
+                }
+
+            }
+
+            .o-collapse .ant-collapse-header .ant-collapse-expand-icon {
+                transform: scale(0.75);
+            }
+
+            &_wrap {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin: 4px 0;
+                padding: 2px 4px;
+                transition: all 0.5s linear;
+
+                li {
+                    &:last-child {
+                        color: $cg-red;
+                    }
+
+                    &:first-child {
+                        width: 75%;
+                    }
+                }
+
+                &:hover {
+                    background-color: $bg-gray-blur;
+                    border-radius: 4px;
+                    transition: background-color 0.5s linear;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,111 @@
+.a-statistic {
+    padding: 4px;
+    box-shadow: 0 4px 7px 2px rgba(0, 0, 0, 0.15);
+    background-color: $white;
+    outline: 1px solid #e3e3e3;
+    border-radius: 4px;
+    height: 98%;
+    min-height: 100px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(0.96) rotate3d(1, 1, 1, -1deg);
+        transition: transform 0.2s ease;
+    }
+
+    &_title {
+        display: flex;
+        justify-content: center;
+
+        .a-typography {
+            font-size: 24px;
+            font-weight: 600;
+            color: $main-color;
+            margin-top: 10px;
+            text-transform: capitalize;
+
+            @include break-max(1280px) {
+                font-size: 20px;
+            }
+        }
+    }
+
+    &_quality {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        height: 80%;
+        position: relative;
+
+        .a-typography {
+            font-size: 40px;
+            line-height: 50px;
+            font-weight: 600;
+            color: $main-color;
+            text-align: center;
+        }
+
+        span {
+            font-size: 16px;
+            transform: translateY(-5px);
+            color: $gray;
+            margin-left: 12px;
+        }
+
+        &_loading {
+            transform: translate(15px, -20px);
+        }
+
+    }
+
+    &-red {
+        .a-statistic {
+            &_title {
+                display: flex;
+                justify-content: center;
+
+                .a-typography {
+                    color: $cg-red !important;
+                }
+            }
+        }
+    }
+
+    &-grouth {
+        .a-statistic {
+            &_title {
+                display: flex;
+                justify-content: center;
+                
+                .a-typography {
+                    color: $green !important;
+                }
+            }
+        }
+    }
+
+    &-money {
+        .a-statistic {
+            &_quality {
+                display: flex;
+                justify-content: center;
+
+                .a-typography {
+                    font-size: 32px;
+                    color: $green;
+
+                    @include break-max(1280px) {
+                        font-size: 26px;
+                    }
+                }
+            }
+        }
+    }
+    
+
+    // &_wrap{
+
+    // }
+}

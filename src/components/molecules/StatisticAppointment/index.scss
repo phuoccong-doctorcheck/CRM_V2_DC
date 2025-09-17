@@ -1,0 +1,51 @@
+/* stylelint-disable scss/selector-no-redundant-nesting-selector */
+.m-statistic_appointment {
+    &_item {
+        background-color: rgb(255, 255, 255);
+        border-radius: 8px;
+        padding: 8px;
+        margin-bottom: 20px;
+        -webkit-box-shadow: 0 4px 16px 0 rgba(30, 49, 80, 0.1);
+
+        .a-typography {
+            text-align: center;
+            margin-bottom: 6px;
+            font-size: 20px;
+            font-weight: 600;
+            color: $blue-main;
+            text-transform: uppercase;
+        }
+
+        &_origin {
+            height: 500px;
+            
+            .o-render_chart {
+                height: 500px;
+
+                .echarts-for-react {
+                    height: 600px !important;
+                }
+            }
+        }
+
+        &_overview {
+            height: 500px;
+            
+            .o-render_chart {
+                .echarts-for-react {
+                    height: 500px !important;
+                }
+            }
+        }
+
+        &_partner {
+            height: 600px;
+            
+            .o-render_chart {
+                .echarts-for-react {
+                    height: 600px !important;
+                }
+            }
+        }
+    }
+}

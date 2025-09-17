@@ -1,0 +1,134 @@
+/* stylelint-disable max-nesting-depth */
+.t-list_job {
+    width: 100%;
+    height: calc(100vh - 140px);
+    padding: 2px 4px;
+
+    &_header {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        
+        &_wrap {
+            width: 100%;
+            height: 36px;
+
+            .t-public_header_left {
+                .a-input {
+                    margin-left: 0;
+                }
+            }
+
+            .t-public_header_right {
+                .a-button {
+                    width: max-content;
+                    height: 28px;
+                }
+
+                .t-public_header_right_filter,
+                .t-public_header_right_dial {
+                    height: 28px;
+                    border-radius: 8px;
+                }
+            }
+
+            &_list {
+                .a-dropdown {
+                    min-width: 200px;
+
+                    &_label {
+                        display: none;
+                    }
+
+                    .ant-select {
+
+                        transform: translateY(-5px);
+                    }
+
+                    .ant-select,
+                    .ant-select-selector {
+                        height: 30px !important;
+                        border-radius: 4px !important;
+                    }
+                }
+            }
+        }
+        
+
+        
+    }
+
+    &_form_content {
+        &_flex {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            width: 100%;
+            flex-grow: 3;
+
+            .a-dropdown {
+                flex: 1;
+            }
+        }
+
+        &_flex2 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 6px;
+            margin-bottom: 8px;
+
+            .a-group_radio {
+                width: fit-content;
+                transform: translate(20px, 15px);
+
+
+                .a-date_picker {
+                    width: 100%;
+                }
+
+                .ant-radio-wrapper {
+                    &:last-child {
+                        margin-right: 0 !important;
+
+                        span {
+                            &:last-child {
+                                margin-right: 0 !important;
+                            }
+
+                        }
+                    }
+
+                    .a-typography {
+                        font-size: 14px;
+                    }
+                }
+
+            }
+        }
+
+        &_btn {
+            display: flex;
+            margin-top: 12px;
+            justify-content: center;
+            gap: 12px;
+
+            .a-button {
+                max-width: 160px;
+            }
+        }
+    }
+
+    &_content {
+        height: calc(100% - 24px);
+        @include border-shadow();
+        padding: 0 !important;
+        overflow: hidden;
+        margin-top: 4px;
+
+        .m-public_table {
+            margin-top: 0;
+        }
+    }
+}

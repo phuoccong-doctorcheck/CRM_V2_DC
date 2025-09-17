@@ -1,0 +1,112 @@
+.m-richtext_editor {
+    width: 100%;
+    // height: fit-content;
+    // min-height: 200px;
+
+    .ck-editor {
+        height: 100%;
+    }
+    
+    &-high {
+        .ck-editor__main {
+            width: 100%;
+            border-radius: 8px !important;
+            
+            .ck-editor__top .ck-sticky-panel .ck-sticky-panel__content .ck-toolbar {
+                border: 1px solid  #00b3ff6e !important;
+            }
+
+            .ck-content {
+                height: 500px !important;
+                padding: rem(8) rem(12) !important;
+                font-size: rem(14);
+                background-color: $lavender !important;
+                transition: background-color 0.5s ease-out;
+
+                
+                &:focus {
+                    border-color: $blue-main !important;
+                    box-shadow: unset !important;
+                }
+            }
+        }
+    }
+
+    &-not_header {
+        .ck-editor {
+            .ck-editor__top {
+                display: none !important;
+            }
+
+            .ck-content {
+                border: unset !important;
+                box-shadow: unset !important;
+                background-color: #d9d9d938 !important;
+                padding: 2px 5px !important;
+                border-left: 4px solid #acccd3 !important;
+                border-radius: 4px !important;
+            }
+        }
+    }
+
+    &-notHeadernotBorder {
+        .ck-editor {
+            .ck-editor__top {
+                display: none !important;
+            }
+
+            .ck-content {
+                border: unset !important;
+                box-shadow: unset !important;
+                background-color: #d9d9d938 !important;
+                padding: 2px 5px !important;
+                border-left: unset !important;
+                border-radius: 4px !important;
+            }
+        }
+
+    }
+
+    &-notHeadernotBordernotBG {
+        .ck-editor {
+            .ck-editor__top {
+                display: none !important;
+            }
+
+            .ck-content {
+                border: unset !important;
+                box-shadow: unset !important;
+                background-color: transparent !important;
+                padding: 2px 5px !important;
+                border-left: unset !important;
+                border-radius: 4px !important;
+            }
+        }
+
+    }
+
+    &-notuseHeaderCustom {
+        .ck-editor {
+            .ck-editor__top {
+                display: none !important;
+            }
+
+            .ck-content {
+                border: unset !important;
+                box-shadow: unset !important;
+                background-color: #c9d0de38 !important;
+                padding: 2px 5px !important;
+                border-left: unset !important;
+                border-radius: 4px !important;
+            }
+        }
+    }
+
+    &-notHeadernotBordernotBGBoxShadown {
+        .ck-editor {
+            .ck-editor__top {
+                display: none !important;
+            }
+        }
+    }
+}

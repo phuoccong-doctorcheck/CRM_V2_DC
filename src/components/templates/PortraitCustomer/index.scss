@@ -1,0 +1,238 @@
+.t-portrait_customer {
+    height: calc(100vh - 350px);
+    width: 100%;
+    
+    &_loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        background-color: #e2e2e2d7;
+        cursor: no-drop;
+    }
+
+    &_header {
+        padding: 4px 12px 0;
+
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        &_item {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            gap: 6px;
+
+            &_title {
+                font-weight: 600;
+                font-size: 15px;
+            }
+            
+            &_value {
+                font-size: 16px;
+                color: $main-color;
+            }
+        }
+
+        &_title {
+            text-align: center;
+            text-transform: uppercase;
+            margin-top: 8px;
+            margin-bottom: 8px;
+
+            p {
+                font-weight: 600;
+                font-size: 15px;
+                color: $main-color;
+            }
+        }
+    }
+
+    &_content {
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        transition: all 0.5s ease;
+        height: fit-content !important;
+        gap: 10px;
+        padding: 0 20px 0 0;
+
+        &_portrait {
+            flex: 8;
+            margin-left: 6px;
+            width: 80%;
+        }
+    }
+
+    .a-input {
+        &_input {
+            background-color: transparent !important;
+            font-size: 16px;
+            color: $button-blue !important;
+        }
+
+        &_error {
+            display: none;
+        }
+    }
+
+    &_csth {
+        padding: 0 4px 16px;
+        overflow-y: scroll;
+        height: calc(100vh - 150px);
+        width: 100%;
+        margin-top: 8px;
+
+        &_answer {
+            padding: 4px;
+            background-color: $white;
+            border-radius: 4px;
+
+            &_item {
+                margin-bottom: 4px;
+                margin-left: 10px;
+
+                &_checkbox {
+                    &_q2 {
+                        display: flex;
+                        justify-content: flex-start;
+                        gap: 10%;
+                    }
+
+                    .a-checkbox {
+                        &_text {
+                            font-size: 15px;
+                            color: $button-blue;
+                        }
+                    }
+
+                }
+
+                
+
+                &_checkbox6 {
+                    &_q8 {
+                        display: grid;
+                        grid-template-columns: repeat(3, 1fr);
+
+                        &_item {
+                            display: flex;
+                            justify-content: flex-start;
+                            gap: 10%;
+                        }
+                    }
+
+                    .a-checkbox {
+                        &_text {
+                            font-size: 15px;
+                            color: $black-08;
+                        }
+                    }
+
+               
+
+                    .a-checkbox {
+                        &_text {
+                            font-size: 15px;
+                            color: $button-blue;    
+                        }
+                    }
+
+                }
+
+
+                &_normal {
+                    .a-input {
+                        &_input {
+                            min-height: 50px;
+                            background-color: transparent !important;
+                            font-size: 16px;
+                        }
+
+                        
+                    }
+                }
+
+                &_title {
+                    font-weight: 500;
+                    transform: translateX(-20px);
+                }
+
+                &_flex {
+                    li {
+                        width: max-content;
+                        min-width: 30%;
+                    }
+                }
+
+                .a-input_error {
+                    display: none;
+                }
+
+                .a-input_input {
+                    color: $black-08 !important;
+                }
+
+                .a-textarea_input {
+                    min-height: 60px;
+                    padding: 8px;
+                    border-radius: 4px;
+                }
+
+                .a-typography {
+                    font-size: 14px;
+                }
+
+                .a-group_radio {
+                    .ant-radio-group {
+                        gap: 30% !important;
+                        display: flex;
+                        align-items: center;
+                    }
+                }
+            }
+        }
+    }
+
+    &_csktq {
+        height: calc(100vh - 100px);
+        overflow-y: scroll;
+
+        &_answer {
+            padding: 4px;
+            background-color: $white;
+            border-radius: 4px;
+        }
+
+        
+
+        &_item {
+            margin-bottom: 6px;
+            margin-left: 20px;
+
+            .a-input_error {
+                display: none;
+            }
+
+            .a-textarea_input {
+                min-height: 60px;
+                padding: 8px;
+                border-radius: 4px;
+            }
+
+            .a-typography {
+                font-size: 14px;
+            }
+
+            .a-group_radio {
+                .ant-radio-group {
+                    gap: 30% !important;
+                    display: flex;
+                    align-items: center;
+                }
+            }
+        }
+    }
+    
+}

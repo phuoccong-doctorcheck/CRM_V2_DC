@@ -1,0 +1,16 @@
+.t-tags {
+    &_header {
+        display: flex;
+        justify-content: flex-end;
+        padding: 6px;
+        margin-bottom: 8px;
+        background-color: $white;
+        border-radius: 8px;
+        box-shadow: 0 0 24px rgba(0, 0, 0, 0.2);
+
+        .a-button {
+            width: 160px;
+            height: 32px;
+        }
+    }
+}

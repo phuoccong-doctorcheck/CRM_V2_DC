@@ -1,0 +1,110 @@
+.m-list_categories {
+    &_item {
+        margin-bottom: 4px;
+        cursor: pointer;
+        padding: 4px 8px;
+        border-bottom: 1px #ced4da;
+        border-bottom-style: dotted;
+        transition: all 0.5s ease;
+
+        &_title {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 6px;
+
+            .a-typography {
+                font-size: 15px;
+                color: $blue-main;
+
+            }
+        }
+
+        &:hover {
+            transform: translateX(2px);
+            transition: transform 0.5s ease;
+            border-radius: 8px;
+            background-color: rgba(202, 205, 213, 0.612);
+        }
+           
+    }
+
+    &_child {
+        margin: 4px 4px 8px 10px;
+        padding: 4px 6px;
+        transition: all 0.5s ease;
+
+        &-done {
+            color: $green;
+        }
+
+        span {
+            margin: 0;
+        }
+
+        &-inprogress {
+            color: $cg-red;
+        }
+
+        &:hover {
+            transform: translateX(4px);
+            transition: transform 0.5s ease;
+            background-color: $white;
+            border-radius: 8px;
+
+        }
+
+        p {
+            font-weight: 600;
+            color: $jetSub;
+        }
+    }
+
+    &_btn {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+
+        
+        .a-button {
+            width: 70%;
+            height: 28px;
+            
+            @include break-max(1280px) {
+                width: 100%;
+            }
+
+            img {
+                height: 30px;
+            }
+
+            .a-typography {
+                width: max-content;
+            }
+        }
+    }
+
+    &_collapse {
+        .o-collapse .ant-collapse {
+            .ant-collapse-header {
+                padding: 8px 4px !important;
+                border-top-left-radius: 8px !important;
+                border-top-right-radius: 8px !important;
+                background-color: $blue-4 !important;
+    
+                .ant-collapse-header-text {
+                    .a-typography {
+                        font-weight: 600 !important;
+                        color: $jetSub !important;
+                    }
+                }
+            }
+    
+            .ant-collapse-content-box {
+                padding: 8px !important;
+                border: 1px solid $gray-border;
+                overflow: hidden;
+            }
+        }
+    }
+}

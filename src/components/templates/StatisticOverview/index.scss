@@ -1,0 +1,123 @@
+/* stylelint-disable max-nesting-depth */
+/* stylelint-disable scss/selector-no-redundant-nesting-selector */
+.t-statistic_overview {
+    height: calc(100vh - 160px);
+    gap: 12px;
+    padding: 12px 4px;
+    width: calc(100vw - 65px);
+    overflow-y: scroll;
+    @include scroll-bars(12,6);
+    
+    @include break-max(1280px) {
+        width: calc(100vw - 15px);
+    }
+    
+    &-list {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        transition: all 0.5s linear;
+        
+        @include break-max(1280px) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        @include break-max(860px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    &_item {
+        background-color: $white;
+        padding: 16px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 16px;
+        border-radius: 8px;
+        transition: all 0.5s linear;
+
+        span {
+            background-color: $blue-main;
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .a-typography {
+            font-size: 16px;
+            text-transform: capitalize;
+            font-weight: 400;
+        }
+        
+        &:hover {
+            outline: 1px solid $gray-border;
+            cursor: pointer;
+            @include shadown-box();
+            transition: all 0.5s ease-in-out;
+
+        }
+    }
+
+    &_main {
+        &_header {
+            background-color: $white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            @include shadown-box();
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+
+            &_left {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+
+                span {
+                    background-color: $blue-main;
+                    padding: 8px;
+                    border-radius: 8px;
+                }
+
+                .a-typography {
+                    font-size: 26px;
+                    text-transform: capitalize;
+                    font-weight: 600;
+                    color: $button-blue;
+                }
+            }
+
+            &_right {
+                p {
+                    background-color: $green;
+                    padding: 8px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    
+                    &:hover {
+                        opacity: 0.8;
+                    }
+                }
+
+            }
+        }
+
+        &_back {
+            position: absolute;
+            left: -40px;
+
+            p {
+                background-color: rgba(30, 49, 80, 0.05);
+                padding: 6px;
+                border-radius: 8px;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: $white;
+                }
+            }
+        }
+    }
+    
+}

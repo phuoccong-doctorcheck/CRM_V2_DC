@@ -1,0 +1,64 @@
+.p-apointment_list {
+
+    @include break-max(1640px) {
+        .p-apointment_list_filter {
+            .a-range_time,
+            .m-multi_select,
+            .a-dropdown,
+            .a-input ,
+            .a-input_input {
+                width: calc((100vw - 40px) / 4) !important;
+                min-width: unset !important;
+            }
+
+            &_bottom {
+                .m-multi_select,
+                .a-dropdown,
+                .a-input ,
+                .a-input_input {
+                    width: calc((100vw - 40px) / 7) !important;
+                    min-width: unset !important;
+                }
+
+            }
+        }
+    }
+    @include break-max(1440px) {
+        .p-apointment_list_filter {
+            .a-range_time {
+                width: calc((100vw - 40px) / 4) !important;
+                min-width: unset !important;
+            }
+
+            &_bottom {
+                .m-multi_select,
+                .a-dropdown,
+                .a-input ,
+                .a-input_input {
+                    width: calc((100vw - 40px) / 5) !important;
+                    min-width: unset !important;
+                }
+
+            }
+        }
+    }
+    @include break-max(1040px) {
+        .p-apointment_list_filter {
+            .a-range_time {
+                width: calc((100vw - 40px) / 4) !important;
+                min-width: unset !important;
+            }
+
+            &_bottom {
+                .m-multi_select,
+                .a-dropdown,
+                .a-input ,
+                .a-input_input {
+                    width: calc((100vw - 40px) / 5) !important;
+                    min-width: unset !important;
+                }
+
+            }
+        }
+    }
+}

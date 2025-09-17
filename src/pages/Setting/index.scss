@@ -1,0 +1,26 @@
+/* stylelint-disable scss/selector-no-redundant-nesting-selector */
+.p-setting {
+    width: 100%;
+    height: calc(100vh - 85px);
+    display: grid;
+    gap: 6px;
+
+    .ant-tabs {
+        height: calc(100vh - 90px);
+
+        .ant-tabs-content-holder >.ant-tabs-content>.ant-tabs-tabpane,
+        :where(.css-dev-only-do-not-override-17a39f8).ant-tabs-left >div>.ant-tabs-content-holder >.ant-tabs-content>.ant-tabs-tabpane {
+            padding: 4px 10px !important;
+        }
+
+        .ant-tabs-content {
+            padding: 4px;
+            border-radius: 4px;
+
+            & > * {
+                padding: 4px 2px !important;
+            }
+        }
+    }
+
+}

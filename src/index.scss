@@ -1,0 +1,38 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
+}
+
+
+// body {
+//     // font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+//     //     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue','SVN-Sofia Pro ExtraLight'
+//     //     sans-serif;
+//     font-family: 'SVN-Sofia Pro ExtraLight', sans-serif;
+//     -webkit-font-smoothing: antialiased;
+//     -moz-osx-font-smoothing: grayscale;
+//     margin: 0;
+// }
+
+// code {
+//     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', 'SVN-Sofia Pro ExtraLight'
+//         monospace;
+// }
+
+@font-face {
+    font-family: 'UTM Avo';
+    src: url('../public/UTM\ Avo.ttf') format('truetype');
+}
+
+.fontS {
+    font-family: 'UTM Avo';
+}

@@ -1,0 +1,48 @@
+.p-after_examination {
+    @include break-max(1480px) {
+        .p-after_examination_filter {
+            .a-date_picker {
+                width: calc((100vw - 40px) / 5) !important;
+                min-width: unset !important;
+                max-width: unset !important;
+            }
+                
+            .ant-picker,
+            .a-range_time {
+                width: calc((100vw - 40px) / 5) !important;
+                min-width: unset !important;
+                max-width: unset !important;
+            }
+
+            .a-input {
+                width: calc((100vw - 40px) / 3) !important;
+                min-width: unset !important;
+                max-width: unset !important;
+            }
+                    
+            .a-input_wrap ,
+            .a-input_input {
+                width: calc((100vw - 40px) / 3) !important;
+                min-width: unset !important;
+                max-width: unset !important;
+            }
+                
+            &_bottom {
+                .m-multi_select,
+                .a-dropdown,
+                .a-input {
+                    width: calc((100vw - 40px) / 6) !important;
+                    min-width: unset !important;
+                    max-width: unset !important;
+                }
+                    
+                .a-input_wrap ,
+                .a-input_input {
+                    width: calc((100vw - 40px) / 6) !important;
+                    min-width: unset !important;
+                    max-width: unset !important;
+                }
+            }
+        }
+    }
+}

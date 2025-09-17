@@ -1,0 +1,30 @@
+.a-range_point {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 32px;
+    gap: 8px;
+
+    .a-input {
+        width: 150px;
+        
+        &_input {
+            height: 30px !important;
+            border-radius: 4px;
+
+            &:focus {
+                border-color: $blue-main !important;
+            }
+        }
+
+        input {
+            color: $blue-main;
+            font-weight: 600;
+        }
+
+        &_error {
+            display: none;
+        }
+    }
+    
+}

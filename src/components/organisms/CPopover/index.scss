@@ -1,0 +1,109 @@
+/* stylelint-disable scss/selector-no-redundant-nesting-selector */
+.o-popover {
+    .ant-popover {
+        padding: 0 !important;
+    
+        .ant-popover-content {
+            max-width: 400px !important;
+    
+            .ant-popover-inner {
+                padding: rem(6);
+                width: fit-content;
+                max-height: 400px;
+                min-width: 400px;
+                overflow: scroll;
+    
+                .ant-popover-title {
+                    .a-typography {
+                        font-size: 18px;
+                        font-weight: 600;
+                        color: $button-blue !important;
+                        text-transform: capitalize;
+                    }
+    
+                    border-bottom: 1px solid #dcdcdc;
+                    margin-bottom: 4px;
+                }
+            }
+    
+            .ant-popover-inner-content {
+                overflow-y: scroll;
+                max-height: rem(370);
+                min-height: rem(370);
+    
+                & > * {
+                    max-height: rem(360);
+    
+                    & > * {
+                        max-height: rem(360);
+    
+                        & > * {
+                            max-height: rem(360);
+                        }
+                    }
+                    
+                    .a-typography {
+                        font-size: unset;
+                        font-weight: unset;
+                        color: unset;
+                        text-transform: unset;
+                    }
+                }
+            }
+        }
+    }
+
+    &_header-search {
+        display: flex;
+        justify-content: space-between;
+
+        .a-input {
+            height: 30px;
+            width: 70%;
+
+            &_input {
+                height: 30px !important;
+            }
+
+            &_error {
+                display: none;
+            }
+        }
+    }
+
+    &-padding {
+        .ant-popover-inner {
+            padding: rem(2) !important;
+        }
+
+        .ant-popover-title {
+            border-bottom: 1px solid$gray-border;
+            padding: 4px 6px 8px;
+            margin-bottom: 0 !important;
+        }
+
+        .ant-popover-inner-content {
+            padding: 4px;
+        }
+    }
+
+    &-fit {
+        .ant-popover-content {
+            max-width: 400px !important;
+            min-width: 400px !important;
+                
+            .ant-popover-inner {
+                padding: rem(6);
+                    
+                .ant-popover-inner-content {
+                    height: fit-content !important;
+                    max-height: 440px !important;
+                    min-height: 240px !important;
+                    overflow-y: scroll !important;
+                }
+            }
+        }
+    }
+}
+
+

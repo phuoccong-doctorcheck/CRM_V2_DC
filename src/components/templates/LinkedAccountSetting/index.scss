@@ -1,0 +1,36 @@
+.t-integration {
+    &_header {
+        display: flex;
+        justify-content: space-between;
+
+        .a-button {
+            width: fit-content;
+            margin: 12px;
+            height: 44px;
+        }
+
+        .o-tabs_labels {
+            display: flex;
+
+            .o-tabs_tab {
+                display: flex;
+                justify-content: center;
+
+                .a-icon {
+                    display: none;
+                }
+
+                span {
+                    font-weight: 600;
+                }
+            }
+        }
+    }
+
+    &_content {
+        height: calc(100vh - 155px);
+        background-color: transparent;
+        padding: 8px;
+        border-radius: 8px;
+    }
+}

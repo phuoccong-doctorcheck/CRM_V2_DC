@@ -1,0 +1,82 @@
+.m-multi_select {
+    width: 100%;
+
+    .ant-select-selector,
+    .ant-select-open,
+    .ant-select {
+        border-radius: 4px !important;
+    }
+
+
+    &-flex {
+        display: flex;
+        align-items: center;
+
+        .m-multi_select_label {
+            margin-right: 8px;
+        }
+    }
+
+    &_label {
+        .a-typography {
+            @include font-base(14, 20);
+            font-weight: 400;
+            display: block;
+            color: $jet;
+            margin-bottom: rem(0);
+            text-transform: capitalize;
+        }
+    }
+
+    &-style {
+        .ant-select {
+            width: 100%;
+
+            .ant-select-selector {
+                border-color: #00b3ff31 !important;
+                border-radius: rem(4);
+                font-size: rem(14);
+                background-color: $lavender !important;
+                transition: background-color 0.5s ease-out;
+
+                .ant-select-selection-item {
+                    padding: 6px 8px;
+                    display: flex;
+                    align-items: center;
+                }
+            }
+        }
+    }
+
+    &-simple {
+        .ant-select {
+            width: 100%;
+
+            .ant-select-selector {
+                display: flex;
+                align-items: center;
+                height: 32px !important;
+                width: 100% !important;
+                border-radius: 2px;
+                border-color: #ced4da;
+                padding: 5px 8px;
+                color: #495057;
+                background-color: #fff !important;
+                background-clip: padding-box;
+                border: 1px solid #ced4da;
+                box-shadow: inset 0 0 0 transparent;
+                transition: border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out;
+                font-size: rem(14);
+                font-weight: 400;
+                line-height: 1.5;
+                overflow-y: scroll;
+
+                .ant-select-selection-item {
+                    padding: 6px 8px;
+                    display: flex;
+                    align-items: center;
+                }
+            }
+        }
+    }
+}

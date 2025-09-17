@@ -1,0 +1,86 @@
+/* stylelint-disable scss/dollar-variable-pattern */
+// Text Colors
+$white: rgb(255, 255, 255); // #ffffff
+$black: rgb(0, 0, 0);//#00000
+$jet: rgb(69, 69, 69); //#454545
+$main-color: rgb(0, 85, 110) ; //#00556E
+$green: rgb(40, 167, 69); //#28a745
+$green-new: rgb(41, 168, 71); //#28a745
+$blue-info: rgb(0, 123, 255);//#007bff
+$gray: #6c757d; //#6c757d
+$orange: rgb(253, 126, 20); //#fd7e14
+$orange-blur: rgba(253, 125, 20, 0.192); //#fd7d1431
+$strong-cyan: #17a2b8; //#17a2b8
+$strong-cyan-2: #17a3b885; //#17a2b8
+$bright-red: #dc3545 ; //#dc3545
+$grayish-green: #b8d3ac; //#b8d3ac
+$bg-gray-hover: #eeececb3 ; //#ededed
+$yellow: #fff766 ; //#fff766
+$dark-violet: #72448c; //#72448c
+$bg-main: #f5f6fa; //#f5f6fa
+$bg-main-hover: #00b3ff21; //#f5f6fa
+$cornflowerblue: #6495ed;
+$steelblue: #7fb8e6;
+$gray-border: #dbdbdb;
+$gray-des: #1e3150;
+/* ---------------------------------------- */
+$blue-main: hsl(203, 96%, 44%);; //#1976D2
+$dark-Gray: rgb(169, 167, 167);//#A9A7A7
+$dim-gray: rgb(100, 99, 99); //#646363
+$celestial-blue: rgb(66, 141, 216); //#428dd8
+$sinopia: rgb(206, 49, 0); // #ce3100
+$snow: rgb(252, 249, 247); //#FCF9F7
+$cool-black: rgb(0, 43, 96); // #002b60
+$copper: rgb(179, 131, 58); // #b3833a
+$davys-grey: rgb(89, 89, 89); // #595959
+$gainsboro-sub: rgba(217, 217, 217, 0.63); //#d9d9d9
+$raisin-black: rgb(38, 38, 38); // #262626
+$taupe-gray: rgb(140, 140, 140); //#8c8c8c
+$green-ryb: rgb(118, 168, 38); // #76a826
+$white-smoke: rgb(246, 246, 246); // #F6F6F6
+$may-green: rgb(95, 158, 69); // #5F9E45
+$may-green-blur: rgba(137, 217, 103, 0.715); // #5F9E45
+$columbia-blue: rgb(203, 222, 240); //#cbdef0
+$cg-red: rgb(228, 52, 52);// #e43434
+$dark-gray: rgb(169, 167, 167); //a9a7a7
+$peach-orange: rgb(255, 214, 152); //#ffd698
+$bg-gray: rgb(234, 231, 231);//#EAE7E7
+$gray-blur: rgb(249, 249, 249);//#F9F9F9
+$blue-blur: rgb(153, 188, 223);//#99BCDF
+$blue-sub: rgb(2, 51, 104);//#428ddb
+$jetSub: rgb(50, 50, 50);//#323232
+$bg-gray-blur: #e8e8e8;//#e8e8e8
+$bg-blue-blur: #d4efff7c;//#e8e8e8
+$gainsboro: rgb(222, 222, 222); //#DEDEDE
+$silver: rgb(192, 192, 192); //#C0C0C0
+$anti-flash-white: rgb(242, 242, 242); //#f2f2f2
+$blue-2: rgb(110, 165, 219); //#6ea5db
+$blue-4: rgb(188, 222, 255); //#6ea5db
+$alice-blue: rgb(239, 247, 255);// #EFF7FF
+$pink: rgb(223, 12, 87); //#df0c57
+$dark-red: rgb(255, 0, 42); //#ff002a
+$space-cadet: #1e3150; //#1E3150
+$lavender: rgba(224, 240, 255, 0.502) ;//#E0F0FF80 
+// $yellow: rgb(255, 192, 0); //#ffc000
+$button-blue: rgb(39, 172, 253);//#27ACFD
+$gray-border: #dbdbdb;
+
+$white-03: rgba($white, 0.3);
+$white-01: rgba($white, 0.1);
+$white-08: rgba($white, 0.8);
+$black-01: rgba($black, 0.1);
+$black-02: rgba($black, 0.2);
+$black-03: rgba($black, 0.3);
+$black-05: rgba($black, 0.5);
+$black-12: rgba($black, 0.12);
+$black-08: rgba($black, 0.8);
+$black-025: rgba($black, 0.25);
+$black-085: rgba($black, 0.85);
+
+$main-gradient: linear-gradient(90deg, #005991   0%, #04566e 100%,);
+$main-gradient1: linear-gradient(120deg, #18a5a7   0%, #bfffc7 100%,);
+$main-gradient2: linear-gradient(15deg, #112d60   0%, #b6c0c5 100%,);
+$main-gradient3: linear-gradient(90deg, #05999e   0%, #cbe7e3 100%,);
+$teal-gradient-2: linear-gradient(180deg, #00a8a8 0%, #02747f 100%);
+$gradient-copper: linear-gradient(90deg, #d6bc76 0%, #bf9743 27.08%, #ece58e 51.32%, #d6bc76 67.71%, #b3833a 81.77%, #d7bc76 93.75%);
+$gradient-dark-green: linear-gradient(91.23deg, #002a2f -1.85%, #00383f 27.87%, #336553 82.21%, rgba(53, 142, 110, 0.8) 103.52%);

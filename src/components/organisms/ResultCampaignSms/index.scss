@@ -1,0 +1,17 @@
+.m-result_campaign {
+    height: calc(100vh - 165px);
+    overflow: hidden;
+    background-color: $white;
+    border: 1px solid #dbdbdb;
+    border-radius: 4px;
+
+    .m-public_table {
+        margin: 0;
+        padding: 0;
+        overflow: visible;
+
+        .ant-table {
+            height: calc(100% - 30px) !important;
+        }
+    }
+}

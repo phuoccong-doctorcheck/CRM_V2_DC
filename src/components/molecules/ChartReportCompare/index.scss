@@ -1,0 +1,14 @@
+.m-chart_report {
+    display: grid;
+    grid-template-columns: 1fr 200px;
+    height: 70vh;
+    
+    @include break-max(1280px) {
+        height: 400px;
+    }
+
+    &_option {
+        border-left: 1px solid #dbdbdb;
+        padding-left: 12px;
+    }
+}

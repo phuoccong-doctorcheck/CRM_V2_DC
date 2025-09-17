@@ -1,0 +1,62 @@
+.p-miss_call {
+    padding: 2px;
+
+    &_statistic {
+        margin: 8px 0;
+    }
+
+    &_table {
+        height: calc(100vh - 120px);
+        overflow: hidden;
+        margin-top: 12px;
+        display: flex;
+        justify-content: center;
+        
+        .m-public_table {
+            @include border-shadow();
+            padding: 0 !important;
+            margin-top: 0;
+            
+            .ant-table .ant-table-body .ant-table-tbody {
+                height: 100% !important;
+            }
+        }
+
+    }
+
+    &_resolve {
+        .a-input {
+            &_label {
+                font-weight: 600;
+                color: $blue-main;
+            }
+
+            &_input {
+                border-radius: 2px;
+                margin-top: 3px;
+            }
+        }
+
+        .a-textarea {
+            margin-bottom: 8px;
+
+            &_label {
+                .a-typography {
+
+                    font-weight: 600;
+                    color: $blue-main;
+                }
+            }
+        }
+
+        .a-switchs {
+            &_label {
+                .a-typography {
+                    font-weight: 600;
+                    color: $blue-main;
+                }
+
+            }
+        }
+    }
+}

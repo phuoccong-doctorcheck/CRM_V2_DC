@@ -1,0 +1,199 @@
+@mixin adjust-loading($width: 8, $height: 8) {
+    @if ($width > 12 & $height > 12) {
+        width: rem($width - 8);
+        height: rem($height - 8);
+    } @else {
+        width: rem($width - 4);
+        height: rem($height - 4);
+    }
+}
+
+.a-button {
+    $root: &;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-weight: 400;
+    outline: 0;
+    overflow: hidden;
+    padding: rem(4) rem(16);
+    width: 100%;
+    @include font-base(15, 20);
+    @include flex-box();
+    @include transition(all $transition ease-in-out);
+    @include reset-button();
+    box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    height: 30px;
+
+    &:hover {
+        text-decoration: none;
+        outline: 0;
+        box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+        color: rgba(0, 0, 0, 0.87);
+    }
+
+    &-loading {
+        align-items: center;
+
+    }
+
+    &-h20 {
+        height: rem(20);
+        background-color: $celestial-blue;
+        color: $white;
+        width: fit-content;
+        border-radius: 6px;
+
+        &#{$root}-loading {
+            img {
+                @include adjust-loading(30, 30);
+            }
+        }
+    }
+
+    &-h36 {
+        height: rem(36);
+
+        &#{$root}-loading {
+            img {
+                @include adjust-loading(36, 36);
+            }
+        }
+    }
+
+    &-h36-md {
+        height: rem(36);
+
+        &#{$root}-loading {
+            img {
+                @include adjust-loading(36, 36);
+            }
+        }
+
+        @include mobile-down {
+            height: rem(32);
+        }
+    }
+
+    &-h56 {
+        height: rem(56);
+
+        &#{$root}-loading {
+            img {
+                @include adjust-loading(56, 56);
+            }
+        }
+    }
+
+    &-primary {
+        background-color: $green;
+        color: $white;
+        padding: rem(8) rem(20);
+        border-radius: rem(4);
+        text-transform: capitalize;
+
+        &:hover {
+            color: $white;
+            opacity: 0.6;
+        }
+    }
+
+    &-red {
+        background-color: $cg-red;
+        border-radius: rem(4);
+        color: $white;
+        padding: rem(8) rem(20);
+        text-transform: capitalize;
+
+        &:hover {
+            color: $white;
+            opacity: 0.6;
+        }
+    }
+
+    &-link {
+        background-color: transparent;
+        border-radius: rem(4);
+        color: $green;
+        border-radius: rem(8);
+        text-transform: capitalize;
+        box-shadow: unset;
+
+        &:hover {
+            color: $green;
+            box-shadow: unset;
+            opacity: 0.7;
+        }
+    }
+
+    &-low {
+        background-color: transparent;
+        padding: 4px;
+        border-radius: 6px;
+        text-transform: capitalize;
+
+        &:hover {
+            background-color: $green;
+            color: $white;
+        }
+    }
+
+    &-bgGray {
+        background-color: $dim-gray;
+        border-radius: rem(4);
+        color: $jet;
+        padding-right: rem(18);
+        padding-left: rem(17);
+    }
+
+    &-white {
+        background-color: $white;
+        border-radius: rem(3.34);
+        color: $blue-main;
+        padding-right: rem(18);
+        padding-left: rem(17);
+    }
+
+    &-orange {
+        background-color: $orange;
+        border-radius: rem(4);
+        color: $white;
+        padding: 8px rem(18) 8px rem(17);
+
+        &:hover {
+            color: #fff !important;
+        }
+    }
+
+    &-foreign {
+        background-color: $blue-main;
+        border-radius: rem(4);
+        color: $white;
+        padding: rem(8) rem(20);
+        text-transform: capitalize;
+
+        &:hover {
+            color: $white;
+            opacity: 0.7;
+        }
+    }
+
+    &-transparent {
+        background-color: transparent;
+        box-shadow: unset;
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        background-color: $dark-Gray;
+        cursor: no-drop;
+    }
+
+    &:hover {
+        opacity: 0.9;
+    }
+
+    &:active {
+        opacity: 1;
+    }
+}
+

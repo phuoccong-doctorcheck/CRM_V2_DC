@@ -1,0 +1,17 @@
+.a-title_group {
+    width: 100%;
+    
+    &_title {
+        width: 100%;
+        
+        .a-typography {
+            font-size: rem(16);
+            color: $davys-grey;
+        }
+    }
+    
+    &_child {
+        width: 100%;
+        padding-left: rem(24);
+    }
+}

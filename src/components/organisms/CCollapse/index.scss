@@ -1,0 +1,91 @@
+.o-collapse {
+    width: 100%;
+
+    .ant-collapse-item {
+        border-bottom: unset !important;
+    }
+
+    .ant-collapse-content {
+        box-shadow: 0 7px 8px 1px rgba(0, 0, 0, 0.1);
+        height: 100%;
+    }
+
+    .ant-collapse {
+        border: unset !important;
+    }
+
+    .ant-collapse>.ant-collapse-item:last-child {
+        border-radius: unset !important;
+    }
+
+    .ant-collapse .ant-collapse-content {
+        background-color: #fff;
+        border-top: unset;
+        border-bottom-left-radius: 4px !important;
+        border-bottom-right-radius: 4px !important;
+    }
+
+    
+    .ant-collapse-item > .ant-collapse-header {
+        border-radius: 4px !important;
+        background-color: $white;
+    }
+
+    .ant-collapse-item-active > .ant-collapse-header {
+        border-top-left-radius: 4px !important;
+        border-top-right-radius: 4px !important;
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+
+    }
+
+    .ant-collapse-header-text {
+        overflow: hidden;
+        font-weight: 500;
+        @include font-base(18,24); 
+        color: $davys-grey;
+    }
+
+    :where(.css-dev-only-do-not-override-1e3x2xa).ant-collapse>.ant-collapse-item:last-child,
+    :where(.css-dev-only-do-not-override-1e3x2xa).ant-collapse>.ant-collapse-item:last-child>.ant-collapse-header {
+        border-radius: 0 0 8px 8px;
+    }
+    
+
+    .ant-collapse-content {
+        height: auto;
+        overflow: hidden;
+        transition: height 0.5s linear;
+    }
+        
+    .ant-collapse-content-hidden {
+        height: 0%;
+    }
+
+    .ant-collapse-expand-icon .ant-collapse-arrow {
+        background-color: $button-blue;
+        padding: 4px;
+        border-radius: 50%;
+
+        svg {
+            color: $white;
+        }
+    }
+
+    &-todo {
+        .o-collapse_panel {
+            .a-input {
+                margin-top: 12px;
+
+                &_error {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+// overflow: hidden;
+//     font-weight: 500;
+//     white-space: nowrap;
+//     text-overflow: ellipsis;

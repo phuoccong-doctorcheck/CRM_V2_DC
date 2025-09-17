@@ -1,0 +1,334 @@
+/* stylelint-disable max-nesting-depth */
+.p-monitor {
+    padding: 4px 2px;
+    position: relative;
+
+    &_header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 46px;
+
+        &_wrapper {
+            width: fit-content;
+            height: 100%;
+            @include border-shadow();
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+
+            .a-typography,
+            span {
+                font-weight: 600;
+                font-size: 36px;
+                color: $blue-main;
+            }
+        }
+    }
+
+    &_content {
+        margin-top: 20px;
+        padding: 0 4px;
+
+        &_wrapper {
+            width: 100vw;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        &_left,
+        &_right {
+            @include border-shadow(); 
+            height: calc(100vh - 95px);
+            position: relative;
+            padding: 2px;
+            transform: translateY(20px);
+
+            .m-public_table {
+                margin-top: 0;
+
+                .ant-table-wrapper {
+                    .ant-spin-container {
+                        height: 100%;
+                    }
+
+                    .ant-table {
+                        height: 100% !important;
+
+                        .ant-table-container {
+                            .ant-table-header {
+                                .ant-table-thead {
+                                    tr th {
+                                        .a-typography {
+                                            font-size: 20px !important;
+                                            text-transform: uppercase;
+                                        }
+                                    }
+                                }
+                            }
+
+                            .ant-table-body {
+                                .ant-table-tbody {
+                                    tr td {
+                                        padding: 2px !important;
+                                    }
+                                }
+                            }
+                        }
+                    } 
+                }
+            }
+
+            &_title {
+                position: absolute;
+
+                .a-typography {
+                    font-family: Arial, Helvetica, sans-serif;
+                    width: max-content;
+                    font-size: 30px;
+                    text-transform: uppercase;
+                    font-weight: 600;
+                    padding: 6px;
+                }
+            }
+        }
+
+        &_right {
+            &_title {
+                position: absolute;
+                top: -36px;
+                right: 4px;
+                
+                .a-typography {
+                    font-family: Arial, Helvetica, sans-serif;
+                    width: max-content;
+                    font-size: 28px;
+                    text-transform: uppercase;
+                    font-weight: 600;
+                    padding: 6px;
+                    color: $green;
+                }
+            }
+            width: 97%;
+            margin-right: 8px;
+
+
+            &_cell_item {
+                display: flex;
+                justify-content: center;
+                gap: 0;
+
+                .a-typography {
+                    font-size: 24px;
+                    color: $blue-main;
+
+                    &:first-child {
+                        font-size: 30px;
+                        color: $green;
+                    }
+                }
+            }
+
+            .m-public_table {
+                margin-top: 0;
+
+                .ant-table-wrapper {
+                    .ant-table {
+                        .ant-table-container {
+                            .ant-table-body {
+                                .ant-table-tbody {
+                                    tr td {
+                                        padding: 8px 2px !important;
+                                    }
+                                }
+                            }
+                        }
+                    } 
+                }
+            }
+        }
+
+        &_left {
+            width: 99%;
+
+            &_title {
+                position: absolute;
+                top: -36px;
+                left: 0;
+                
+                .a-typography {
+                    font-family: Arial, Helvetica, sans-serif;
+                    width: max-content;
+                    font-size: 28px;
+                    text-transform: uppercase;
+                    font-weight: 600;
+                    padding: 6px;
+                    color: $cg-red;
+                }
+            }
+
+            .m-public_table {
+                height: 95%;
+            }
+
+            &_summary {
+                margin-top: 4px;
+                transform: translateY(-4px);
+
+                &_item {
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-start;
+                    gap: 4px;
+
+                    span {
+                        text-transform: capitalize;
+                        font-weight: 600;
+                        color: $jet;
+                        font-size: 18px;
+                    }
+
+                    .a-typography {
+                        font-size: 20px;
+                        font-weight: 600;
+                        color: $cg-red;
+                    }
+
+                    p {
+                        text-transform: capitalize;
+                        font-weight: 600;
+                        color: $blue-main;
+                        font-size: 16px;
+                    }
+                }
+            }
+
+            &_cell_item {
+                display: flex;
+                gap: 0;
+                justify-content: center;
+
+                .a-icon {
+                    transform: rotate(90deg);
+                }
+
+                .a-typography {
+                    color: $blue-main;
+                    font-size: 24px;
+                    
+                    &:first-child {
+                        color: $cg-red;
+                        font-size: 32px;
+                        font-weight: 600;
+                    }
+                }
+            }
+        }
+    }
+
+    &_state {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: fit-content;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid $gray-border;
+        @include border-shadow();
+        padding: 0 5px 0 10px !important;
+        border-radius: 4px;
+
+        span {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+        }
+
+        &-connected {
+            span {
+                background-color: $green;
+            }
+
+            .a-typography {
+                color: $green;
+                font-weight: 400;
+                text-transform: capitalize;
+            }
+        }
+        
+        &-disconnect {
+            span {
+                background-color: $cg-red;
+            }
+            
+            .a-typography {
+                text-transform: capitalize;
+                color: $cg-red;
+                font-weight: 400;
+            }
+        }
+    }
+
+    &_count_down {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        width: fit-content;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 4px 4px 10px !important;
+        border-radius: 4px;
+
+        .a-typography {
+            color: $cg-red;
+            font-weight: 400;
+            font-size: 20px;
+            text-transform: capitalize;
+        }
+
+        
+        
+    }
+
+    &_bell {
+        position: absolute;
+        top: 10px;
+        right: 100px;
+        display: flex;
+        align-items: center;
+
+        .a-typography {
+            color: $cg-red;
+            font-weight: 400;
+            font-size: 20px;
+            text-transform: capitalize;
+        }
+
+        &-active {
+            animation: Bellring 1s ease infinite;
+        }
+        
+    }
+}
+@keyframes Bellring {
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(20deg);
+    }
+
+    50% {
+        transform: rotate(-20deg);
+    }
+
+    75% {
+        transform: rotate(10deg);
+    }
+}
