@@ -1465,8 +1465,9 @@ const CustomerInfomation2: React.FC<CustomerInformationProps> = ({
            </div>  
 </div>
                   {
-                    stateDetallVisit.data.master?.status === "canceled" ? <></> : <div style={{ display: "flex", justifyContent: "start", alignItems: "center", gap: "5px", }}>
-                         <div className={mapModifiers('m-customer_infos_new_function', formData.status === 'canceled' && 'canceled', !formData.isBooking && 'not_booking')} style={{display:"flex", justifyContent:"end"}}>
+                    (stateDetallVisit.data.master?.status === "canceled") ? <></> : <div style={{ display: "flex", justifyContent: "start", alignItems: "center", gap: "5px", }}>
+                      {
+                        stateDetallVisit.data.master?.status !== "done" && (<div className={mapModifiers('m-customer_infos_new_function', formData.status === 'canceled' && 'canceled', !formData.isBooking && 'not_booking')} style={{display:"flex", justifyContent:"end"}}>
         {listBtnBookingUpdate?.map((btn) => {
           switch (btn?.id) {
             
@@ -1488,7 +1489,9 @@ const CustomerInfomation2: React.FC<CustomerInformationProps> = ({
           
           }
         })}
-                  </div>
+                  </div>)
+                      }
+                         
                        <div className={mapModifiers('m-customer_infos_new_function', formData.status === 'canceled' && 'canceled', !formData.isBooking && 'not_booking')} style={{display:"flex", justifyContent:"end"}}>
         {listBtnR?.map((btn) => {
           switch (btn?.id) {

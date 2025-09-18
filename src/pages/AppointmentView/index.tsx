@@ -630,7 +630,7 @@ const [dataFilter, setDataFilter] = useState({
       ),
     },
     {
-      title: (data: any) => { return (<Typography content="Đối tác" modifiers={["12x18", "500", "center"]} />); },
+      title: (data: any) => { return (<Typography content="Người giới thiệu" modifiers={["12x18", "500", "center"]} />); },
       width: 260,
       dataIndex: "affiliate_name",
       filters: filterColumn.partner,
@@ -666,10 +666,10 @@ const [dataFilter, setDataFilter] = useState({
             toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
           }
         }}>
-          {(data?.affiliate_type !== "customer" && data?.affiliate_type !== "BSCD") ? (
+          {/* {(data?.affiliate_type !== "customer" && data?.affiliate_type !== "BSCD") ? (
             <Typography content={data?.affiliate_type} modifiers={["14x20", "600", "center", data?.affiliate_type === "BSCD" ? "cg-red" : "blueNavy",]} />
-          ) : null}
-          <Typography content={record} modifiers={["14x20", "600", "center", data?.affiliate_type === "BSCD" ? "cg-red" : "blueNavy",]} />
+          ) : null} */}
+          <Typography content={record === "[] " ? "" : record} modifiers={["14x20", "600", "center", data?.affiliate_type === "BSCD" ? "cg-red" : "blueNavy",]} />
         </div>
       ),
     },

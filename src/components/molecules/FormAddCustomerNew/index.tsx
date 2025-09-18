@@ -878,7 +878,7 @@ const FormAddCustomerNew: React.FC<FormAddCustomerProps> = ({
     if (dataForm.typeBooking?.value === "package") {
       serviceIds = getServiceIds(servicePackageId, listPackageItems);
     }
-    // if (!handleValidateForm()) return;
+     if (!handleValidateForm()) return;
     const converContent = parseCustomerPortrait(
       dataForm?.portraitSurveyType,
       dataGastrointestinal,
@@ -1400,7 +1400,7 @@ const FormAddCustomerNew: React.FC<FormAddCustomerProps> = ({
     }
   );
   // end Call API
-
+   const [openModalKeysearch,setOpenModalKeysearch] = useState(false)
   const handleGetItemPaseAPI = async (
     id: string,
     option: any,
@@ -1841,21 +1841,23 @@ const FormAddCustomerNew: React.FC<FormAddCustomerProps> = ({
       title: (
         <Typography content="Họ tên" modifiers={["12x18", "500", "center"]} />
       ),
-      dataIndex: "customer_fullname",
+      dataIndex: "owner_name",
       key: "customer_fullname",
       align: "center",
       width: 200,
       render: (record: any, data: any) => (
         <div
           onClick={() => {
-            setIsUpdateWOM(false);
-            setSaveCustomerWoM(data);
-            setIsOpenFormGetCustomer(false);
+            setDataForm(prev => ({ ...prev, source: data, }));
+            setOpenModalKeysearch(false)
+             setOwnerType(data?.owner_type)
+            setOwnerId(data?.owner_id)
+             setKeysearch("")
           }}
         >
           {" "}
           <Typography
-            content={record}
+            content={record ?  record : data?.owner_name_display}
             modifiers={["12x18", "400", "center"]}
           />{" "}
         </div>
@@ -1863,17 +1865,47 @@ const FormAddCustomerNew: React.FC<FormAddCustomerProps> = ({
     },
     {
       title: (
-        <Typography content="Năm sinh" modifiers={["12x18", "500", "center"]} />
+        <Typography content="Điện thoại" modifiers={["12x18", "500", "center"]} />
       ),
-      dataIndex: "year_of_birth",
+      dataIndex: "owner_phone",
       width: 90,
       align: "center",
       render: (record: any, data: any) => (
         <div
-          onClick={() => {
-            setIsUpdateWOM(false);
-            setSaveCustomerWoM(data);
-            setIsOpenFormGetCustomer(false);
+           onClick={() => {
+             setDataForm(prev => ({ ...prev, source: data, }));
+            setOpenModalKeysearch(false)
+             setOwnerType(data?.owner_type)
+            setOwnerId(data?.owner_id)
+             setKeysearch("")
+          }}
+        >
+          {" "}
+          <Typography
+            content={record?.replace(/^\s*0/, '+84-')}
+            modifiers={["12x18", "400", "center"]}
+          />{" "}
+        </div>
+      ),
+    },
+    {
+      title: (
+        <Typography
+          content="Nhóm"
+          modifiers={["12x18", "500", "center"]}
+        />
+      ),
+      dataIndex: "owner_type",
+      align: "center",
+      width: 90,
+      render: (record: any, data: any) => (
+        <div
+           onClick={() => {
+              setDataForm(prev => ({ ...prev, source: data, }));
+            setOpenModalKeysearch(false)
+             setOwnerType(data?.owner_type)
+            setOwnerId(data?.owner_id)
+             setKeysearch("")
           }}
         >
           {" "}
@@ -1887,96 +1919,35 @@ const FormAddCustomerNew: React.FC<FormAddCustomerProps> = ({
     {
       title: (
         <Typography
-          content="Giới tính"
+          content="Ngày cập nhật
+"
           modifiers={["12x18", "500", "center"]}
         />
       ),
-      dataIndex: "gender_id",
-      align: "center",
-      width: 90,
-      render: (record: any, data: any) => (
-        <div
-          onClick={() => {
-            setIsUpdateWOM(false);
-            setSaveCustomerWoM(data);
-            setIsOpenFormGetCustomer(false);
-          }}
-        >
-          {" "}
-          <Typography
-            content={record === "M" ? "Nam" : "Nữ"}
-            modifiers={["12x18", "400", "center"]}
-          />{" "}
-        </div>
-      ),
-    },
-    {
-      title: (
-        <Typography
-          content="Số điện thoại"
-          modifiers={["12x18", "500", "center"]}
-        />
-      ),
-      dataIndex: "customer_phone",
-      key: "customer_phone",
+      dataIndex: "update_datetime",
+      key: "update_datetime",
       align: "center",
       width: 120,
       render: (record: any, data: any) => (
         <div
-          onClick={() => {
-            setIsUpdateWOM(false);
-            setSaveCustomerWoM(data);
-            setIsOpenFormGetCustomer(false);
+           onClick={() => {
+             setDataForm(prev => ({ ...prev, source: data, }));
+            setOpenModalKeysearch(false)
+             setOwnerType(data?.owner_type)
+            setOwnerId(data?.owner_id)
+             setKeysearch("")
           }}
         >
           {" "}
           <Typography
-            content={record ? record.replace(/^.{4}/, "0") : "---"}
+content={moment(record).format("DD-MM-YYYY HH:mm")}
             modifiers={["12x18", "400", "center"]}
           />{" "}
         </div>
       ),
     },
-    {
-      title: (
-        <Typography content="Địa chỉ" modifiers={["12x18", "500", "center"]} />
-      ),
-      dataIndex: "customer_full_address",
-      key: "customer_full_address",
-      align: "center",
-      render: (record: any, data: any) => (
-        <div
-          onClick={() => {
-            setIsUpdateWOM(false);
-            setSaveCustomerWoM(data);
-            setIsOpenFormGetCustomer(false);
-          }}
-        >
-          {" "}
-          <Typography content={record} modifiers={["12x18", "400", "center"]} />
-        </div>
-      ),
-    },
-    {
-      title: (
-        <Typography content="Chọn" modifiers={["12x18", "500", "center"]} />
-      ),
-      dataIndex: "",
-      key: "",
-      align: "center",
-      width: 50,
-      render: (record: any, data: any) => (
-        <p
-          onClick={() => {
-            setIsUpdateWOM(false);
-            setSaveCustomerWoM(data);
-            setIsOpenFormGetCustomer(false);
-          }}
-        >
-          <Icon iconName="check" isPointer />
-        </p>
-      ),
-    },
+ 
+   
   ];
 
   const handleValidateInsurance = () => {
@@ -3101,7 +3072,7 @@ const FormAddCustomerNew: React.FC<FormAddCustomerProps> = ({
             <form>
               {!csPortrait && (
                 <div className="m-form_add_customer_wrap">
-                  <div
+                  {/* <div
                     style={{
                       borderBottom: "1px solid #dee2e6",
                       marginBottom: "5px",
@@ -3116,7 +3087,7 @@ const FormAddCustomerNew: React.FC<FormAddCustomerProps> = ({
                         fontWeight: "600",
                       }}
                     />
-                  </div>
+                  </div> */}
                   <div
                     className="m-form_add_customer_row gap_10"
                     style={{ alignItems: "self-start" }}
@@ -3321,7 +3292,7 @@ const FormAddCustomerNew: React.FC<FormAddCustomerProps> = ({
                     />
                   </div>
                   {/* Đây là layout nhập ID google khi chọn nguồn Google */}
-                  {Number(dataForm?.origin?.value) === 8 && (
+                  {/* {Number(dataForm?.origin?.value) === 8 && (
                     <div
                       className={`m-form_add_customer_row grid_customize `}
                       style={{ marginBottom: "7px", alignItems: "start" }}
@@ -3351,16 +3322,16 @@ const FormAddCustomerNew: React.FC<FormAddCustomerProps> = ({
                         />
                       </div>
                     </div>
-                  )}
+                  )} */}
                   {/* Đây là layout search khách hàng cũ giới thiệu */}
-                   {![8].includes(Number(dataForm?.origin?.value)) && (<div
+                   { (<div
                                         className={`m-form_add_customer_row grid_1_1_1_1 grid_customize ${Number(dataForm?.origin?.value) === 4 &&
                                           "m-form_add_customer_row_optional"
                                           }`}
-                                        style={{ alignItems: "center", marginBottom: "8px", gridTemplateColumns:((isNaN(Number(dataForm?.origin?.value)) || Number(dataForm?.origin?.value) === 1)) ?"1fr":  "0.2fr 1fr" ,display:"grid"}}
+                                        style={{ alignItems: "center", marginBottom: "8px", gridTemplateColumns:((isNaN(Number(dataForm?.origin?.value)) || Number(dataForm?.origin?.value) === 1)) ?"1fr":  "0.3fr 1fr 0.1fr" ,display:"grid"}}
                                     >
                                       {
-                                        ( Number(dataForm?.origin?.value) === 6 || Number(dataForm?.origin?.value) === 9 || Number(dataForm?.origin?.value) === 11 || Number(dataForm?.origin?.value) === 7  || Number(dataForm?.origin?.value) === 10  ) && (
+                                        ( Number(dataForm?.origin?.value) === 6 || Number(dataForm?.origin?.value) === 9 || Number(dataForm?.origin?.value) === 11 || Number(dataForm?.origin?.value) === 7  || Number(dataForm?.origin?.value) === 10  || Number(dataForm?.origin?.value) === 8  ) && (
                                            <Checkbox
                                           label="Khám doanh nghiệp:"
                                           isChecked={isCompany}
@@ -3420,9 +3391,25 @@ placeholder={
                                               variant="simple"
                                               className="form_origin"
                                             
-                                            />
-                                     
-                                      
+                    />
+                    {
+                      ([2,3,4,5,6,7,8,9,10,11,12].includes(Number(dataForm?.origin?.value))) && (
+                     <CTooltip
+                                                                          placements="top"
+                                                                          title="Tìm và chọn BSCĐ, WOM, Đối tác,..."
+                                                     colorCustom="#04566e"
+                                                     
+                                                                        >
+                                      <div
+                          style={{display:"flex",justifyContent:"center",alignItems:"center",cursor:"pointer"}}
+                            onClick={() => {
+                            setOpenModalKeysearch(true)
+                            }}
+                          >
+                          <svg fill="#000000" width="25px" height="25px" viewBox="0 0 24 24" id="add-user-3" data-name="Flat Color" xmlns="http://www.w3.org/2000/svg" className="icon flat-color"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path id="secondary" d="M19,8a1,1,0,0,1-1-1V6H17a1,1,0,0,1,0-2h1V3a1,1,0,0,1,2,0V4h1a1,1,0,0,1,0,2H20V7A1,1,0,0,1,19,8Z" style={{fill:"#2ca9bc"}}></path><path id="primary" d="M16.46,13.37a6.86,6.86,0,0,0,1.46-3.49,5,5,0,0,1-3.46-7A7,7,0,0,0,5.54,13.37,8,8,0,0,0,2,20a2,2,0,0,0,2,2H18a2,2,0,0,0,2-2A8,8,0,0,0,16.46,13.37Z" style={{fill:"#2ca9bc"}}></path></g></svg>
+                          </div></CTooltip>)
+                    }
+                                    
                                       </div>
                                       )}
                   {!isShowMore ? (
@@ -5329,6 +5316,48 @@ placeholder={
         textCancel="Hủy"
       >
         <p>Bạn xác nhận xóa hết tất cả dịch vụ?</p>
+      </CModal>
+            <CModal
+        isOpen={openModalKeysearch}
+        onCancel={() => { setOpenModalKeysearch(false), setKeysearch("") }}
+  title={`Tìm và chọn ${nameSource || ""}`}
+        widths={800}
+        isHideFooter
+
+      >
+        <div>
+           <Input
+                        variant="borderRadius"
+                        type="text"
+                        id=""
+                        isSearch
+                        value={keysearch}
+                        placeholder='Nhập tên, địa chỉ, số điện thoại,.. để tìm kiếm khách hàng'
+                        onChange={(e) => { setKeysearch(e.target.value); }}
+                        handleEnter={async () => {
+                          if (keysearch.trim()) {
+                            await handleGetSource(dataForm.origin.value);
+                            // setIsLoading(true);
+                          }
+                          else {
+                            toast.error('Không thể tìm kiếm với một giá trị rỗng');
+                          }
+                        }}
+                        iconName='search'
+                        // isLoading={isLoading}
+                      />
+        </div>
+        <PublicTable
+          listData={stateListS}
+          column={tableColumnForSearch}
+          handleOnClick={(event: any, record: any, rowIndex: any) => { }}
+          pageSizes={100}
+          isHideRowSelect
+           scroll={{
+            x: '100%',
+            y: '300px',
+          }}
+        />
       </CModal>
       {showNotification && (
         <Notification

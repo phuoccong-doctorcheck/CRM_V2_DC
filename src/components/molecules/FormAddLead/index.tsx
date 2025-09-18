@@ -2767,7 +2767,7 @@ const FormAddLead: React.FC<FormAddCustomerProps> = ({
                       }
                     />
                   </div>
-                  {/* <div
+                <div
                     className="m-form_add_customer_row gap_10 m-form_add_customer_row-origins"
                     style={{ marginBottom: "0px", maxHeight: "85px" }}
                   >
@@ -2816,9 +2816,9 @@ const FormAddLead: React.FC<FormAddCustomerProps> = ({
                       className="form_origin"
                       values={(dataForm.originType as any) || undefined}
                     />
-                  </div> */}
+                  </div>
                  
-               
+                      
                     <div>
                    
                       <div className="m-form_add_customer_row_diff grid_1_1_1">

@@ -2999,23 +2999,24 @@ content={moment(record).format("DD-MM-YYYY HH:mm")}
                                                                                                          placeholder={stateLaunchSource[0]?.label}
                                                                                                          defaultValue={valueUpdateCustomer?.origin as DropdownData}
                                                                                                          label="Nguồn:"
-                                                                                                        handleSelect={(item) => {
-                                                                                                           setDataForm(prev => ({ ...prev, origin: item , source:  undefined as unknown as DropdownData,}));
-                                                                                                           handleGetSource(item?.value);
-                                                                                   
-                                                                                                           const v = Number(item?.value);
-                                                                                                          setNameSource([2, 3, 4, 12].includes(v) ? (item?.label ?? "") : [5].includes(v) ? "Nhân Viên" : "công ty");
-                                                                                                          if ([2, 3, 4, 12, 5].includes(v))
-                                                                                                          {
-                                                                                                            setIsCompany(true)
-                                                                                                          }
-                                                                                                          else {
-                                                                                                             setIsCompany(false)
-                                                                                                          }
-                                                                                                           
-                                                                                                          clearStateErrorForm("origin");
-                                                                                                          
-                                                                                                         }}
+                                                                                                     handleSelect={(item) => {
+                                            setKeysearch("")
+                                              setDataForm(prev => ({ ...prev, origin: item , source:  undefined as unknown as DropdownData,}));
+                                              handleGetSource(item?.value);
+
+                                              const v = Number(item?.value);
+                                            setNameSource([2, 3, 4, 12].includes(v) ? (item?.label ?? "") : [5].includes(v) ? "Nhân Viên" : "công ty");
+                                            if ([2, 3, 4, 12, 5].includes(v))
+                                            {
+                                              setIsCompany(true)
+                                            }
+                                            else {
+                                                setIsCompany(false)
+                                            }
+                                              
+                                            clearStateErrorForm("origin");
+                                            
+                                            }}
                                                                                    
                                                                                                          variant="simple"
                                                                                                          error={errorForm.origin}
@@ -3035,7 +3036,7 @@ content={moment(record).format("DD-MM-YYYY HH:mm")}
                                              className="form_origin"
                                              values={(dataForm.originType as any) || undefined}
                     />
-                     <div style={{marginTop:"10px"}}>
+                     <div style={{marginTop:"20px"}}>
                                            <Button
                                                 className="m-form_note"
                                                 onClick={() => {
@@ -3061,75 +3062,75 @@ content={moment(record).format("DD-MM-YYYY HH:mm")}
                                        </div>
                     </div>
                 
-                      { (<div
-                                                         className={`m-form_add_customer_row grid_1_1_1_1 grid_customize ${Number(dataForm?.origin?.value) === 4 &&
-                                                           "m-form_add_customer_row_optional"
-                                                           }`}
-                                                         style={{ alignItems: "center", marginBottom: "8px", gridTemplateColumns:((isNaN(Number(dataForm?.origin?.value)) || Number(dataForm?.origin?.value) === 1)) ?"1fr":  "0.3fr 1fr 0.1f" ,display:"grid"}}
-                                                     >
-                                                       {
-                                                         ( Number(dataForm?.origin?.value) === 6 || Number(dataForm?.origin?.value) === 9 || Number(dataForm?.origin?.value) === 11 || Number(dataForm?.origin?.value) === 7  || Number(dataForm?.origin?.value) === 10  || Number(dataForm?.origin?.value) === 8  ) && (
-                                                            <Checkbox
-                                                           label="Khám doanh nghiệp:"
-                                                           isChecked={isCompany}
-                                                           onChange={() => {
-                                                             setIsCompany(!isCompany)
-                                                           }}
-                                                         />
-                                                         )
-                                                       }
-                                                       {
-                                                         (Number(dataForm?.origin?.value) === 2 || Number(dataForm?.origin?.value) === 3 || Number(dataForm?.origin?.value) === 4 || Number(dataForm?.origin?.value) === 5 || Number(dataForm?.origin?.value) === 12) && (
-                                                            <span>Chọn {nameSource === "KH Cũ Giới Thiệu (WoM)" ? "KH Cũ Giới Thiệu" : nameSource}: </span>
-                                                           )
-                                                       }
-                                                        {/* { (isNaN(Number(dataForm?.origin?.value)) || Number(dataForm?.origin?.value) === 1) && (
-                     <Checkbox
-                       label="Khám doanh nghiệp:"
-                       isChecked={isCompany}
-                                         onChange={() => setIsCompany(!isCompany)}
-                                         disabled
-                     />
-                 )} */}
-                                                        <Dropdown
-                                                               dropdownOption={
-                                                                 stateListS
-                                                               }
-                                                               values={dataForm.source}
-                                                               isRequired={false}
-                 placeholder={
-                   !isCompany && (Number.isNaN(Number(dataForm?.origin?.value)) || [1,6,7,9,11,10].includes(Number(dataForm?.origin?.value)))
-                     ? ""
-                     : `Chọn ${nameSource || ""} tại đây ...`
-                 }
-                                                         // defaultValue={
-                                                               //   valueUpdateCustomer?.origin as DropdownData
-                                                               // }
-                                                               // defaultValue={listAffiliates.find(
-                                                               //   (affi: any) =>
-                                                               //     affi.affiliate_code ===
-                                                               //     valUpdate?.source_first?.owner_id
-                                       // )}
-                                       
-                                                               label={
-                                                                 Number(dataForm?.origin?.value) === 2 ? "" : ""
-                                                               }
-                                                         disabled={[2, 3,4,5,12].includes(Number(dataForm?.origin?.value)) ? false : !isCompany }
-                                                         handleSelect={(item) => {
-                                                     
-                                                          
-                                                           setOwnerType(item?.owner_type)
-                                                           setOwnerId(item?.owner_id)
-                                                           setDataForm({
-                                                             ...dataForm,
-                                                             source:item
-                                                              })
-                                                               }}
-                                                               variant="simple"
-                                                               className="form_origin"
-                                                             
-                                                             />
-                                                       {
+                     { (<div
+                                        className={`m-form_add_customer_row grid_1_1_1_1 grid_customize ${Number(dataForm?.origin?.value) === 4 &&
+                                          "m-form_add_customer_row_optional"
+                                          }`}
+                                        style={{ alignItems: "center", marginBottom: "8px", gridTemplateColumns:((isNaN(Number(dataForm?.origin?.value)) || Number(dataForm?.origin?.value) === 1)) ?"1fr":  "0.3fr 1fr 0.1fr" ,display:"grid"}}
+                                    >
+                                      {
+                                        ( Number(dataForm?.origin?.value) === 6 || Number(dataForm?.origin?.value) === 9 || Number(dataForm?.origin?.value) === 11 || Number(dataForm?.origin?.value) === 7  || Number(dataForm?.origin?.value) === 10  || Number(dataForm?.origin?.value) === 8  ) && (
+                                           <Checkbox
+                                          label="Khám doanh nghiệp:"
+                                          isChecked={isCompany}
+                                          onChange={() => {
+                                            setIsCompany(!isCompany)
+                                          }}
+                                        />
+                                        )
+                                      }
+                                      {
+                                        (Number(dataForm?.origin?.value) === 2 || Number(dataForm?.origin?.value) === 3 || Number(dataForm?.origin?.value) === 4 || Number(dataForm?.origin?.value) === 5 || Number(dataForm?.origin?.value) === 12) && (
+                                           <span>Chọn {nameSource === "KH Cũ Giới Thiệu (WoM)" ? "KH Cũ Giới Thiệu" : nameSource}: </span>
+                                          )
+                                      }
+                                       {/* { (isNaN(Number(dataForm?.origin?.value)) || Number(dataForm?.origin?.value) === 1) && (
+    <Checkbox
+      label="Khám doanh nghiệp:"
+      isChecked={isCompany}
+                        onChange={() => setIsCompany(!isCompany)}
+                        disabled
+    />
+)} */}
+                                       <Dropdown
+                                              dropdownOption={
+                                                stateListS
+                                              }
+                                              values={dataForm.source}
+                                              isRequired={false}
+placeholder={
+  !isCompany && (Number.isNaN(Number(dataForm?.origin?.value)) || [1,6,7,9,11,10].includes(Number(dataForm?.origin?.value)))
+    ? ""
+    : `Chọn ${nameSource || ""} tại đây ...`
+}
+                                        // defaultValue={
+                                              //   valueUpdateCustomer?.origin as DropdownData
+                                              // }
+                                              // defaultValue={listAffiliates.find(
+                                              //   (affi: any) =>
+                                              //     affi.affiliate_code ===
+                                              //     valUpdate?.source_first?.owner_id
+                      // )}
+                      
+                                              label={
+                                                Number(dataForm?.origin?.value) === 2 ? "" : ""
+                                              }
+                                        disabled={[2, 3,4,5,12].includes(Number(dataForm?.origin?.value)) ? false : !isCompany }
+                                        handleSelect={(item) => {
+                                    
+                                         
+                                          setOwnerType(item?.owner_type)
+                                          setOwnerId(item?.owner_id)
+                                          setDataForm({
+                                            ...dataForm,
+                                            source:item
+                                             })
+                                              }}
+                                              variant="simple"
+                                              className="form_origin"
+                                            
+                    />
+                    {
                       ([2,3,4,5,6,7,8,9,10,11,12].includes(Number(dataForm?.origin?.value))) && (
                      <CTooltip
                                                                           placements="top"
@@ -3146,9 +3147,9 @@ content={moment(record).format("DD-MM-YYYY HH:mm")}
                           <svg fill="#000000" width="25px" height="25px" viewBox="0 0 24 24" id="add-user-3" data-name="Flat Color" xmlns="http://www.w3.org/2000/svg" className="icon flat-color"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path id="secondary" d="M19,8a1,1,0,0,1-1-1V6H17a1,1,0,0,1,0-2h1V3a1,1,0,0,1,2,0V4h1a1,1,0,0,1,0,2H20V7A1,1,0,0,1,19,8Z" style={{fill:"#2ca9bc"}}></path><path id="primary" d="M16.46,13.37a6.86,6.86,0,0,0,1.46-3.49,5,5,0,0,1-3.46-7A7,7,0,0,0,5.54,13.37,8,8,0,0,0,2,20a2,2,0,0,0,2,2H18a2,2,0,0,0,2-2A8,8,0,0,0,16.46,13.37Z" style={{fill:"#2ca9bc"}}></path></g></svg>
                           </div></CTooltip>)
                     }
-                                                       
-                                                       </div>
-                                                       )}
+                                    
+                                      </div>
+                                      )}
                 
                 </div>
               )}
