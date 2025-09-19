@@ -934,7 +934,7 @@ const FormAddCustomerNew: React.FC<FormAddCustomerProps> = ({
             appointment_note: isBooking
               ? dataForm.noteBooking
               : "Không có thông tin ghi chú",
-            master_note: "",
+            master_note: "Không có thông tin ghi chú",
             // package_id: isBooking ? dataForm.serviceAllowTypeBooking2?.value : null,
             appointment_date: isBooking
               ? moment(dataForm.dateBooking).format("YYYY-MM-DDTHH:mm:03")

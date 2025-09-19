@@ -134,7 +134,7 @@ export const postCustomerTask = async (body: any) => {
   return response.data;
 };
 export const postSurveyUrl = async (body: any) => {
-  const response = await axiosInstance.post("/surveys/get-survey-url", body);
+  const response = await axiosInstance.post("/survey/get-survey-url", body);
   return response.data;
 };
 export const postGeneralUrlResult = async (body: any) => {

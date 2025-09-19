@@ -449,10 +449,11 @@ const CustomerInfomation2: React.FC<CustomerInformationProps> = ({
     });
   };
   const handleGetSurveyUrl = async (type: string) => {
+    console.log(123)
     await getSurveyUrlForCustomerId({
       survey_type: type,
       customer_id: formData?.id,
-      master_id: formData.master_id || formData.master.master_id,
+      master_id: stateDetallVisit.data.master?.master_id,
     });
   };
   const handleGetGeneralUrl = async () => {
