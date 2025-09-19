@@ -929,8 +929,8 @@ const FormAddCustomerNew: React.FC<FormAddCustomerProps> = ({
             launch_source_id: dataForm?.origin?.value,
             launch_source_type_id: dataForm?.originType?.value,
                
-             owner_id: isCompany ? ownerId : null,
-            owner_type: isCompany ? ownerType : null,
+            owner_id: isCompany ? ownerId : ([2, 3, 4, 5,12].includes(Number(dataForm?.origin?.value)) ? ownerId: null ),
+            owner_type: isCompany ? ownerType : ([2, 3, 4, 5,12].includes(Number(dataForm?.origin?.value)) ? ownerType: null ),  
             appointment_note: isBooking
               ? dataForm.noteBooking
               : "Không có thông tin ghi chú",
@@ -1089,8 +1089,8 @@ const FormAddCustomerNew: React.FC<FormAddCustomerProps> = ({
            launch_source_group_id: dataForm?.originGroup?.value,
            launch_source_id: dataForm?.origin?.value,
           launch_source_type_id: dataForm?.originType?.value,
-              owner_id: isCompany ? ownerId : null,
-            owner_type: isCompany ? ownerType : null,
+           owner_id: isCompany ? ownerId : ([2, 3, 4, 5,12].includes(Number(dataForm?.origin?.value)) ? ownerId: null ),
+            owner_type: isCompany ? ownerType : ([2, 3, 4, 5,12].includes(Number(dataForm?.origin?.value)) ? ownerType: null ),  
           appointment_note: isBooking
             ? dataForm.noteBooking
             : "Không có thông tin ghi chú",

@@ -1147,8 +1147,8 @@ const FormUpdateBookingCustomer: React.FC<FormAddCustomerProps> = ({
             //   owner_id: dataForm.owner_id,
             //  owner_id: Number(dataForm?.origin?.value) === 4 ? stateOID : Number(dataForm?.origin?.value) === 2 ? dataForm?.ctvBSCD?.affiliate_code : Number(dataForm?.origin?.value) === 3 ? dataForm?.ctv?.affiliate_code : Number(dataForm?.origin?.value) === 5? dataForm?.staff?.value : null,
             // owner_type: Number(dataForm?.origin?.value) === 4 ? "customer": Number(dataForm?.origin?.value) === 2 ? "BSCD": Number(dataForm?.origin?.value) === 3  ?  "CTV ": Number(dataForm?.origin?.value) === 5? "staff" :null,
-               owner_id: isCompany ? ownerId : null,
-            owner_type: isCompany ? ownerType : null,  
+               owner_id: isCompany ? ownerId : ([2, 3, 4, 5,12].includes(Number(dataForm?.origin?.value)) ? ownerId: null ),
+            owner_type: isCompany ? ownerType : ([2, 3, 4, 5,12].includes(Number(dataForm?.origin?.value)) ? ownerType: null ),  
           launch_source_group_id: dataForm?.originGroup?.value,
             launch_source_id: dataForm?.origin?.value,
             launch_source_type_id: dataForm?.originType?.value,
@@ -1186,12 +1186,12 @@ const FormUpdateBookingCustomer: React.FC<FormAddCustomerProps> = ({
         };
         console.log(request)
         if (handleAddCustomer) {
-           clearStateForm();
-           clearGastrointestinal();
-           setCustomerPortrait(false);
-          setServiceSelected([]);
-          handleLoading(true)
-           handleAddCustomer(request);
+            clearStateForm();
+            clearGastrointestinal();
+            setCustomerPortrait(false);
+           setServiceSelected([]);
+           handleLoading(true)
+            handleAddCustomer(request);
         }
       } else {
         toast.error("Vui lòng chọn dịch vụ");
