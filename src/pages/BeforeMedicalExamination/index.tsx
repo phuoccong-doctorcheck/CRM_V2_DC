@@ -395,8 +395,8 @@ const [stateEmployeeId, setStateEmployeeId] = useState<any>(
     limit: 50,
     page: 1,
     keyword:  "",
-    guid_status: statusGuid[0].value || "pending",
-    category_id: userguidType[0].value || 1,
+    guid_status: statusGuid[0]?.value || "pending",
+    category_id: userguidType[0]?.value || 1,
   });
   const [formDataErr, setFormDataErr] = useState({
     name: "",

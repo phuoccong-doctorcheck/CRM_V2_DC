@@ -957,7 +957,7 @@ const FormConvertCustomer: React.FC<FormAddCustomerProps> = ({
         // !dataForm.gender?.label?.trim() ||
         dataForm.phoneNumber.trim().length >= 12 ||
         dataForm.phoneNumber.trim().length <= 9 ||
-       
+        
         // (isBooking &&  !dataForm.origin.value ) ||
         // (isBooking &&  !dataForm.originGroup.value )||
         (Number(dataForm.origin?.value) === 2 &&

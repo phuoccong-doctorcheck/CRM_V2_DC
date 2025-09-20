@@ -258,7 +258,7 @@ export const homeSlice = createSlice({
 
       const colors = ["#28a745", "#17a2b8", "#dc3545", "#20c997", "#333"];
       const listServicesAllowGroup: any[] = [];
-      services.length &&
+      services?.length &&
         ((services as unknown as ServiceItem[]) || []).map(
           (item: ServiceItem) => {
             const checkGroupIsExit = listServicesAllowGroup.find(
@@ -323,7 +323,7 @@ export const homeSlice = createSlice({
       //     }
       //   });
 
-       appointment_types.length &&
+       appointment_types?.length &&
          appointment_types.map((item, index) => {
            const newItem = {
              id: item.service_id,
@@ -355,7 +355,7 @@ export const homeSlice = createSlice({
         //   };
         //   newCategories.push(newItem as unknown as GroupRadioType);
         // });
-       ads_accounts.length &&
+       ads_accounts?.length &&
         ads_accounts.map((item, index) => {
           const newItem = {
             ads_account_id: item.ads_account_id,
@@ -370,7 +370,7 @@ export const homeSlice = createSlice({
           };
           newAdsAccount.push(newItem as unknown as GroupRadioType);
         });
-       userguid_types.length &&
+       userguid_types?.length &&
         userguid_types.map((item, index) => {
           const newItem = {
             guid_type_id: item.guid_type_id,
@@ -383,7 +383,7 @@ export const homeSlice = createSlice({
           };
           newUserguidTypes.push(newItem as unknown as GroupRadioType);
         });
-        !!dc_dm_cschedules_status.length &&
+        !!dc_dm_cschedules_status?.length &&
           dc_dm_cschedules_status.map((item) => {
           const convertStages = {
             label: item.value_text,
@@ -405,7 +405,7 @@ export const homeSlice = createSlice({
           };
           newListDmDcStaff.push(convertStages as unknown as DropdownData);
           });
-      !!dm_time_doctor_schedules.length &&
+      !!dm_time_doctor_schedules?.length &&
           dm_time_doctor_schedules.map((item) => {
         const convertStages = {
       label: item.key === "Đã trôi qua" ? "(Đã trôi qua)" : item.key,
@@ -417,7 +417,7 @@ export const homeSlice = createSlice({
   label: "Tất cả",
   value: "all"
 } as unknown as DropdownData);
-       !!dc_dm_cschedules.length &&
+       !!dc_dm_cschedules?.length &&
           dc_dm_cschedules.map((item) => {
           const convertStages = {
             c_schedule_type_id: item.c_schedule_type_id,
@@ -431,7 +431,7 @@ export const homeSlice = createSlice({
           newdc_dm_cschedules.push(convertStages as unknown as DropdownData);
           });
     
-       !!dm_year_doctor_schedules.length &&
+       !!dm_year_doctor_schedules?.length &&
           dm_year_doctor_schedules.map((item) => {
           const convertStages = {
             label: item.key,
@@ -440,7 +440,7 @@ export const homeSlice = createSlice({
            
           newdm_year_doctor_schedules.push(convertStages as unknown as DropdownData);
           });
-       evaluation_criterias.length &&
+       evaluation_criterias?.length &&
         evaluation_criterias.map((item, index) => {
           const newItem = {
             criteria_id: item.criteria_id,
@@ -459,7 +459,7 @@ export const homeSlice = createSlice({
           };
           newCampaignCriteria.push(newItem as unknown as GroupRadioType);
         });
-        users.length &&
+        users?.length &&
         users.map((item, index) => {
           const newItem = {
               u_id: item.employee_id,
@@ -513,7 +513,7 @@ export const homeSlice = createSlice({
         //   newNations.push(convertStages as unknown as DropdownData);
         // });
 
-      !!source_groups.length &&
+      !!source_groups?.length &&
       source_groups.map((item:any) => {
           const convertStages = {
             id: item.launch_source_group_id,
@@ -525,7 +525,7 @@ export const homeSlice = createSlice({
           // }
           newLaunchSourcesGroups.push(convertStages as unknown as DropdownData);
         });
-        !!touchpointlog_types.length &&
+        !!touchpointlog_types?.length &&
         touchpointlog_types.map((item:any) => {
             const convertStages = {
               id: item.id,
@@ -535,7 +535,7 @@ export const homeSlice = createSlice({
            
             newTouchPointLogType.push(convertStages as unknown as DropdownData);
         });
-        !!userflow_lead_steps.length &&
+        !!userflow_lead_steps?.length &&
         userflow_lead_steps.map((item:any) => {
             const convertStages = {
               id: item.step_index,

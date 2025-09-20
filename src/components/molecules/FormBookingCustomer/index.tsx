@@ -765,7 +765,7 @@ const FormBookingCustomer: React.FC<FormAddCustomerProps> = ({
     try {
      
       if (
-      
+         !dataForm.noteBooking ||
         !dataForm.origin.value ||
         !dataForm.originGroup.value ||
         (Number(dataForm.origin?.value) === 2 &&
@@ -783,29 +783,17 @@ const FormBookingCustomer: React.FC<FormAddCustomerProps> = ({
       ) {
         setErrorForm({
           ...errorForm,
-          name: !dataForm.name.trim() ? "Tên khách hàng là bắt buộc" : "",
-          nation_id: !dataForm.nation?.label?.trim() ? "Dân tộc là bắt buộc" : "",
-          gender:   !dataForm.gender?.label?.trim() ? "Giới tính là bắt buộc" : "",
-          phone:
-            isBooking && !dataForm.phoneNumber.trim()
-              ? "Số điện thoại là bắt buộc"
-              : isBooking &&
-                (dataForm.phoneNumber.trim().length >= 11 ||
-                  dataForm.phoneNumber.trim().length <= 9)
-                ? "Số điện thoại không đúng định dạng"
-                : "",
-          dayOfBirth:
-            isBooking && !dataForm.dayOfBirth ? "Ngày sinh là bắt buộc" : "",
+         
           origin: !dataForm.origin?.value ? "Nguồn là bắt buộc" : "",
           originGroup: !dataForm.originGroup?.value
             ? "Nhóm nguồn là bắt buộc"
             : "",
           dateBooking:
-            isBooking && !dataForm.dateBooking
+          !dataForm.dateBooking
               ? "Ngày đặt lịch là bắt buộc"
               : "",
           noteBooking:
-            isBooking && !dataForm.noteBooking
+             !dataForm.noteBooking
               ? "Ghi chú đặt lịch là bắt buộc"
               : "",
           bookingService1:
@@ -865,7 +853,7 @@ const FormBookingCustomer: React.FC<FormAddCustomerProps> = ({
     if (dataForm.typeBooking?.value === "package") {
       serviceIds = getServiceIds(servicePackageId, listPackageItems);
     }
-    //if (!handleValidateForm()) return;
+    if (!handleValidateForm()) return;
     const converContent = parseCustomerPortrait(
       dataForm?.portraitSurveyType,
       dataGastrointestinal,

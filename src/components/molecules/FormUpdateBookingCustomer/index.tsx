@@ -792,103 +792,91 @@ const FormUpdateBookingCustomer: React.FC<FormAddCustomerProps> = ({
     setShowDVL(dataForm.typeBooking);
   }, [dataForm.typeBooking]);
   /* Validate & Submit save/update customer infomation */
-  const handleValidateForm = () => {
-    try {
-     
-      if (
+   const handleValidateForm = () => {
+     try {
       
-        !dataForm.origin.value ||
-        !dataForm.originGroup.value ||
-        (Number(dataForm.origin?.value) === 2 &&
-          !dataForm.ctvBSCD?.affiliate_type) ||
-        (Number(dataForm.origin?.value) === 3 &&
-          !dataForm.ctv?.affiliate_type) ||
-        (Number(dataForm.origin?.value) === 4 &&
-          !valueGetCustomerWoM.trim() &&
-          _.isUndefined(saveCustomerWoM)) ||
-        (Number(dataForm.origin?.value) === 8 &&
-          Number(dataForm.originType?.value) === 5 &&
-          !dataForm?.gclid?.trim()) 
-      
-        // || _.isEmpty(dataForm.portraitSurveyType)
-      ) {
-        setErrorForm({
-          ...errorForm,
-          name: !dataForm.name.trim() ? "Tên khách hàng là bắt buộc" : "",
-          nation_id: !dataForm.nation?.label?.trim() ? "Dân tộc là bắt buộc" : "",
-          gender:   !dataForm.gender?.label?.trim() ? "Giới tính là bắt buộc" : "",
-          phone:
-            isBooking && !dataForm.phoneNumber.trim()
-              ? "Số điện thoại là bắt buộc"
-              : isBooking &&
-                (dataForm.phoneNumber.trim().length >= 11 ||
-                  dataForm.phoneNumber.trim().length <= 9)
-                ? "Số điện thoại không đúng định dạng"
-                : "",
-          dayOfBirth:
-            isBooking && !dataForm.dayOfBirth ? "Ngày sinh là bắt buộc" : "",
-          origin: !dataForm.origin?.value ? "Nguồn là bắt buộc" : "",
-          originGroup: !dataForm.originGroup?.value
-            ? "Nhóm nguồn là bắt buộc"
-            : "",
-          dateBooking:
-            isBooking && !dataForm.dateBooking
-              ? "Ngày đặt lịch là bắt buộc"
-              : "",
-          noteBooking:
-            isBooking && !dataForm.noteBooking
-              ? "Ghi chú đặt lịch là bắt buộc"
-              : "",
-          bookingService1:
-            isBooking &&
-              dataForm.typeBooking?.value === "telemedicine" &&
-              !dataForm.serviceAllowTypeBooking1
-              ? "Vui lòng chọn bác sĩ!"
-              : "",
-          bookingService2:
-            isBooking &&
-              dataForm.typeBooking?.value === "package" &&
-              !dataForm.serviceAllowTypeBooking2
-              ? "Vui lòng chọn gói dịch vụ !"
-              : "",
-
-          endoscopics:
-            isBooking &&
-              dataForm.typeBooking?.value === "endoscopics" &&
-              !dataForm.endoscopics
-              ? "Vui lòng chọn dịch vụ nội soi !"
-              : "",
-          ctv:
-            (Number(dataForm.origin?.value) === 2 &&
-              !dataForm.ctvBSCD?.affiliate_type &&
-              "Vui lòng chọn bác sĩ chỉ định") ||
-            (Number(dataForm.origin?.value) === 3 &&
-              !dataForm.ctv?.affiliate_type &&
-              "Vui lòng chọn đối tác") ||
-            "" ||
-            (Number(dataForm.origin?.value) === 4 &&
-              !valueGetCustomerWoM.trim() &&
-              _.isUndefined(saveCustomerWoM) &&
-              "Vui lòng chọn Người giới thiệu") ||
-            "",
-          groupCs: _.isEmpty(dataForm?.portraitSurveyType) ? "error" : "",
-          gclid:
-            Number(dataForm.origin?.value) === 8 &&
-              Number(dataForm.originType?.value) === 5 &&
-              !dataForm?.gclid?.trim()
-              ? "Vui lòng nhập Google ID từ mail"
-              : "",
-        });
-        // if (_.isEmpty(dataForm?.portraitSurveyType)) {
-        //   toast.error('Vui lòng chọn nhóm khách hàng');
-        // }
-        return false;
-      }
-      return true;
-    } catch (err) {
-      console.error(" 🚀- DaiNQ - 🚀: -> handleValidateForm -> err:", err);
-    }
-  };
+       if (
+          !dataForm.noteBooking ||
+         !dataForm.origin.value ||
+         !dataForm.originGroup.value ||
+         (Number(dataForm.origin?.value) === 2 &&
+           !dataForm.ctvBSCD?.affiliate_type) ||
+         (Number(dataForm.origin?.value) === 3 &&
+           !dataForm.ctv?.affiliate_type) ||
+         (Number(dataForm.origin?.value) === 4 &&
+           !valueGetCustomerWoM.trim() &&
+           _.isUndefined(saveCustomerWoM)) ||
+         (Number(dataForm.origin?.value) === 8 &&
+           Number(dataForm.originType?.value) === 5 &&
+           !dataForm?.gclid?.trim()) 
+       
+         // || _.isEmpty(dataForm.portraitSurveyType)
+       ) {
+         setErrorForm({
+           ...errorForm,
+          
+           origin: !dataForm.origin?.value ? "Nguồn là bắt buộc" : "",
+           originGroup: !dataForm.originGroup?.value
+             ? "Nhóm nguồn là bắt buộc"
+             : "",
+           dateBooking:
+           !dataForm.dateBooking
+               ? "Ngày đặt lịch là bắt buộc"
+               : "",
+           noteBooking:
+              !dataForm.noteBooking
+               ? "Ghi chú đặt lịch là bắt buộc"
+               : "",
+           bookingService1:
+             isBooking &&
+               dataForm.typeBooking?.value === "telemedicine" &&
+               !dataForm.serviceAllowTypeBooking1
+               ? "Vui lòng chọn bác sĩ!"
+               : "",
+           bookingService2:
+             isBooking &&
+               dataForm.typeBooking?.value === "package" &&
+               !dataForm.serviceAllowTypeBooking2
+               ? "Vui lòng chọn gói dịch vụ !"
+               : "",
+ 
+           endoscopics:
+             isBooking &&
+               dataForm.typeBooking?.value === "endoscopics" &&
+               !dataForm.endoscopics
+               ? "Vui lòng chọn dịch vụ nội soi !"
+               : "",
+           ctv:
+             (Number(dataForm.origin?.value) === 2 &&
+               !dataForm.ctvBSCD?.affiliate_type &&
+               "Vui lòng chọn bác sĩ chỉ định") ||
+             (Number(dataForm.origin?.value) === 3 &&
+               !dataForm.ctv?.affiliate_type &&
+               "Vui lòng chọn đối tác") ||
+             "" ||
+             (Number(dataForm.origin?.value) === 4 &&
+               !valueGetCustomerWoM.trim() &&
+               _.isUndefined(saveCustomerWoM) &&
+               "Vui lòng chọn Người giới thiệu") ||
+             "",
+           groupCs: _.isEmpty(dataForm?.portraitSurveyType) ? "error" : "",
+           gclid:
+             Number(dataForm.origin?.value) === 8 &&
+               Number(dataForm.originType?.value) === 5 &&
+               !dataForm?.gclid?.trim()
+               ? "Vui lòng nhập Google ID từ mail"
+               : "",
+         });
+         // if (_.isEmpty(dataForm?.portraitSurveyType)) {
+         //   toast.error('Vui lòng chọn nhóm khách hàng');
+         // }
+         return false;
+       }
+       return true;
+     } catch (err) {
+       console.error(" 🚀- DaiNQ - 🚀: -> handleValidateForm -> err:", err);
+     }
+   };
      const employeeId1 = localStorage.getItem("employee_id");
         const [employeeId, setStateEmployeeId] = useState<any>(employeeId1 ? JSON.parse(employeeId1) : "");
      const getName = Cookies.get('fullname');
@@ -1124,7 +1112,7 @@ const FormUpdateBookingCustomer: React.FC<FormAddCustomerProps> = ({
     if (dataForm.typeBooking?.value === "package") {
       serviceIds = getServiceIds(servicePackageId, listPackageItems);
     }
-    //if (!handleValidateForm()) return;
+    if (!handleValidateForm()) return;
     const converContent = parseCustomerPortrait(
       dataForm?.portraitSurveyType,
       dataGastrointestinal,
