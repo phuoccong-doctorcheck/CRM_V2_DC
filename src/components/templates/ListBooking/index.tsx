@@ -76,7 +76,8 @@ export default function ListBooking(data: any) {
     dispatch(getCategoriesCustomer({
       master_id: stateMaster,
     }));
-  }, [stateDetallVisit])
+    }, [stateDetallVisit])
+  console.log(stateDetallVisit)
   useEffect(() => { 
 
      setSelectedAppointment(selectedAppointment);
@@ -111,32 +112,32 @@ export default function ListBooking(data: any) {
         <div style={{ maxWidth: "900px", }}>
       <p style={{ fontSize: "24px", fontWeight: 700 }}>Thông tin lượt khám</p>
           <div style={{display:"flex", alignItems: "center", gap: "8px", justifyContent:"flex-start"}}>
-          <p style={{ color: "gray" }}>Mã lượt khám: {stateDetallVisit.data.visit?.master_id}</p>
+          <p style={{ color: "gray" }}>Mã lượt khám: {stateDetallVisit.data.master?.master_id}</p>
       <p style={{ padding: "4px 8px", background: "#e0f2fe", display: "inline-block", borderRadius: "4px" ,textTransform:"capitalize"}}>
-        { stateDetallVisit.data.visit?.status}
+        { stateDetallVisit.data.master?.status}
       </p>
      </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "24px", marginTop: "12px" }}>
         <div style={{ border: "1px solid #ddd", borderRadius: "8px", padding: "16px" }}>
           <h3 style={{ fontSize: "18px", }}>Thông tin cơ bản</h3>
-          <p><strong>Mã khách hàng:</strong> {stateDetallVisit.data.visit?.customer_id}</p>
-          <p><strong>Ngày hẹn khám:</strong> {moment(stateDetallVisit.data.visit?.appointment_date).format("DD/MM/YYYY")}</p>
-          <p><strong>Ngày tạo:</strong> {moment(stateDetallVisit.data.visit?.create_date).format("DD/MM/YYYY")}</p>
+          <p><strong>Mã khách hàng:</strong> {stateDetallVisit.data.master?.customer_id}</p>
+          <p><strong>Ngày hẹn khám:</strong> {moment(stateDetallVisit.data.master?.appointment_date).format("DD/MM/YYYY")}</p>
+          <p><strong>Ngày tạo:</strong> {moment(stateDetallVisit.data.master?.create_date).format("DD/MM/YYYY")}</p>
         </div>
 
         <div style={{ border: "1px solid #ddd", borderRadius: "8px", padding: "16px" }}>
           <h3 style={{ fontSize: "18px", marginBottom: "12px" }}>Thông tin khám bệnh</h3>
-          <p><strong>Khoa khám:</strong> {stateDetallVisit.data.visit?.exams_department_id}</p>
-          <p><strong>Bác sĩ khám:</strong> {stateDetallVisit.data.visit?.exams_doctor_id}</p>
-          <p><strong>Dịch vụ khám:</strong> {stateDetallVisit.data.visit?.exams_service_id}</p>
-          <p><strong>Ghi chú:</strong> {stateDetallVisit.data.visit?.appointment_note || "Không có ghi chú"}</p>
+          <p><strong>Khoa khám:</strong> {stateDetallVisit.data.master?.exams_department_id}</p>
+          <p><strong>Bác sĩ khám:</strong> {stateDetallVisit.data.master?.exams_doctor_id}</p>
+          <p><strong>Dịch vụ khám:</strong> {stateDetallVisit.data.master?.exams_service_id}</p>
+          <p><strong>Ghi chú:</strong> {stateDetallVisit.data.master?.appointment_note || "Không có ghi chú"}</p>
         </div>
 
         <div style={{ border: "1px solid #ddd", borderRadius: "8px", padding: "16px" }}>
           <h3 style={{ fontSize: "18px", marginBottom: "12px" }}>Thông tin nhân viên</h3>
           <p><strong>Nhân viên sales:</strong> {stateDetallVisit.data.sales_employee?.name}</p>
-          <p><strong>Người tạo:</strong> {stateDetallVisit.data.visit?.create_employee_id}</p>
+          <p><strong>Người tạo:</strong> {stateDetallVisit.data.master?.create_employee_id}</p>
         </div>
 
         {/* <div style={{ border: "1px solid #ddd", borderRadius: "8px", padding: "16px" }}>
@@ -148,27 +149,27 @@ export default function ListBooking(data: any) {
         </div> */}
       </div>
 
-      <div style={{ marginTop: "24px", border: "1px solid #ddd", borderRadius: "8px", padding: "16px" }}>
+      {/* <div style={{ marginTop: "24px", border: "1px solid #ddd", borderRadius: "8px", padding: "16px" }}>
         <h3 style={{ fontSize: "18px", marginBottom: "12px" }}>Trạng thái</h3>
         <div style={{ display: "flex", gap: "12px" }}>
           <div style={{ flex: 1, textAlign: "center" }}>
             <p>Đặt lịch</p>
-            <p>{stateDetallVisit.data.visit?.is_appointment ? "✓ Có" : "✗ Không"}</p>
+            <p>{stateDetallVisit.data.master?.is_appointment ? "✓ Có" : "✗ Không"}</p>
           </div>
           <div style={{ flex: 1, textAlign: "center" }}>
             <p>Khám bệnh</p>
-            <p>{stateDetallVisit.data.visit?.is_exams ? "✓ Có" : "✗ Không"}</p>
+            <p>{stateDetallVisit.data.master?.is_exams ? "✓ Có" : "✗ Không"}</p>
           </div>
           <div style={{ flex: 1, textAlign: "center" }}>
             <p>Cận lâm sàng</p>
-            <p>{stateDetallVisit.data.visit?.is_register_subclinical ? "✓ Có" : "✗ Không"}</p>
+            <p>{stateDetallVisit.data.master?.is_register_subclinical ? "✓ Có" : "✗ Không"}</p>
           </div>
           <div style={{ flex: 1, textAlign: "center" }}>
             <p>Tái khám</p>
-            <p>{stateDetallVisit.data.visit?.is_re_exams ? "✓ Có" : "✗ Không"}</p>
+            <p>{stateDetallVisit.data.master?.is_re_exams ? "✓ Có" : "✗ Không"}</p>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
       );
     } else if (activeTab === "order") {
@@ -294,13 +295,13 @@ export default function ListBooking(data: any) {
                     </h3>
                     <div style={{ color: "#6b7280", fontSize: "14px", lineHeight: "1.6" }}>
                       <p style={{ margin: "4px 0" }}>
-                        <strong>Tên:</strong> {stateDetallVisit?.data?.saleorders[0]?.own_employee.fullname}
+                        <strong>Tên:</strong> {stateDetallVisit?.data?.saleorders[0]?.own_employee?.fullname}
                       </p>
                       <p style={{ margin: "4px 0" }}>
-                        <strong>Mã NV:</strong> {stateDetallVisit?.data?.saleorders[0]?.own_employee.employee_id}
+                        <strong>Mã NV:</strong> {stateDetallVisit?.data?.saleorders[0]?.own_employee?.employee_id}
                       </p>
                       <p style={{ margin: "4px 0" }}>
-                        <strong>Mã ERP:</strong> {stateDetallVisit?.data?.saleorders[0]?.own_employee.own_erp_code}
+                        <strong>Mã ERP:</strong> {stateDetallVisit?.data?.saleorders[0]?.own_employee?.own_erp_code}
                       </p>
                     </div>
                   </div>

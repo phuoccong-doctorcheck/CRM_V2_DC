@@ -1627,7 +1627,7 @@ const CustomerInfomation2: React.FC<CustomerInformationProps> = ({
     styles={{ fontWeight: 500, whiteSpace: "nowrap" }}
   />
                   {
-                    stateDetallVisit.data.master?.register_date ?   <Typography content={ moment(formData.master?.register_date).format('HH:mm - DD/MM/YYYY')} /> :  <Typography styles={{color:"#fe0000"}} content={ "Chưa đến"} />
+                    stateDetallVisit.data.master?.register_date ?   <Typography content={ moment( stateDetallVisit.data.master?.register_date).format('HH:mm - DD/MM/YYYY')} /> :  <Typography styles={{color:"#fe0000"}} content={ "Chưa đến"} />
   }
 
 </div>
