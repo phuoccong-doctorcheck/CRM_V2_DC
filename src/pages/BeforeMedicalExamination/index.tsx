@@ -474,13 +474,13 @@ const [stateEmployeeId, setStateEmployeeId] = useState<any>(
 
 
  const [filterTask, setFilterTask] = useState({
-     task_type_id: userguidType[0].value || "all",
-     status:OptionCustomerTask[0].value || "all",
+     task_type_id: userguidType[0]?.value || "all",
+     status:OptionCustomerTask[0]?.value || "all",
      id: 0,
  });
  const [filterTaskAll, setFilterTaskAll] = useState({
   own_u_id: stateEmployeeId,
-  status:OptionCustomerTask[0].value || "all",
+  status:OptionCustomerTask[0]?.value || "all",
 });
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [conversation, setConversation] = useState<any>({

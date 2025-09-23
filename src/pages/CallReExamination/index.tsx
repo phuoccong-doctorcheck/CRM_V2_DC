@@ -111,6 +111,33 @@ interface Note {
   employee_name: string;
   cs_notes: string;
 }
+const listF = [
+  {
+    id: 1,
+    label: "F1",
+    value: "F1",
+  },  {
+    id: 2,
+    label: "TK",
+    value: "TK",
+  },
+   {
+    id: 3,
+    label: "F2",
+    value: "F2",
+  },
+    {
+    id: 4,
+    label: "F3",
+    value: "F3",
+  },
+   
+      {
+    id: 5,
+    label: "BSCD",
+    value: "BSCD",
+  },
+]
 const CallReExamination: React.FC = () => {
   const dispatch = useAppDispatch();
   /*  */
@@ -154,7 +181,7 @@ const CallReExamination: React.FC = () => {
   }, [dataListCallReExamming]);
   /*  */
   const storageLaunchSourcesGroup = localStorage.getItem("launchSourcesGroups");
-  const dataLaunchSource = localStorage.getItem("launchSources");
+  const storageLaunchSources = localStorage.getItem("launchSources");
   const storageLaunchSourcesType = localStorage.getItem("launchSourcesTypes");
   const dataStages = localStorage.getItem("stages");
   const employeeId = Cookies.get("employee_id");
@@ -172,6 +199,9 @@ const CallReExamination: React.FC = () => {
   const dc_dm_cschedules_status = localStorage.getItem(
     "dc_dm_cschedules_status"
   );
+      const [stateLaunchSourceGroups, setstateLaunchSourceGroups] = useState<DropdownData[]>(storageLaunchSourcesGroup ? JSON.parse(storageLaunchSourcesGroup) : []);
+      const [stateLaunchSource, setstateLaunchSource] = useState<DropdownData[]>(storageLaunchSources ? JSON.parse(storageLaunchSources) : []);
+      const [stateLaunchSourceTypes, setstateLaunchSourceTypes] = useState<DropdownData[]>(storageLaunchSourcesType ? JSON.parse(storageLaunchSourcesType) : []);
   const [stateEmployeeList, setStateEmployeeList] = useState<DropdownData[]>(
     () => {
       const parsedList: DropdownData[] = storageEmployeeList
@@ -231,6 +261,9 @@ const CallReExamination: React.FC = () => {
   from_date1: moment().format("YYYY-MM-DD 00:00:00") as string ,
   to_date1: moment().format("YYYY-MM-DD 23:59:59") as string,
     year: undefined as unknown as DropdownData,
+    source: undefined as unknown as DropdownData,
+    sourceGroup: undefined as unknown as DropdownData,
+    stateF:  undefined as unknown as DropdownData,
   });
   const listNotesCustomer = useAppSelector(
     (state) => state.infosCustomer.noteListCR
@@ -247,6 +280,9 @@ const CallReExamination: React.FC = () => {
     from_date: dataFilter.from_date,
     to_date: dataFilter.to_date,
     year: dataFilter.year || "all",
+    source: dataFilter?.source || 0,
+    sourceGroup: dataFilter?.sourceGroup || 0,
+     stateF: dataFilter?.stateF || "all",
   };
   const [assigntTasks, setAssigntTasks] = useState({
     openModal: false,
@@ -357,6 +393,9 @@ const CallReExamination: React.FC = () => {
         page_number: 1,
         page_size: 10000,
         keyWord: dataFilter.keyWord,
+        f_type: "all",
+        launch_source_group_id: 0,
+        launch_source_id:0
       } as any)
     );
     document.title = "Nhắc tái khám - nội soi - tầm soát lại | CRM";
@@ -1043,6 +1082,150 @@ const CallReExamination: React.FC = () => {
     {
       title: (
         <Typography
+          content="Branch"
+          modifiers={["12x18", "500", "center", "uppercase"]}
+          styles={{ textAlign: "center" }}
+        />
+      ),
+      dataIndex: "launch_source_group_name",
+      width: 200,
+      className: "ant-table-column_wrap",
+      render: (record: any, data: any) => (
+        <div
+          className="ant-table-column_item"
+         onClick={() => {
+              handleCallOutCustomer(data?.customer_phone);
+              handleUpdateStatus({
+                action: "update_info_communicate",
+                id_pk_long: data.c_schedule_id,
+                value_text: "",
+              });
+            }}
+          style={{
+            justifyContent: "center",
+            wordWrap: "break-word", // Cho phép xuống dòng
+            whiteSpace: "normal", // Đảm bảo nội dung hiển thị nhiều dòng
+            overflow: "hidden", // Xử lý tràn nếu cần
+            maxWidth: "250px",
+          }}
+        >
+          <Typography
+           content={record}
+            modifiers={[
+              "13x18",
+              "500",
+              "center",
+              `${data.is_high_light === true ? "main" : "main"}`,
+            ]}
+            styles={{
+              display: "block", // Đảm bảo hiển thị như block
+              wordWrap: "break-word", // Xuống dòng khi quá dài
+              whiteSpace: "normal", // Nội dung nhiều dòng
+              textAlign: "left",
+            }}
+          />
+        </div>
+      ),
+    },
+    {
+      title: (
+        <Typography
+          content="Nguồn"
+          modifiers={["12x18", "500", "center", "uppercase"]}
+          styles={{ textAlign: "center" }}
+        />
+      ),
+      dataIndex: "launch_source_name",
+      width: 80,
+      className: "ant-table-column_wrap",
+      render: (record: any, data: any) => (
+        <div
+          className="ant-table-column_item"
+         onClick={() => {
+              handleCallOutCustomer(data?.customer_phone);
+              handleUpdateStatus({
+                action: "update_info_communicate",
+                id_pk_long: data.c_schedule_id,
+                value_text: "",
+              });
+            }}
+          style={{
+            justifyContent: "center",
+            wordWrap: "break-word", // Cho phép xuống dòng
+            whiteSpace: "normal", // Đảm bảo nội dung hiển thị nhiều dòng
+            overflow: "hidden", // Xử lý tràn nếu cần
+            maxWidth: "250px",
+          }}
+        >
+          <Typography
+         content={record === "KH Cũ Giới Thiệu (WoM)" ? "WOM" : record === "Bác Sĩ Chỉ Định" ? "BSCĐ" : record}
+            modifiers={[
+              "13x18",
+              "500",
+              "center",
+              `${data.is_high_light === true ? "main" : "main"}`,
+            ]}
+            styles={{
+              display: "block", // Đảm bảo hiển thị như block
+              wordWrap: "break-word", // Xuống dòng khi quá dài
+              whiteSpace: "normal", // Nội dung nhiều dòng
+              textAlign: "left",
+            }}
+          />
+        </div>
+      ),
+    },
+    {
+      title: (
+        <Typography
+          content="Phân loại"
+          modifiers={["12x18", "500", "center", "uppercase"]}
+          styles={{ textAlign: "center" }}
+        />
+      ),
+      dataIndex: "f_type",
+      width: 60,
+      className: "ant-table-column_wrap",
+      render: (record: any, data: any) => (
+        <div
+          className="ant-table-column_item"
+         onClick={() => {
+              handleCallOutCustomer(data?.customer_phone);
+              handleUpdateStatus({
+                action: "update_info_communicate",
+                id_pk_long: data.c_schedule_id,
+                value_text: "",
+              });
+            }}
+          style={{
+            justifyContent: "center",
+            wordWrap: "break-word", // Cho phép xuống dòng
+            whiteSpace: "normal", // Đảm bảo nội dung hiển thị nhiều dòng
+            overflow: "hidden", // Xử lý tràn nếu cần
+            maxWidth: "250px",
+          }}
+        >
+          <Typography
+          content={record}
+            modifiers={[
+              "13x18",
+              "500",
+              "center",
+              `${data.is_high_light === true ? "main" : "main"}`,
+            ]}
+            styles={{
+              display: "block", // Đảm bảo hiển thị như block
+              wordWrap: "break-word", // Xuống dòng khi quá dài
+              whiteSpace: "normal", // Nội dung nhiều dòng
+              textAlign: "left",
+            }}
+          />
+        </div>
+      ),
+    },
+    {
+      title: (
+        <Typography
           content="Nội dung công việc"
           modifiers={["12x18", "500", "center", "uppercase"]}
           styles={{ textAlign: "center" }}
@@ -1251,7 +1434,7 @@ const CallReExamination: React.FC = () => {
         />
       ),
       dataIndex: "c_schedule_note",
-      width: 420,
+      width: 370,
       className: "ant-table-column_wrap",
       render: (record: any, data: any) => (
         <div
@@ -1985,7 +2168,7 @@ const statisticHeader = useMemo(() => {
             //   handleGetStatistic();
           }}
           tabBottomRight={
-            <div style={{ width: "320px", marginTop:"5px" }}>
+            <div style={{ width: "180px", marginTop:"5px" }}>
               <Input2
                 id="customer_id"
                 type="text"
@@ -2026,13 +2209,13 @@ const statisticHeader = useMemo(() => {
           tabBottom={
             <div
               className="p-after_examination_filter_bottom p-after_examination_filter p-appointment_view_filter"
-              style={{ gap: "10px" }}
+              style={{ gap: "5px" }}
             >
               <div style={{ width: "200px" }}>
                 <Dropdown4
                   dropdownOption={dcdmcschedules}
                   values={dataFilter.c_schedule_type_id}
-                  defaultValue={propsData.c_schedule_type_id}
+                  // defaultValue={propsData.c_schedule_type_id}
                   handleSelect={(item: any) => {
                     setDataFilter({
                       ...dataFilter,
@@ -2056,7 +2239,7 @@ const statisticHeader = useMemo(() => {
                 />
               </div>
 
-              <div style={{ width: "200px" }}>
+              <div style={{ width: "130px" }}>
                 <Dropdown4
                   dropdownOption={dcdmcschedulesstatus}
                   values={dataFilter.status}
@@ -2075,7 +2258,94 @@ const statisticHeader = useMemo(() => {
                   placeholder="-- Trạng thái --"
                 />
               </div>
- <div style={{ width: "100px" }}>
+               <div style={{ width: "200px" }}>
+                <Dropdown4
+                  dropdownOption={[
+                    {
+                    id:1,
+                    label: "Tất cả",
+                    value: 0
+                  }, ...stateLaunchSourceGroups
+                  ]}
+                  values={dataFilter.sourceGroup}
+                  // defaultValue={{
+                  //   id:1,
+                  //   label: "Tất cả",
+                  //   value: 0
+                  // }}
+                  handleSelect={(item: any) => {
+                    setDataFilter({ ...dataFilter, sourceGroup: item?.value });
+                    setListCallReExamming([]);
+                    dispatch(
+                      getListCallReExammingMaster({
+                        ...propsData,
+                        launch_source_group_id: item?.value,
+                      } as any)
+                    );
+                  }}
+                  variant="simple"
+                  placeholder="-- Branch --"
+                />
+              </div>
+                <div style={{ width: "120px" }}>
+                <Dropdown4
+                  dropdownOption={[
+                    {
+                    id:1,
+                    label: "Tất cả",
+                    value: 0
+                  }, ...stateLaunchSource
+                  ]}
+                  values={dataFilter.source}
+                  // defaultValue={{
+                  //   id:1,
+                  //   label: "Tất cả",
+                  //   value: 0
+                  // }}
+                  handleSelect={(item: any) => {
+                    setDataFilter({ ...dataFilter, source: item?.value });
+                    setListCallReExamming([]);
+                    dispatch(
+                      getListCallReExammingMaster({
+                        ...propsData,
+                        launch_source_id: item?.value,
+                      } as any)
+                    );
+                  }}
+                  variant="simple"
+                  placeholder="-- Nguồn --"
+                />
+              </div>
+               <div style={{ width: "100px" }}>
+                <Dropdown4
+                   dropdownOption={[
+                    {
+                    id:1,
+                    label: "Tất cả",
+                    value: "all"
+                  }, ...listF
+                  ]}
+                  values={dataFilter.stateF}
+                //  defaultValue={{
+                //     id:1,
+                //     label: "Tất cả",
+                //     value: "all"
+                //   }}
+                  handleSelect={(item: any) => {
+                    setDataFilter({ ...dataFilter, stateF: item?.value });
+                    setListCallReExamming([]);
+                    dispatch(
+                      getListCallReExammingMaster({
+                        ...propsData,
+                        f_type: item?.value,
+                      } as any)
+                    );
+                  }}
+                  variant="simple"
+                  placeholder="Phân loại"
+                />
+              </div>
+ <div style={{ width: "80px" }}>
                 <Dropdown4
                   dropdownOption={dmYearDoctorSchedules}
                   values={dataFilter.year}
@@ -2102,7 +2372,7 @@ const statisticHeader = useMemo(() => {
                   }}
 
                   variant="simple"
-                  placeholder="-- Năm --"
+                  placeholder="Năm"
                 />
               </div>
               <Radio.Group
@@ -2239,14 +2509,17 @@ const statisticHeader = useMemo(() => {
                   display: "flex",
                   justifyContent: "start",
                   marginTop: "10px",
-                  gap: "16px",
+                  gap: "5px",
                 }}
               >
-                {dmtimedoctorschedules.map((option) => (
-                  <Radio key={option.value} value={option.value}>
+               {dmtimedoctorschedules
+                .filter((option:any) => option.value !== 7)
+                .map(option => (
+                  <Radio key={option.value} value={option.value} style={{fontSize:12}}>
                     {option.label}
                   </Radio>
-                ))}
+              ))}
+
               </Radio.Group>
 
               <div style={{ marginTop: "10px" }}>
@@ -2268,7 +2541,6 @@ const statisticHeader = useMemo(() => {
                     const tomorrow = moment()
                       .add(1, "days")
                       .format("YYYY-MM-DD");
-                    console.log(from,to)
                     const fromDate = moment(from).format("YYYY-MM-DD 00:00:00");
                     const toDate = moment(to).format("YYYY-MM-DD 23:59:59");
 

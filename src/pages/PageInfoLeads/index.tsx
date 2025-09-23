@@ -574,8 +574,8 @@ const [stateEmployeeId, setStateEmployeeId] = useState<any>(
     limit: 50,
     page: 1,
     keyword:  "",
-    guid_status: statusGuid[0].value || "pending",
-    category_id: userguidType[0].id || 0,
+    guid_status: statusGuid[0]?.value || "pending",
+    category_id: userguidType[0]?.id || 0,
   });
   const [formDataErr, setFormDataErr] = useState({
     name: "",
@@ -646,8 +646,8 @@ const [stateEmployeeId, setStateEmployeeId] = useState<any>(
     setDataListAnswer(listAnswer)
   },[listAnswer])
   const [filterTask, setFilterTask] = useState({
-   task_type_id: userguidType[0].value || "all",
-    status:OptionCustomerTask[0].value || "all",
+   task_type_id: userguidType[0]?.value || "all",
+    status:OptionCustomerTask[0]?.value || "all",
     id: "",
   });
    const [filterTaskAll, setFilterTaskAll] = useState({

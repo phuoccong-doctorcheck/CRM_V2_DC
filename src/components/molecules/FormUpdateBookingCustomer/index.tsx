@@ -1112,7 +1112,7 @@ const FormUpdateBookingCustomer: React.FC<FormAddCustomerProps> = ({
     if (dataForm.typeBooking?.value === "package") {
       serviceIds = getServiceIds(servicePackageId, listPackageItems);
     }
-    if (!handleValidateForm()) return;
+    // if (!handleValidateForm()) return;
     const converContent = parseCustomerPortrait(
       dataForm?.portraitSurveyType,
       dataGastrointestinal,

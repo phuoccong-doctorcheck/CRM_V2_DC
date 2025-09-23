@@ -767,17 +767,11 @@ const FormBookingCustomer: React.FC<FormAddCustomerProps> = ({
       if (
          !dataForm.noteBooking ||
         !dataForm.origin.value ||
-        !dataForm.originGroup.value ||
-        (Number(dataForm.origin?.value) === 2 &&
-          !dataForm.ctvBSCD?.affiliate_type) ||
-        (Number(dataForm.origin?.value) === 3 &&
-          !dataForm.ctv?.affiliate_type) ||
-        (Number(dataForm.origin?.value) === 4 &&
-          !valueGetCustomerWoM.trim() &&
-          _.isUndefined(saveCustomerWoM)) ||
-        (Number(dataForm.origin?.value) === 8 &&
-          Number(dataForm.originType?.value) === 5 &&
-          !dataForm?.gclid?.trim()) 
+        !dataForm.originGroup.value 
+       
+        // (Number(dataForm.origin?.value) === 8 &&
+        //   Number(dataForm.originType?.value) === 5 &&
+        //   !dataForm?.gclid?.trim()) 
       
         // || _.isEmpty(dataForm.portraitSurveyType)
       ) {
