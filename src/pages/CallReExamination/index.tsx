@@ -280,9 +280,9 @@ const CallReExamination: React.FC = () => {
     from_date: dataFilter.from_date,
     to_date: dataFilter.to_date,
     year: dataFilter.year || "all",
-    source: dataFilter?.source || 0,
-    sourceGroup: dataFilter?.sourceGroup || 0,
-     stateF: dataFilter?.stateF || "all",
+    launch_source_id: dataFilter?.source || 0,
+    launch_source_group_id: dataFilter?.sourceGroup || 0,
+     f_type: dataFilter?.stateF || "all",
   };
   const [assigntTasks, setAssigntTasks] = useState({
     openModal: false,
@@ -1082,7 +1082,7 @@ const CallReExamination: React.FC = () => {
     {
       title: (
         <Typography
-          content="Branch"
+          content="Brand"
           modifiers={["12x18", "500", "center", "uppercase"]}
           styles={{ textAlign: "center" }}
         />
@@ -2284,7 +2284,7 @@ const statisticHeader = useMemo(() => {
                     );
                   }}
                   variant="simple"
-                  placeholder="-- Branch --"
+                  placeholder="-- Brand --"
                 />
               </div>
                 <div style={{ width: "120px" }}>
