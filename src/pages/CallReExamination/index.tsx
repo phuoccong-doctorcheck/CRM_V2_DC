@@ -26,6 +26,7 @@ import PublicTable from "components/molecules/PublicTable";
 import CModal from "components/organisms/CModal";
 import InteractionHistory from "components/organisms/InteractionHistory";
 import InteractionHistory2 from "components/organisms/InteractionHistory2";
+import InteractionHistoryRC from "components/organisms/InteractionHistoryRC";
 import PublicHeader from "components/templates/PublicHeader";
 import PublicHeaderStatistic from "components/templates/PublicHeaderStatistic";
 import PublicLayout from "components/templates/PublicLayout";
@@ -64,6 +65,7 @@ import {
   postCustomerTask,
 } from "services/api/customerInfo";
 import { getCustomerByKey } from "services/api/dashboard";
+import { postAddTaskOfOneCustomer } from "services/api/tasks";
 import {
   getListToStoreAfterExams,
   getStatisticAllowRangeDate,
@@ -398,7 +400,7 @@ const CallReExamination: React.FC = () => {
         launch_source_id:0
       } as any)
     );
-    document.title = "Nhắc tái khám - nội soi - tầm soát lại | CRM";
+    document.title = "Nhắc tầm soát lại - nội soi - tầm soát lại | CRM";
   }, []);
   const [loadingPage, setLoadingPage] = useState(false);
 
@@ -497,28 +499,29 @@ const CallReExamination: React.FC = () => {
 
   const { mutate: postTask } = useMutation(
     "post-footer-form",
-    (data: any) => postCustomerTask(data),
+    (data: any) => postAddTaskOfOneCustomer(data),
     {
       onSuccess: (data: any) => {
-        dispatch(
-          getTaskByCustomerID({
-            id: stateCustomerId,
-            task_status: "all",
-          })
-        );
+        // dispatch(
+        //   getTaskByCustomerID({
+        //     id: stateCustomerId,
+        //     task_status: "all",
+        //   })
+        // );
         setIsAddTask(false);
         setIsUpdateTask(false);
      
         setFormData({
-          name: "",
-          shortDesc: "",
-          group: undefined as unknown as DropdownData,
-          assign: undefined as unknown as DropdownData,
-          personCharge: undefined as unknown as DropdownData,
-          deadline: undefined as unknown as Date,
-          type: OptionCustomerTask[0],
-          desc: "",
+            name: "",
+            shortDesc: "",
+            group: undefined as unknown as DropdownData,
+            assign: undefined as unknown as DropdownData,
+            personCharge: undefined as unknown as DropdownData,
+            deadline: undefined as unknown as Date,
+            type: OptionCustomerTask[0],
+            desc: "",
           id: "",
+          
         });
         setIsLoadingGetService(false);
       },
@@ -554,37 +557,41 @@ const CallReExamination: React.FC = () => {
     if (isUpdateTask) {
       setIsLoadingGetService(true);
       const body = {
-        task_id: formData?.id,
+       
         task_type_id: formData?.group?.value,
+        assign_employee_id:formData?.personCharge?.value,
+        exec_employee_id: formData?.personCharge?.value,
         customer_id: stateCustomerId,
         task_name: formData?.name,
         task_description: formData?.shortDesc,
-        task_last_note: formData?.desc,
+        note: formData?.desc,
         employee_team_id: formData?.assign?.value,
-        assign_employee_id: formData?.personCharge?.value,
         remind_datetime: moment(formData?.deadline).format(
           "YYYY-MM-DDTHH:mm:ss"
         ),
-        task_status: formData?.type?.value,
+        status: "inprogress",
+        task_id: formData?.id || null,
       };
       await postTask(body);
     } else {
       setIsLoadingGetService(true);
       const body = {
-        task_id: handleRenderGUID(),
-        task_type_id: formData?.group?.value,
+          task_type_id: formData?.group?.value,
+        assign_employee_id:formData?.personCharge?.value,
+        exec_employee_id: formData?.personCharge?.value,
         customer_id: stateCustomerId,
         task_name: formData?.name,
         task_description: formData?.shortDesc,
-        task_last_note: formData?.desc,
+        note: formData?.desc,
         employee_team_id: formData?.assign?.value,
-        assign_employee_id: formData?.personCharge?.value,
         remind_datetime: moment(formData?.deadline).format(
           "YYYY-MM-DDTHH:mm:ss"
         ),
-        task_status: formData?.type?.value,
+        status: "inprogress",
+        task_id: formData?.id || null,
       };
-      await postTask(body);
+      console.log(body,formData)
+       await postTask(body);
     }
   };
   // Bên trong component của bạn:
@@ -848,6 +855,18 @@ const CallReExamination: React.FC = () => {
   const [stateCscheduleId, setStateCscheduleId] = useState("");
   /* Column */
   const ColumnTable = [
+   {
+        title: (<Typography content="STT" modifiers={["12x18", "500", "center", "main"]} />),
+        align: "center",
+        dataIndex: "index",
+        width: 40,
+        className: "ant-table-column_wrap",
+        render: (record: any, data: any, index: any) => (
+          <div className="ant-table-column_item">
+            < Typography content={`${index + 1}`} modifiers={['13x18', '600', 'center']} />
+          </div>
+        ),
+      },
     {
       title: (
         <Typography
@@ -909,27 +928,22 @@ const CallReExamination: React.FC = () => {
         </div>
       ),
     },
-    {
+       {
       title: (
         <Typography
-          content="Giới tính"
+          content="Ngày thực hiện CV"
           modifiers={["12x18", "500", "center", "uppercase"]}
-          styles={{ textAlign: "center" }}
         />
       ),
-      dataIndex: "customer_gender",
-      width: 70,
+      dataIndex: "create_datetime",
+      align: "center",
+      width: 120,
       className: "ant-table-column_wrap",
       render: (record: any, data: any) => (
         <div
           className="ant-table-column_item"
           onClick={() => {
-            const {
-              customer_id,
-              customer_fullname,
-              year_of_birth,
-              ...prevData
-            } = data;
+            const { customer_id, customer_fullname, ...prevData } = data;
             if (customer_id) {
               Cookies.set("id_customer", customer_id);
               dispatch(getInfosCustomerById({ customer_id: customer_id }));
@@ -944,141 +958,189 @@ const CallReExamination: React.FC = () => {
               toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
             }
           }}
-          style={{
-            justifyContent: "center",
-            wordWrap: "break-word", // Cho phép xuống dòng
-            whiteSpace: "normal", // Đảm bảo nội dung hiển thị nhiều dòng
-            overflow: "hidden", // Xử lý tràn nếu cần
-            maxWidth: "250px",
-          }}
         >
           <Typography
-            content={record}
+            content={moment(record).format("DD/MM/YYYY")}
             modifiers={[
               "13x18",
               "500",
               "center",
-              `${data.is_high_light === true ? "main" : "main"}`,
+             "main"
             ]}
-            styles={{
-              display: "block", // Đảm bảo hiển thị như block
-              wordWrap: "break-word", // Xuống dòng khi quá dài
-              whiteSpace: "normal", // Nội dung nhiều dòng
-              textAlign: "left",
-            }}
           />
         </div>
       ),
     },
-      {
-      title: (
-        <Typography
-          content="Năm sinh"
-          modifiers={["12x18", "500", "center", "uppercase"]}
-          styles={{ textAlign: "center" }}
-        />
-      ),
-      dataIndex: "year_of_birth",
-      width: 70,
-      className: "ant-table-column_wrap",
-      render: (record: any, data: any) => (
-        <div
-          className="ant-table-column_item"
-          onClick={() => {
-            const {
-              customer_id,
-              customer_fullname,
-              year_of_birth,
-              ...prevData
-            } = data;
-            if (customer_id) {
-              Cookies.set("id_customer", customer_id);
-              dispatch(getInfosCustomerById({ customer_id: customer_id }));
-              const newTab = window.open(
-                `/customer-info/id/${customer_id}/history-interaction`,
-                "_blank"
-              );
-              if (newTab) {
-                newTab.focus();
-              }
-            } else {
-              toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
-            }
-          }}
-          style={{
-            justifyContent: "center",
-            wordWrap: "break-word", // Cho phép xuống dòng
-            whiteSpace: "normal", // Đảm bảo nội dung hiển thị nhiều dòng
-            overflow: "hidden", // Xử lý tràn nếu cần
-            maxWidth: "250px",
-          }}
-        >
-          <Typography
-            content={record.toString()}
-            modifiers={[
-              "13x18",
-              "500",
-              "center",
-              `${data.is_high_light === true ? "main" : "main"}`,
-            ]}
-            styles={{
-              display: "block", // Đảm bảo hiển thị như block
-              wordWrap: "break-word", // Xuống dòng khi quá dài
-              whiteSpace: "normal", // Nội dung nhiều dòng
-              textAlign: "left",
-            }}
-          />
-        </div>
-      ),
-    },
-   {
-      title: (
-        <Typography
-          content="Số ĐT"
-          modifiers={["12x18", "500", "center", "uppercase"]}
-          styles={{ textAlign: "center" }}
-        />
-      ),
-      dataIndex: "customer_phone",
-      width: 80,
-      className: "ant-table-column_wrap",
-      render: (record: any, data: any) => (
-        <div
-          className="ant-table-column_item"
-         onClick={() => {
-              handleCallOutCustomer(data?.customer_phone);
-              handleUpdateStatus({
-                action: "update_info_communicate",
-                id_pk_long: data.c_schedule_id,
-                value_text: "",
-              });
-            }}
-          style={{
-            justifyContent: "center",
-            wordWrap: "break-word", // Cho phép xuống dòng
-            whiteSpace: "normal", // Đảm bảo nội dung hiển thị nhiều dòng
-            overflow: "hidden", // Xử lý tràn nếu cần
-            maxWidth: "250px",
-          }}
-        >
-          <Typography
-            content={record.replace("+84", "0").replace(/-/g, "")}
-            modifiers={[
-              "13x18",
-              "500",
-              "center",
-              `${data.is_high_light === true ? "main" : "main"}`,
-            ]}
-            styles={{
-              display: "block", // Đảm bảo hiển thị như block
-              wordWrap: "break-word", // Xuống dòng khi quá dài
-              whiteSpace: "normal", // Nội dung nhiều dòng
-              textAlign: "left",
-            }}
-          />
-        </div>
-      ),
-    },
+  //   {
+  //     title: (
+  //       <Typography
+  //         content="Giới tính"
+  //         modifiers={["12x18", "500", "center", "uppercase"]}
+  //         styles={{ textAlign: "center" }}
+  //       />
+  //     ),
+  //     dataIndex: "customer_gender",
+  //     width: 70,
+  //     className: "ant-table-column_wrap",
+  //     render: (record: any, data: any) => (
+  //       <div
+  //         className="ant-table-column_item"
+  //         onClick={() => {
+  //           const {
+  //             customer_id,
+  //             customer_fullname,
+  //             year_of_birth,
+  //             ...prevData
+  //           } = data;
+  //           if (customer_id) {
+  //             Cookies.set("id_customer", customer_id);
+  //             dispatch(getInfosCustomerById({ customer_id: customer_id }));
+  //             const newTab = window.open(
+  //               `/customer-info/id/${customer_id}/history-interaction`,
+  //               "_blank"
+  //             );
+  //             if (newTab) {
+  //               newTab.focus();
+  //             }
+  //           } else {
+  //             toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
+  //           }
+  //         }}
+  //         style={{
+  //           justifyContent: "center",
+  //           wordWrap: "break-word", // Cho phép xuống dòng
+  //           whiteSpace: "normal", // Đảm bảo nội dung hiển thị nhiều dòng
+  //           overflow: "hidden", // Xử lý tràn nếu cần
+  //           maxWidth: "250px",
+  //         }}
+  //       >
+  //         <Typography
+  //           content={record}
+  //           modifiers={[
+  //             "13x18",
+  //             "500",
+  //             "center",
+  //             `${data.is_high_light === true ? "main" : "main"}`,
+  //           ]}
+  //           styles={{
+  //             display: "block", // Đảm bảo hiển thị như block
+  //             wordWrap: "break-word", // Xuống dòng khi quá dài
+  //             whiteSpace: "normal", // Nội dung nhiều dòng
+  //             textAlign: "left",
+  //           }}
+  //         />
+  //       </div>
+  //     ),
+  //   },
+  //     {
+  //     title: (
+  //       <Typography
+  //         content="Năm sinh"
+  //         modifiers={["12x18", "500", "center", "uppercase"]}
+  //         styles={{ textAlign: "center" }}
+  //       />
+  //     ),
+  //     dataIndex: "year_of_birth",
+  //     width: 70,
+  //     className: "ant-table-column_wrap",
+  //     render: (record: any, data: any) => (
+  //       <div
+  //         className="ant-table-column_item"
+  //         onClick={() => {
+  //           const {
+  //             customer_id,
+  //             customer_fullname,
+  //             year_of_birth,
+  //             ...prevData
+  //           } = data;
+  //           if (customer_id) {
+  //             Cookies.set("id_customer", customer_id);
+  //             dispatch(getInfosCustomerById({ customer_id: customer_id }));
+  //             const newTab = window.open(
+  //               `/customer-info/id/${customer_id}/history-interaction`,
+  //               "_blank"
+  //             );
+  //             if (newTab) {
+  //               newTab.focus();
+  //             }
+  //           } else {
+  //             toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
+  //           }
+  //         }}
+  //         style={{
+  //           justifyContent: "center",
+  //           wordWrap: "break-word", // Cho phép xuống dòng
+  //           whiteSpace: "normal", // Đảm bảo nội dung hiển thị nhiều dòng
+  //           overflow: "hidden", // Xử lý tràn nếu cần
+  //           maxWidth: "250px",
+  //         }}
+  //       >
+  //         <Typography
+  //           content={record.toString()}
+  //           modifiers={[
+  //             "13x18",
+  //             "500",
+  //             "center",
+  //             `${data.is_high_light === true ? "main" : "main"}`,
+  //           ]}
+  //           styles={{
+  //             display: "block", // Đảm bảo hiển thị như block
+  //             wordWrap: "break-word", // Xuống dòng khi quá dài
+  //             whiteSpace: "normal", // Nội dung nhiều dòng
+  //             textAlign: "left",
+  //           }}
+  //         />
+  //       </div>
+  //     ),
+  //   },
+  //  {
+  //     title: (
+  //       <Typography
+  //         content="Số ĐT"
+  //         modifiers={["12x18", "500", "center", "uppercase"]}
+  //         styles={{ textAlign: "center" }}
+  //       />
+  //     ),
+  //     dataIndex: "customer_phone",
+  //     width: 80,
+  //     className: "ant-table-column_wrap",
+  //     render: (record: any, data: any) => (
+  //       <div
+  //         className="ant-table-column_item"
+  //        onClick={() => {
+  //             handleCallOutCustomer(data?.customer_phone);
+  //             handleUpdateStatus({
+  //               action: "update_info_communicate",
+  //               id_pk_long: data.c_schedule_id,
+  //               value_text: "",
+  //             });
+  //           }}
+  //         style={{
+  //           justifyContent: "center",
+  //           wordWrap: "break-word", // Cho phép xuống dòng
+  //           whiteSpace: "normal", // Đảm bảo nội dung hiển thị nhiều dòng
+  //           overflow: "hidden", // Xử lý tràn nếu cần
+  //           maxWidth: "250px",
+  //         }}
+  //       >
+  //         <Typography
+  //           content={record.replace("+84", "0").replace(/-/g, "")}
+  //           modifiers={[
+  //             "13x18",
+  //             "500",
+  //             "center",
+  //             `${data.is_high_light === true ? "main" : "main"}`,
+  //           ]}
+  //           styles={{
+  //             display: "block", // Đảm bảo hiển thị như block
+  //             wordWrap: "break-word", // Xuống dòng khi quá dài
+  //             whiteSpace: "normal", // Nội dung nhiều dòng
+  //             textAlign: "left",
+  //           }}
+  //         />
+  //       </div>
+  //     ),
+  //   },
     {
       title: (
         <Typography
@@ -1578,27 +1640,27 @@ const CallReExamination: React.FC = () => {
             maxWidth: "300px",
           }}
           className="ant-table-column_item"
-          onClick={() => {
-            setDataUpdateStatus({
-              ...dataUpdateStatus,
-              openUpdateStatus: true,
-              id_pk_long: data.c_schedule_id,
-              value_text: {
-                id: 0,
-                value: data.status,
-                label:
-                  data.status === "new"
-                    ? "Chưa liên hệ"
-                    : data.status === "contact"
-                    ? "Đã liên hệ"
-                    : data.status === "appointment"
-                    ? "Đã đặt lịch"
-                    : data.status === "checkin"
-                    ? "Đã đến"
-                    : "Đã hủy",
-              },
-            });
-          }}
+          // onClick={() => {
+          //   setDataUpdateStatus({
+          //     ...dataUpdateStatus,
+          //     openUpdateStatus: true,
+          //     id_pk_long: data.c_schedule_id,
+          //     value_text: {
+          //       id: 0,
+          //       value: data.status,
+          //       label:
+          //         data.status === "new"
+          //           ? "Chưa liên hệ"
+          //           : data.status === "contact"
+          //           ? "Đã liên hệ"
+          //           : data.status === "appointment"
+          //           ? "Đã đặt lịch"
+          //           : data.status === "checkin"
+          //           ? "Đã đến"
+          //           : "Đã hủy",
+          //     },
+          //   });
+          // }}
         >
           <Typography
             content={
@@ -2073,7 +2135,7 @@ const statisticHeader = useMemo(() => {
   return (
     <PublicHeaderStatistic
       handleClick={() => {}}
-      title="DANH SÁCH NHẮC TÁI KHÁM - NỘI SOI - TẦM SOÁT LẠI"
+      title="DANH SÁCH NHẮC TẦM SOÁT LẠI - NỘI SOI"
       isStatistic={false}
       valueRangeDate={{
         from: new Date(),
@@ -3005,7 +3067,7 @@ const statisticHeader = useMemo(() => {
                 </div>
               ) : (
             <>     {
-                    listNode.data.length !== 0 &&                 <InteractionHistory2
+                    listNode.data.length !== 0 &&                 <InteractionHistoryRC
                   options={listNode?.data as any}
                   id={dataAddNote.c_schedule_id.toString()}
                   loadingNote={listNodeLoading}
@@ -3228,7 +3290,7 @@ const statisticHeader = useMemo(() => {
                 values={formData.personCharge}
               />
             </div>
-            <div className="t-list_job_form_content_flex2">
+            <div className="t-list_job_form_content_flex2" style={{display:"grid", gridTemplateColumns:"1fr"}}>
               <CDatePickers
                 isRequired
                 label="Hạn chót (deadline)"
@@ -3242,7 +3304,7 @@ const statisticHeader = useMemo(() => {
                 value={formData.deadline}
                 error={formDataErr.deadline}
               />
-              <div style={{ marginBottom: "10px" }}>
+              {/* <div style={{ marginBottom: "10px" }}>
                 <GroupRadio
                   options={OptionCustomerTask}
                   value={formData.type}
@@ -3250,7 +3312,7 @@ const statisticHeader = useMemo(() => {
                     setFormData({ ...formData, type: data })
                   }
                 />
-              </div>
+              </div> */}
             </div>
             <TextArea
               label="Ghi chú"
@@ -3258,6 +3320,7 @@ const statisticHeader = useMemo(() => {
               required
               id=""
               readOnly={false}
+              value={formData.desc}
               handleOnchange={(e) =>
                 setFormData({ ...formData, desc: e.target.value })
               }

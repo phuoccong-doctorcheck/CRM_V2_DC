@@ -75,7 +75,7 @@ async function downloadFile(path: string, token?: string) {
 const RenderExaminationResult: React.FC<RenderExaminationResultProps> = ({
   type, data, title, registerDate, masterId, error, handlePrint, isPrintOption, isRenderDone,
 }) => {
-  console.log(data,type)
+  console.log("data---------------------",data,type)
  const columnsPCD = [
     {
       title: <Typography content="Tên dịch vụ" modifiers={['14x20', '500', 'center']} />,
@@ -2201,7 +2201,7 @@ Genotype HPV 18/45
           </div>
         </div>
       )}
-      <div className="t-examination_result_content">
+      <div className="t-examination_result_content" style={{paddingBottom:"200px"}}>
         {!isRenderDone ? (
           <div className="t-examination_result_content_null">
             <Loading variant="default" />

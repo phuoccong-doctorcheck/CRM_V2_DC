@@ -476,6 +476,7 @@ export interface LeadResponse {
 }
 
 export interface InteractionNode {
+  note_datetime: string;
   cs_node_content: string | undefined;
   cs_notes: string | undefined;
   employee_name: string | undefined;

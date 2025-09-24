@@ -27,9 +27,10 @@ const examResults = [
   { test: "Cân nặng", result: "65 kg", date: "2024-01-15" },
 ];
 const tabs = [
-  { id: "info", label: "Thông tin lịch hẹn", icon: <FileText size={16} /> },
+    { id: "result", label: "Kết quả khám", icon: <Stethoscope size={16} /> },
+ 
   { id: "order", label: "Đơn hàng", icon: <ShoppingCart size={16} /> },
-  { id: "result", label: "Kết quả khám", icon: <Stethoscope size={16} /> },
+  { id: "info", label: "Thông tin lịch hẹn", icon: <FileText size={16} /> },
 ];
 
 
@@ -88,7 +89,7 @@ export default function ListBooking(data: any) {
                 setStateCustomer(selectedAppointment.customer_id);
                 dispatch(getListVisitItemMaster(body))
   }, [])
-  const [activeTab, setActiveTab] = useState("info");
+  const [activeTab, setActiveTab] = useState("result");
   const dispatch = useAppDispatch();
   const getStatusStyle = (status: string) => {
     switch (status) {

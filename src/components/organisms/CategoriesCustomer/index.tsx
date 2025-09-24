@@ -171,7 +171,7 @@ const { mutate: getDetailResultByCustomerById } = useMutation(
        customer:customerInfo?.data?.customer
     };
     setError('');
-   
+    setIsSuccess(false);
     await getDetailResultByCustomerById(request);
 //  const existingData1 = dataEX1.find((item: any) => (item.service_group_type === request.service_group_type && item.id === request.id));
 //     dataST = request.service_group_type

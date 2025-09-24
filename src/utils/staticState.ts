@@ -77,7 +77,7 @@ export const MenuCRM = [
       },
         {
         id: 117,
-        name: "Nhắc tái khám",
+        name: "Nhắc tầm soát lại",
         icon: "histories_call",
         slug: "/call-re-examination",
      role: ["afterExams", "BOD"],

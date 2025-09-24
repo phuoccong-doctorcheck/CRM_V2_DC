@@ -714,31 +714,42 @@ const UserGuids: React.FC = () => {
   };
   /* Column */
   const ColumnTable = [
-
     {
-      title: <Typography content="Ngày thực hiện" modifiers={['12x18', '500', 'center', 'uppercase']} />,
-      dataIndex: 'examming_date',
-      align: 'center',
-      width: 70,
-      className: "ant-table-column_wrap",
-      render: (record: any, data: any) => (
-        <div className="ant-table-column_item" onClick={() => {
-          const { customer_id, customer_fullname, ...prevData } = data;
-          if (customer_id) {
-            Cookies.set('id_customer', customer_id);
-            dispatch(getInfosCustomerById({ customer_id: customer_id }));
-            const newTab = window.open(`/customer-info/id/${customer_id}/history-interaction`, '_blank');
-            if (newTab) {
-              newTab.focus();
-            }
-          } else {
-            toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
-          }
-        }}>
-          <Typography content={moment(record).format('DD/MM/YYYY')} modifiers={['13x18', '500', 'center', 'main']} />
-        </div>
-      ),
-    },
+            title: (<Typography content="STT" modifiers={["12x18", "500", "center", "main"]} />),
+            align: "center",
+            dataIndex: "index",
+            width: 40,
+            className: "ant-table-column_wrap",
+            render: (record: any, data: any, index: any) => (
+              <div className="ant-table-column_item">
+                < Typography content={`${index + 1}`} modifiers={['13x18', '600', 'center']} />
+              </div>
+            ),
+          },
+    // {
+    //   title: <Typography content="Ngày thực hiện" modifiers={['12x18', '500', 'center', 'uppercase']} />,
+    //   dataIndex: 'examming_date',
+    //   align: 'center',
+    //   width: 70,
+    //   className: "ant-table-column_wrap",
+    //   render: (record: any, data: any) => (
+    //     <div className="ant-table-column_item" onClick={() => {
+    //       const { customer_id, customer_fullname, ...prevData } = data;
+    //       if (customer_id) {
+    //         Cookies.set('id_customer', customer_id);
+    //         dispatch(getInfosCustomerById({ customer_id: customer_id }));
+    //         const newTab = window.open(`/customer-info/id/${customer_id}/history-interaction`, '_blank');
+    //         if (newTab) {
+    //           newTab.focus();
+    //         }
+    //       } else {
+    //         toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
+    //       }
+    //     }}>
+    //       <Typography content={moment(record).format('DD/MM/YYYY')} modifiers={['13x18', '500', 'center', 'main']} />
+    //     </div>
+    //   ),
+    // },
   
     {
       title: <Typography content="Lần" modifiers={['12x18', '500', 'center', 'uppercase']} />,
