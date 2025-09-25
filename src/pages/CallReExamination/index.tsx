@@ -1156,13 +1156,26 @@ const CallReExamination: React.FC = () => {
         <div
           className="ant-table-column_item"
          onClick={() => {
-              handleCallOutCustomer(data?.customer_phone);
-              handleUpdateStatus({
-                action: "update_info_communicate",
-                id_pk_long: data.c_schedule_id,
-                value_text: "",
-              });
-            }}
+            const {
+              customer_id,
+              customer_fullname,
+              year_of_birth,
+              ...prevData
+            } = data;
+            if (customer_id) {
+              Cookies.set("id_customer", customer_id);
+              dispatch(getInfosCustomerById({ customer_id: customer_id }));
+              const newTab = window.open(
+                `/customer-info/id/${customer_id}/history-interaction`,
+                "_blank"
+              );
+              if (newTab) {
+                newTab.focus();
+              }
+            } else {
+              toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
+            }
+          }}
           style={{
             justifyContent: "center",
             wordWrap: "break-word", // Cho phép xuống dòng
@@ -1203,14 +1216,27 @@ const CallReExamination: React.FC = () => {
       render: (record: any, data: any) => (
         <div
           className="ant-table-column_item"
-         onClick={() => {
-              handleCallOutCustomer(data?.customer_phone);
-              handleUpdateStatus({
-                action: "update_info_communicate",
-                id_pk_long: data.c_schedule_id,
-                value_text: "",
-              });
-            }}
+        onClick={() => {
+            const {
+              customer_id,
+              customer_fullname,
+              year_of_birth,
+              ...prevData
+            } = data;
+            if (customer_id) {
+              Cookies.set("id_customer", customer_id);
+              dispatch(getInfosCustomerById({ customer_id: customer_id }));
+              const newTab = window.open(
+                `/customer-info/id/${customer_id}/history-interaction`,
+                "_blank"
+              );
+              if (newTab) {
+                newTab.focus();
+              }
+            } else {
+              toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
+            }
+          }}
           style={{
             justifyContent: "center",
             wordWrap: "break-word", // Cho phép xuống dòng
@@ -1252,13 +1278,26 @@ const CallReExamination: React.FC = () => {
         <div
           className="ant-table-column_item"
          onClick={() => {
-              handleCallOutCustomer(data?.customer_phone);
-              handleUpdateStatus({
-                action: "update_info_communicate",
-                id_pk_long: data.c_schedule_id,
-                value_text: "",
-              });
-            }}
+            const {
+              customer_id,
+              customer_fullname,
+              year_of_birth,
+              ...prevData
+            } = data;
+            if (customer_id) {
+              Cookies.set("id_customer", customer_id);
+              dispatch(getInfosCustomerById({ customer_id: customer_id }));
+              const newTab = window.open(
+                `/customer-info/id/${customer_id}/history-interaction`,
+                "_blank"
+              );
+              if (newTab) {
+                newTab.focus();
+              }
+            } else {
+              toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
+            }
+          }}
           style={{
             justifyContent: "center",
             wordWrap: "break-word", // Cho phép xuống dòng

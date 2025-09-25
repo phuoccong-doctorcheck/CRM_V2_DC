@@ -8,6 +8,7 @@ import Button from 'components/atoms/Button';
 import CDatePickers from 'components/atoms/CDatePickers';
 import CTooltip from 'components/atoms/CTooltip';
 import Dropdown, { DropdownData } from 'components/atoms/Dropdown';
+import Dropdown4 from 'components/atoms/Dropdown4';
 import Icon from 'components/atoms/Icon';
 import Input from 'components/atoms/Input';
 import RangeDate from 'components/atoms/RangeDate';
@@ -61,6 +62,33 @@ interface Note {
   employee_name: string;
   cs_notes: string;
 }
+const listF = [
+  {
+    id: 1,
+    label: "F1",
+    value: "F1",
+  },  {
+    id: 2,
+    label: "TK",
+    value: "TK",
+  },
+   {
+    id: 3,
+    label: "F2",
+    value: "F2",
+  },
+    {
+    id: 4,
+    label: "F3",
+    value: "F3",
+  },
+   
+      {
+    id: 5,
+    label: "BSCD",
+    value: "BSCD",
+  },
+]
 const AfterMedicalExaminationTask: React.FC = () => {
   const dispatch = useAppDispatch();
   /*  */
@@ -75,9 +103,9 @@ const AfterMedicalExaminationTask: React.FC = () => {
   const storeisLoadingAferExamsTask = useAppSelector((state) => state.afterexamtask.isLoadingAfterExamTask);
   const [listAfterExamsTask, setListAfterExamsTask] = useState(dataListAfterExamTask);
   /*  */
-  const storageLaunchSourcesGroup = localStorage.getItem('launchSourcesGroups');
-  const dataLaunchSource = localStorage.getItem('launchSources');
-  const storageLaunchSourcesType = localStorage.getItem('launchSourcesTypes');
+ const storageLaunchSourcesGroup = localStorage.getItem("launchSourcesGroups");
+  const storageLaunchSources = localStorage.getItem("launchSources");
+  const storageLaunchSourcesType = localStorage.getItem("launchSourcesTypes");
   const dataStages = localStorage.getItem('stages');
   const employeeId = Cookies.get('employee_id');
   const listStages = localStorage.getItem('stages');
@@ -92,7 +120,8 @@ const AfterMedicalExaminationTask: React.FC = () => {
   });
   const [stateScheduleTypes, setstateScheduleTypes] = useState<DropdownData[]>(schedule_types ? JSON.parse(schedule_types) : []);
   const [stateLaunchSourceGroups, setstateLaunchSourceGroups] = useState<DropdownData[]>(storageLaunchSourcesGroup ? JSON.parse(storageLaunchSourcesGroup) : []);
-  const [launchSourcesAfterExams, setLaunchSourcesAfterExams] = useState([{ id: 'all', label: 'Tất cả', value: 'all' }, ...(dataLaunchSource ? JSON.parse(dataLaunchSource || '') : [])]);
+    const [stateLaunchSource, setstateLaunchSource] = useState<DropdownData[]>(storageLaunchSources ? JSON.parse(storageLaunchSources) : []);
+
   const [stateLaunchSourceTypes, setstateLaunchSourceTypes] = useState<DropdownData[]>(storageLaunchSourcesType ? JSON.parse(storageLaunchSourcesType) : []);
   const [listStateInStorage, setListStateInStorage] = useState(listStages ? JSON.parse(listStages || '') : undefined);
   const [stateAfterExams2, setStateAfterExams2] = useState([{ id: '', label: 'Tất cả', value: 'all' }, ...dataStateAfterExams]);
@@ -115,7 +144,10 @@ const AfterMedicalExaminationTask: React.FC = () => {
     type: undefined as unknown as DropdownData,
     employee_id: undefined as unknown as DropdownData,
     status: undefined as unknown as DropdownData,
-    key: ''
+    key: '',
+      source: undefined as unknown as DropdownData,
+        sourceGroup: undefined as unknown as DropdownData,
+        stateF:  undefined as unknown as DropdownData,
   });
 
   const propsData = {
@@ -126,6 +158,9 @@ const AfterMedicalExaminationTask: React.FC = () => {
     keyWord: dataFilter.key,
     page: 1,
     limit: 200,
+     launch_source_id: dataFilter?.source || 0,
+    launch_source_group_id: dataFilter?.sourceGroup || 0,
+     f_type: dataFilter?.stateF || "all",
   };
     const [assigntTasks, setAssigntTasks] = useState({
       openModal: false,
@@ -183,6 +218,9 @@ const AfterMedicalExaminationTask: React.FC = () => {
       keyWord: dataFilter.key,
       page: 1,
       limit: 200,
+          f_type: "all",
+        launch_source_group_id: 0,
+        launch_source_id:0
     } as any));
     document.title = 'Chăm sóc sau khám | CRM'
   }, []);
@@ -488,10 +526,21 @@ const AfterMedicalExaminationTask: React.FC = () => {
   };
   /* Column */
   const ColumnTable = [
-
+     {
+            title: (<Typography content="STT" modifiers={["12x18", "500", "center", "main"]} />),
+            align: "center",
+            dataIndex: "index",
+            width: 40,
+            className: "ant-table-column_wrap",
+            render: (record: any, data: any, index: any) => (
+              <div className="ant-table-column_item">
+                < Typography content={`${index + 1}`} modifiers={['13x18', '600', 'center']} />
+              </div>
+            ),
+          },
     {
       title: <Typography content="Ngày thực hiện" modifiers={['12x18', '500', 'center', 'uppercase']} />,
-      dataIndex: 'examming_date',
+      dataIndex: 'cs_remind_date',
       align: 'center',
       width: 70,
       className: "ant-table-column_wrap",
@@ -571,6 +620,165 @@ const AfterMedicalExaminationTask: React.FC = () => {
           whiteSpace: "normal", // Nội dung nhiều dòng
           textAlign:"left"
         }}/>
+        </div>
+      ),
+    },
+     {
+      title: (
+        <Typography
+          content="Brand"
+          modifiers={["12x18", "500", "center", "uppercase"]}
+          styles={{ textAlign: "center" }}
+        />
+      ),
+      dataIndex: "launch_source_group_name",
+      width: 200,
+      className: "ant-table-column_wrap",
+      render: (record: any, data: any) => (
+        <div
+          className="ant-table-column_item"
+          onClick={() => {
+        const { customer_id, customer_fullname, ...prevData } = data;
+        if (customer_id) {
+          Cookies.set('id_customer', customer_id);
+          dispatch(getInfosCustomerById({ customer_id: customer_id }));
+          const newTab = window.open(`/customer-info/id/${customer_id}/history-interaction`, '_blank');
+          if (newTab) {
+            newTab.focus();
+          }
+        } else {
+          toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
+        }
+      }}
+          style={{
+            justifyContent: "center",
+            wordWrap: "break-word", // Cho phép xuống dòng
+            whiteSpace: "normal", // Đảm bảo nội dung hiển thị nhiều dòng
+            overflow: "hidden", // Xử lý tràn nếu cần
+            maxWidth: "250px",
+          }}
+        >
+          <Typography
+           content={record}
+            modifiers={[
+              "13x18",
+              "500",
+              "center",
+              `${data.is_high_light === true ? "main" : "main"}`,
+            ]}
+            styles={{
+              display: "block", // Đảm bảo hiển thị như block
+              wordWrap: "break-word", // Xuống dòng khi quá dài
+              whiteSpace: "normal", // Nội dung nhiều dòng
+              textAlign: "left",
+            }}
+          />
+        </div>
+      ),
+    },
+    {
+      title: (
+        <Typography
+          content="Nguồn"
+          modifiers={["12x18", "500", "center", "uppercase"]}
+          styles={{ textAlign: "center" }}
+        />
+      ),
+      dataIndex: "launch_source_name",
+      width: 80,
+      className: "ant-table-column_wrap",
+      render: (record: any, data: any) => (
+        <div
+          className="ant-table-column_item"
+          onClick={() => {
+        const { customer_id, customer_fullname, ...prevData } = data;
+        if (customer_id) {
+          Cookies.set('id_customer', customer_id);
+          dispatch(getInfosCustomerById({ customer_id: customer_id }));
+          const newTab = window.open(`/customer-info/id/${customer_id}/history-interaction`, '_blank');
+          if (newTab) {
+            newTab.focus();
+          }
+        } else {
+          toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
+        }
+      }}
+          style={{
+            justifyContent: "center",
+            wordWrap: "break-word", // Cho phép xuống dòng
+            whiteSpace: "normal", // Đảm bảo nội dung hiển thị nhiều dòng
+            overflow: "hidden", // Xử lý tràn nếu cần
+            maxWidth: "250px",
+          }}
+        >
+          <Typography
+         content={record === "KH Cũ Giới Thiệu (WoM)" ? "WOM" : record === "Bác Sĩ Chỉ Định" ? "BSCĐ" : record}
+            modifiers={[
+              "13x18",
+              "500",
+              "center",
+              `${data.is_high_light === true ? "main" : "main"}`,
+            ]}
+            styles={{
+              display: "block", // Đảm bảo hiển thị như block
+              wordWrap: "break-word", // Xuống dòng khi quá dài
+              whiteSpace: "normal", // Nội dung nhiều dòng
+              textAlign: "left",
+            }}
+          />
+        </div>
+      ),
+    },
+    {
+      title: (
+        <Typography
+          content="Phân loại"
+          modifiers={["12x18", "500", "center", "uppercase"]}
+          styles={{ textAlign: "center" }}
+        />
+      ),
+      dataIndex: "f_type",
+      width: 60,
+      className: "ant-table-column_wrap",
+      render: (record: any, data: any) => (
+        <div
+          className="ant-table-column_item"
+         onClick={() => {
+        const { customer_id, customer_fullname, ...prevData } = data;
+        if (customer_id) {
+          Cookies.set('id_customer', customer_id);
+          dispatch(getInfosCustomerById({ customer_id: customer_id }));
+          const newTab = window.open(`/customer-info/id/${customer_id}/history-interaction`, '_blank');
+          if (newTab) {
+            newTab.focus();
+          }
+        } else {
+          toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
+        }
+      }}
+          style={{
+            justifyContent: "center",
+            wordWrap: "break-word", // Cho phép xuống dòng
+            whiteSpace: "normal", // Đảm bảo nội dung hiển thị nhiều dòng
+            overflow: "hidden", // Xử lý tràn nếu cần
+            maxWidth: "250px",
+          }}
+        >
+          <Typography
+          content={record === "F0" ? "" : record}
+            modifiers={[
+              "13x18",
+              "500",
+              "center",
+              `${data.is_high_light === true ? "main" : "main"}`,
+            ]}
+            styles={{
+              display: "block", // Đảm bảo hiển thị như block
+              wordWrap: "break-word", // Xuống dòng khi quá dài
+              whiteSpace: "normal", // Nội dung nhiều dòng
+              textAlign: "left",
+            }}
+          />
         </div>
       ),
     },
@@ -1093,7 +1301,7 @@ const AfterMedicalExaminationTask: React.FC = () => {
       size="small"
        pageSizes={50}
       isPagination
-      isHideRowSelect={false}
+      isHideRowSelect={true}
       isNormal
       scroll={{ x: 'max-content', y: '100vh - 80px' }}
       handleChangePagination={(page: any, pageSize: any) => {
@@ -1414,7 +1622,9 @@ const AfterMedicalExaminationTask: React.FC = () => {
            }
           tabBottom={(
             <div className='p-after_examination_filter_bottom p-after_examination_filter p-appointment_view_filter' style={{ gap: "10px" }}>
-              <div style={{marginTop:"10px"}}><CDatePickers
+              <div style={{marginTop:"10px",display:"flex",alignItems:"center",gap:5}}>
+              <span>Ngày thực hiện:</span>
+<CDatePickers
                               fomat="YYYY-MM-DD"
                               variant="simple"
                               ValDefault={dataFilter.date}
@@ -1429,7 +1639,8 @@ const AfterMedicalExaminationTask: React.FC = () => {
                     date:  moment(date?.$d).format('YYYY-MM-DD'),
                   } as any));
                               }}
-              /></div>
+              />
+              </div>
                  
               
               <Dropdown
@@ -1476,7 +1687,105 @@ const AfterMedicalExaminationTask: React.FC = () => {
                 placeholder='-- Chọn tình trạng --'
                 
               />
-             
+               <div style={{ width: "200px" }}>
+                              <Dropdown4
+                                dropdownOption={[
+                                  {
+                                  id:1,
+                                  label: "Tất cả",
+                                  value: 0
+                                }, ...stateLaunchSourceGroups
+                                ]}
+                                values={dataFilter.sourceGroup}
+                                // defaultValue={{
+                                //   id:1,
+                                //   label: "Tất cả",
+                                //   value: 0
+                                // }}
+                                handleSelect={(item: any) => {
+                                  setDataFilter({ ...dataFilter, sourceGroup: item?.value });
+                                  // setListCallReExamming([]);
+                                  // dispatch(
+                                  //   getListCallReExammingMaster({
+                                  //     ...propsData,
+                                  //     launch_source_group_id: item?.value,
+                                  //   } as any)
+                                  // );
+                                    dispatch(getListAfterExamTaskMaster({
+                    ...propsData,
+                  launch_source_group_id: item?.value,
+                  } as any));
+                                }}
+                                variant="simple"
+                                placeholder="-- Brand --"
+                              />
+                            </div>
+                              <div style={{ width: "120px" }}>
+                              <Dropdown4
+                                dropdownOption={[
+                                  {
+                                  id:1,
+                                  label: "Tất cả",
+                                  value: 0
+                                }, ...stateLaunchSource
+                                ]}
+                                values={dataFilter.source}
+                                // defaultValue={{
+                                //   id:1,
+                                //   label: "Tất cả",
+                                //   value: 0
+                                // }}
+                                handleSelect={(item: any) => {
+                                  setDataFilter({ ...dataFilter, source: item?.value });
+                                  // setListCallReExamming([]);
+                                  // dispatch(
+                                  //   getListCallReExammingMaster({
+                                  //     ...propsData,
+                                  //     launch_source_id: item?.value,
+                                  //   } as any)
+                                  // );
+                                    dispatch(getListAfterExamTaskMaster({
+                    ...propsData,
+                launch_source_id: item?.value,
+                  } as any));
+                                }}
+                                variant="simple"
+                                placeholder="-- Nguồn --"
+                              />
+                            </div>
+                             <div style={{ width: "100px" }}>
+                              <Dropdown4
+                                 dropdownOption={[
+                                  {
+                                  id:1,
+                                  label: "Tất cả",
+                                  value: "all"
+                                }, ...listF
+                                ]}
+                                values={dataFilter.stateF}
+                              //  defaultValue={{
+                              //     id:1,
+                              //     label: "Tất cả",
+                              //     value: "all"
+                              //   }}
+                                handleSelect={(item: any) => {
+                                  setDataFilter({ ...dataFilter, stateF: item?.value });
+                                  // setListCallReExamming([]);
+                                  // dispatch(
+                                  //   getListCallReExammingMaster({
+                                  //     ...propsData,
+                                  //     f_type: item?.value,
+                                  //   } as any)
+                                  // );
+                                   dispatch(getListAfterExamTaskMaster({
+                    ...propsData,
+                   f_type: item?.value,
+                  } as any));
+                                }}
+                                variant="simple"
+                                placeholder="Phân loại"
+                              />
+                            </div>
                 <div style={{marginTop:"8px"}}>
               <Input
                 id='search-booking'
