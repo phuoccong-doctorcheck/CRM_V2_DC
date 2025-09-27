@@ -175,9 +175,14 @@ const DashboardMarketingPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false);
   const [isOpenADS, setIsOpenADS] = useState(true);
-const [stateEmployeeId, setStateEmployeeId] = useState<any>(
-  employeeId ? JSON.parse(employeeId) : ""
-);
+const [stateEmployeeId, setStateEmployeeId] = useState<any>(() => {
+  try {
+    return employeeId ? JSON.parse(employeeId) : "";
+  } catch {
+    return employeeId || "";
+  }
+});
+
   const [data, setData] = useState<DashboardMarketingResponse>(storeDashBoardMarketing)
     const [dataADS, setDataADS] = useState<any>(storeADSMarketing)
    const [listCampaigns,setListCampaigns] = useState<any[]>([]);

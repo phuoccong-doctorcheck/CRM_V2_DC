@@ -465,18 +465,23 @@ const CallReExamination: React.FC = () => {
             value_text: undefined as unknown as DropdownData,
             id_pk_long: 0,
           });
+           setLoadingStatus(false);
         } else {
           toast.error(data.message);
           setIsClosePopup(true);
           setIsUpdateInfo(false);
+          setLoadingStatus(false);
         }
       },
       onError: (e) => {
+        setLoadingStatus(false);
         toast.error("Đã có lỗi xảy ra ...!");
       },
     }
   );
+  const [loadingStatus, setLoadingStatus] = useState(false);
   const handleUpdateStatus = async (data: any) => {
+    setLoadingStatus(true);
     await postUpdateStatus(data);
   };
   const handleValidate = () => {
@@ -928,49 +933,49 @@ const CallReExamination: React.FC = () => {
         </div>
       ),
     },
-       {
-      title: (
-        <Typography
-          content="Ngày thực hiện CV"
-          modifiers={["12x18", "500", "center", "uppercase"]}
-        />
-      ),
-      dataIndex: "create_datetime",
-      align: "center",
-      width: 120,
-      className: "ant-table-column_wrap",
-      render: (record: any, data: any) => (
-        <div
-          className="ant-table-column_item"
-          onClick={() => {
-            const { customer_id, customer_fullname, ...prevData } = data;
-            if (customer_id) {
-              Cookies.set("id_customer", customer_id);
-              dispatch(getInfosCustomerById({ customer_id: customer_id }));
-              const newTab = window.open(
-                `/customer-info/id/${customer_id}/history-interaction`,
-                "_blank"
-              );
-              if (newTab) {
-                newTab.focus();
-              }
-            } else {
-              toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
-            }
-          }}
-        >
-          <Typography
-            content={moment(record).format("DD/MM/YYYY")}
-            modifiers={[
-              "13x18",
-              "500",
-              "center",
-             "main"
-            ]}
-          />
-        </div>
-      ),
-    },
+    //    {
+    //   title: (
+    //     <Typography
+    //       content="Ngày thực hiện CV"
+    //       modifiers={["12x18", "500", "center", "uppercase"]}
+    //     />
+    //   ),
+    //   dataIndex: "remind_datetime",
+    //   align: "center",
+    //   width: 120,
+    //   className: "ant-table-column_wrap",
+    //   render: (record: any, data: any) => (
+    //     <div
+    //       className="ant-table-column_item"
+    //       onClick={() => {
+    //         const { customer_id, customer_fullname, ...prevData } = data;
+    //         if (customer_id) {
+    //           Cookies.set("id_customer", customer_id);
+    //           dispatch(getInfosCustomerById({ customer_id: customer_id }));
+    //           const newTab = window.open(
+    //             `/customer-info/id/${customer_id}/history-interaction`,
+    //             "_blank"
+    //           );
+    //           if (newTab) {
+    //             newTab.focus();
+    //           }
+    //         } else {
+    //           toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
+    //         }
+    //       }}
+    //     >
+    //       <Typography
+    //         content={moment(record).format("DD/MM/YYYY")}
+    //         modifiers={[
+    //           "13x18",
+    //           "500",
+    //           "center",
+    //          "main"
+    //         ]}
+    //       />
+    //     </div>
+    //   ),
+    // },
   //   {
   //     title: (
   //       <Typography
@@ -1679,27 +1684,27 @@ const CallReExamination: React.FC = () => {
             maxWidth: "300px",
           }}
           className="ant-table-column_item"
-          // onClick={() => {
-          //   setDataUpdateStatus({
-          //     ...dataUpdateStatus,
-          //     openUpdateStatus: true,
-          //     id_pk_long: data.c_schedule_id,
-          //     value_text: {
-          //       id: 0,
-          //       value: data.status,
-          //       label:
-          //         data.status === "new"
-          //           ? "Chưa liên hệ"
-          //           : data.status === "contact"
-          //           ? "Đã liên hệ"
-          //           : data.status === "appointment"
-          //           ? "Đã đặt lịch"
-          //           : data.status === "checkin"
-          //           ? "Đã đến"
-          //           : "Đã hủy",
-          //     },
-          //   });
-          // }}
+           onClick={() => {
+             setDataUpdateStatus({
+               ...dataUpdateStatus,
+               openUpdateStatus: true,
+               id_pk_long: data.c_schedule_id,
+               value_text: {
+                 id: 0,
+                 value: data.status,
+                 label:
+                   data.status === "new"
+                     ? "Chưa liên hệ"
+                     : data.status === "contact"
+                     ? "Đã liên hệ"
+                     : data.status === "appointment"
+                     ? "Đã đặt lịch"
+                     : data.status === "checkin"
+                     ? "Đã đến"
+                     : "Đã hủy",
+               },
+             });
+           }}
         >
           <Typography
             content={
@@ -3445,6 +3450,7 @@ const statisticHeader = useMemo(() => {
         }}
         textCancel="Hủy"
         textOK="Cập nhật"
+        confirmLoading={loadingStatus}
       >
         <>
           <div style={{ width: "100%", gap: 12 }}>

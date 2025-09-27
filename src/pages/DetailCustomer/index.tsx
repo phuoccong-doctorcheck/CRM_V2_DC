@@ -262,9 +262,14 @@ const DetailCustomer: React.FC = () => {
       guid_u_id: employeeId,
       tags: [],
     });
-const [stateEmployeeId, setStateEmployeeId] = useState<any>(
-  employeeId ? JSON.parse(employeeId) : ""
-);
+const [stateEmployeeId, setStateEmployeeId] = useState<any>(() => {
+  try {
+    return employeeId ? JSON.parse(employeeId) : "";
+  } catch {
+    return employeeId || "";
+  }
+});
+
   const [isUpdateTask, setIsUpdateTask] = useState(false);
     const [formData, setFormData] = useState({
       task_his_id: null,

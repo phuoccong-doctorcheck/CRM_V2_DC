@@ -277,9 +277,14 @@ const ListCustomer: React.FC = () => {
   const [stateLaunchSourceTypes, setstateLaunchSourceTypes] = useState<DropdownData[]>(storageLaunchSourcesType ? JSON.parse(storageLaunchSourcesType) : []);
   const [stateTagsCustomer, setStateTagsCustomer] = useState<DropdownData[]>(storageTagsCustomer ? JSON.parse(storageTagsCustomer) : []);
   // const [stateTeamIDS, setStateTeamIDS] = useState<string[]>(storeTeamIDS ? JSON.parse(storeTeamIDS) : []);
-const [stateEmployeeId, setStateEmployeeId] = useState<any>(
-  employeeId ? JSON.parse(employeeId) : ""
-);
+const [stateEmployeeId, setStateEmployeeId] = useState<any>(() => {
+  try {
+    return employeeId ? JSON.parse(employeeId) : "";
+  } catch {
+    return employeeId || "";
+  }
+});
+
   const [stateBreakPoint, setstateBreakPoint] = useState(window.innerWidth);
   const [listPhares, setListPhares] = useState<DropdownData[]>(
     storagelistPhares ? JSON.parse(storagelistPhares) : ""

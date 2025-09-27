@@ -886,9 +886,14 @@ const DashboardPage: React.FC = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-const [stateEmployeeId, setStateEmployeeId] = useState<any>(
-  employeeId ? JSON.parse(employeeId) : ""
-);
+const [stateEmployeeId, setStateEmployeeId] = useState<any>(() => {
+  try {
+    return employeeId ? JSON.parse(employeeId) : "";
+  } catch {
+    return employeeId || "";
+  }
+});
+
    const [data, setData] = useState<DashboardResponse>(storeDashBoard)
   const groupedData = useMemo(() => groupRevenueByBrand(data.data), [data]);
   console.log(groupedData)

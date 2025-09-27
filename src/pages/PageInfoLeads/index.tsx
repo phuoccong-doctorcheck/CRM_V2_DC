@@ -69,8 +69,7 @@ import ReactFlow, {
   Node,
   NodeMouseHandler,
 } from 'reactflow';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import 'reactflow/dist/style.css';
+
 // eslint-disable-next-line import/no-extraneous-dependencies, import/order
 import { Edit, User, Tag, Users, IterationCcw} from "lucide-react"
 // eslint-disable-next-line import/order
@@ -531,9 +530,14 @@ const PageInfoLeads: React.FC = () => {
     lead_id: lead_id,
     follow_employee_id:  listUsers[0]
   })
-const [stateEmployeeId, setStateEmployeeId] = useState<any>(
-  employeeId ? JSON.parse(employeeId) : ""
-);
+const [stateEmployeeId, setStateEmployeeId] = useState<any>(() => {
+  try {
+    return employeeId ? JSON.parse(employeeId) : "";
+  } catch {
+    return employeeId || "";
+  }
+});
+
   const [isAddTag, setIsAddTag] = useState(false);
   const [dataUpdateTag, setDataUpdateTag] = useState<TransferItemType[]>();
   const [customerInfoAddTag, setCustomerInfoAddTag] = useState();
