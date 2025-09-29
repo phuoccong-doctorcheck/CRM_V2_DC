@@ -1503,13 +1503,17 @@ const [dataPrint, setDataPrint] = useState<DataPrint | null>(null);
                   node_type: dataAddNote.node_type,
                   id: info
                 }));
-       dispatch(getListTask({ ...filterTask } as unknown as any));
+     
     dispatch(getListUserGuidsCRM({
       ...formDataGuid,
   
     }));
   }, []);
+ useEffect(() => {
 
+       dispatch(getListTask({ ...filterTask,task_type_id:"all",id: infoCustomer?.data?.customer?.customer_id } as unknown as any));
+
+  }, [ infoCustomer?.data?.customer?.customer_id ]);
   useEffect(() => {
     if (isNotFoundCs) {
       if (type === 'phone') {
@@ -1587,7 +1591,7 @@ const [dataPrint, setDataPrint] = useState<DataPrint | null>(null);
             id: null,
           });
           setIsAddTask(false);setIsLoadingGetService(false);
-          dispatch(getListTask({ ...filterTask } as unknown as any));
+          dispatch(getListTask({ ...filterTask ,task_type_id:filterTask.task_type_id.value} as unknown as any));
           toast.success(data?.message);
         },
         onError: (error) => {
@@ -1600,7 +1604,7 @@ const [dataPrint, setDataPrint] = useState<DataPrint | null>(null);
    
     setIsLoadingGetService(true);
      const body = {
-             task_type_id: formData?.category_id,
+             task_type_id: formData?.category_id?.value,
                     assign_employee_id: formData?.personCharge?.value || formData?.personCharge,
                     exec_employee_id: formData?.personCharge?.value || formData?.personCharge,
                     customer_id: infoCustomer?.data?.customer?.customer_id,
@@ -1608,12 +1612,18 @@ const [dataPrint, setDataPrint] = useState<DataPrint | null>(null);
                     task_description: formData?.task_description,
                     note: formData?.note,
                     employee_team_id: formData?.assign.value || null,
-                    status: formData?.type?.value,
+                    status: "inprogress",
                     remind_datetime: moment(formData?.remind_datetime).format(
                       "YYYY-MM-DDTHH:mm:ss"
                     ),
             
                     task_id: formData?.id || null,
+
+
+                 
+                         
+                           
+                
           };
     await postAddTask(body);
 
@@ -1631,7 +1641,7 @@ const [dataPrint, setDataPrint] = useState<DataPrint | null>(null);
              id: 0,
              note:""
            })
-           dispatch(getListTask({ ...filterTask } as unknown as any));
+        dispatch(getListTask({ ...filterTask ,task_type_id:filterTask.task_type_id.value} as unknown as any));
            dispatch(getListTaskE({ ...filterTaskAll } as unknown as any));
          } 
        },
@@ -1687,7 +1697,7 @@ const [dataPrint, setDataPrint] = useState<DataPrint | null>(null);
               note: "",
               exec_u_id: undefined as unknown as DropdownData,
             })
-            dispatch(getListTask({ ...filterTask } as unknown as any));
+          dispatch(getListTask({ ...filterTask ,task_type_id:filterTask.task_type_id.value} as unknown as any));
             dispatch(getListTaskE({ ...filterTaskAll } as unknown as any));
           } 
         },
@@ -2101,7 +2111,11 @@ const [dataPrint, setDataPrint] = useState<DataPrint | null>(null);
     );
     const [isAddTask, setIsAddTask] = useState(false);
    const [filterTask, setFilterTask] = useState({
-      task_type_id: userguidType[0].id || "all",
+     task_type_id: {
+       label: "Tất cả",
+       value: "all",
+        id:1
+      },
       status:OptionCustomerTask[0].value || "all",
       id: infoCustomer?.data?.customer?.customer_id,
     });
@@ -2112,7 +2126,6 @@ const [dataPrint, setDataPrint] = useState<DataPrint | null>(null);
       id: infoCustomer?.data?.customer?.customer_id,
     })
   },[infoCustomer])
-  console.log(infoCustomer?.data?.customer?.customer_id)
   const listTask = useAppSelector((state) => state.listTaskReducer.taskList);
   const [dataListTask, setDataListTask] = useState(listTask || []);
   useEffect(() => {
@@ -2582,7 +2595,7 @@ const [dataPrint, setDataPrint] = useState<DataPrint | null>(null);
                                    ]}
                                    variant="simple"
                                   isColor
-                                   defaultValue={{id:1, label: "Tất cả", value: "all" }}
+                                    defaultValue={{id:1, label: "Tất cả", value: "all" }}
                 
                                    placeholder="-- Chọn nhóm việc  --"
                                    values={filterTask.task_type_id}
@@ -3389,169 +3402,161 @@ const [dataPrint, setDataPrint] = useState<DataPrint | null>(null);
                        zIndex={9999}
                      >
                        <div className="t-list_job_form">
-                         <div className="t-list_job_form_content">
-                           <Input
-                             label="Tên công việc"
-                             isRequired
-                             value={formData.task_name}
-                             variant="border8"
-                             placeholder="Nhập tên công việc"
-                             onChange={(e) =>
-                               setFormData({ ...formData, task_name: e.target.value })
-                             }
-                             error={formDataErr.name}
-                           />
-                           <Input
-                             label="Mô tả ngắn"
-                             value={formData.task_description}
-                             variant="border8"
-                             placeholder="Nhập mô tả"
-                             onChange={(e) =>
-                               setFormData({ ...formData, task_description: e.target.value })
-                             }
-                           />
-                            <div style={{ display: "flex", gap: "10px", marginBottom: "10px",alignItems:"center" }}>
-                 <div style={{ flex: 5 }}>
-                     <Dropdown
-                                   dropdownOption={listEmployeeTeams}
+                               <div className="t-list_job_form_content">
+                                 <Input
+                                   label="Tên công việc"
                                    isRequired
-                                   placeholder=""
-                                   label="Phân công cho"
-                                   handleSelect={(item) => {
-                                     setFormData({ ...formData, assign: item });
-                                     setListPerson(hanldeConvertListCustomer(item?.value));
-                                   }}
-                                   variant="style"
-                                   className="form_origin"
-                                   values={formData.assign}
+                                   value={formData.task_name}
+                                   variant="border8"
+                                   placeholder="Nhập tên công việc"
+                                   onChange={(e) =>
+                                     setFormData({ ...formData, task_name: e.target.value })
+                                   }
+                                   error={formDataErr.name}
                                  />
-                 </div>
-               
-                 <div style={{ flex: 5 }}>
-                   <Dropdown
-                                  dropdownOption={listPerson || []}
-                                  isRequired
-                                  placeholder="Chọn người đảm nhiệm"
-                                  label="Người đảm nhiệm"
-                                  handleSelect={(item) => { setFormData({ ...formData, personCharge: item }); }}
-                                  variant="style"
-                                  className="form_origin"
-                                  values={formData.personCharge}
-                                />
-                 </div>
-               </div>
-                           <div style={{ display: "flex", gap: "10px", marginBottom: "10px",alignItems:"center" }}>
-                 <div style={{ flex: 3 }}>
-                   <CDatePickers
-                     isRequired
-                     label="Hạn chót (deadline)"
-                     handleOnChange={(date: any) => {
-                       setFormData({ ...formData, remind_datetime: date?.$d });
-                     }}
-                     variant="style"
-                     fomat="YYYY-MM-DD HH:mm"
-                     isShowTime
-                     placeholder="1990-01-01"
-                     value={formData.remind_datetime}
-                     error={formDataErr.deadline}
-                   />
-                 </div>
-               
-                  <div style={{ flex: 7 }}>
-                    <Dropdown
-                      dropdownOption={[...userguidType]}
-                      variant="simple"
-                      isColor
-                      placeholder="-- Chọn nhóm việc --"
-                      values={formData.category_id}
-                      handleSelect={(item: any) => {
-                        setFormData({ ...formData, category_id: item.value });
-                      
-                      }}
-                    />
-                  </div>
-               </div>
-                           <GroupRadio  options={OptionCustomerTask.filter(opt => opt.id !== 0)} value={formData.type} handleOnchangeRadio={(data: any) => setFormData({ ...formData, type: data })} />
-                           <TextArea
-                             label="Ghi chú"
-                             placeholder="Mô tả công việc"
-                             required
-                             id=""
-                             readOnly={false}
-                             handleOnchange={(e) =>
-                               setFormData({ ...formData, note: e.target.value })
-                             }
-                           />
-                         </div>
-                         <div className="t-list_job_form_content_btn">
-                           <div
-                             className="blue-hover-effect"
-                             style={{
-                               display: "flex",
-                               textAlign: "center",
-                               minWidth: "100px",
-                               justifyContent: "center",
-                               alignItems: "center",
-                               gap: "5px",
-                               fontWeight: "600",
-                               border: "1px solid #e3e1e1",
-                               padding: "5px",
-                               borderRadius: "5px",
-                               cursor: "pointer",
-                             }}
-                             onClick={() => {
-                               setIsAddTask(false);
-                               setIsUpdateTask(false);
-                               setFormData({
-                                 ...formData,
-                                 task_his_id: null,
-                                 remind_datetime: undefined as unknown as Date,
-                                 task_description: undefined as unknown as string,
-                                 task_name: undefined as unknown as string,
-                                 note: undefined as unknown as string,
-                                 exec_u_id: stateEmployeeId,
-                                 category_id: undefined as unknown as DropdownData,
-                                 id: null,
-                               });
-                             }}
-                           >
-                             <Typography
-                               type="span"
-                               modifiers={["400", "16x24"]}
-                               content="Đóng"
-                             />
-                           </div>
-                           <div
-                             onClick={handleAddTask}
-                             //   className='orange-hover-effect'
-                             className={mapModifiers(
-                               "green-hover-effect",
-                               isLoadingGetService && "pendding"
-                             )}
-                             style={{
-                               display: "flex",
-                               minWidth: "100px",
-                               justifyContent: "center",
-                               alignItems: "center",
-                               gap: "5px",
-                               border: "1px solid #e3e1e1",
-                               padding: "5px",
-                               borderRadius: "5px",
-                               cursor: "pointer",
-                             }}
-                           >
-                             {isLoadingGetService ? (
-                               <Icon iconName={"loading_crm"} isPointer />
-                             ) : (
-                               <Typography
-                                 type="span"
-                                 modifiers={["400", "16x24"]}
-                                 content="Lưu công việc"
-                               />
-                             )}
-                           </div>
-                         </div>
-                       </div>
+                                 <Input
+                                   label="Mô tả ngắn"
+                                   value={formData.task_description}
+                                   variant="border8"
+                                   placeholder="Nhập mô tả"
+                                   onChange={(e) =>
+                                     setFormData({ ...formData, task_description: e.target.value })
+                                   }
+                                 />
+                                 <div className="t-list_job_form_content_flex">
+                                   <Dropdown
+                                     dropdownOption={userguidType}
+                                     isRequired
+                                     values={formData.category_id}
+                                     placeholder="Nhóm việc"
+                                     label="Nhóm việc"
+                                     handleSelect={(item) => {
+                                       setFormData({ ...formData, category_id: item });
+                                     }}
+                                     variant="style"
+                                     className="form_origin"
+                                     error={formDataErr.group}
+                                   />
+                                   <Dropdown
+                                     dropdownOption={listEmployeeTeams}
+                                     isRequired
+                                     placeholder=""
+                                     label="Phân công cho"
+                                     handleSelect={(item) => {
+                                       setFormData({ ...formData, assign: item });
+                                       setListPerson(hanldeConvertListCustomer(item?.value));
+                                     }}
+                                     variant="style"
+                                     className="form_origin"
+                                     values={formData.assign}
+                                   />
+                                   <Dropdown
+                                     dropdownOption={listPerson || []}
+                                     isRequired
+                                     placeholder="Chọn người đảm nhiệm"
+                                     label="Người đảm nhiệm"
+                                     handleSelect={(item) => {
+                                       setFormData({ ...formData, personCharge: item });
+                                     }}
+                                     variant="style"
+                                     className="form_origin"
+                                     values={formData.personCharge}
+                                   />
+                                 </div>
+                                 <div className="t-list_job_form_content_flex2" style={{display:"grid", gridTemplateColumns:"1fr"}}>
+                                   <CDatePickers
+                                     isRequired
+                                     label="Hạn chót (deadline)"
+                                     handleOnChange={(date: any) => {
+                                       setFormData({ ...formData, remind_datetime: date?.$d });
+                                     }}
+                                     variant="style"
+                                     fomat="YYYY-MM-DD HH:mm"
+                                     isShowTime
+                                     placeholder="1990-01-01"
+                                     value={formData.remind_datetime}
+                                     error={formDataErr.deadline}
+                                   />
+                                   {/* <div style={{ marginBottom: "10px" }}>
+                                     <GroupRadio
+                                       options={OptionCustomerTask}
+                                       value={formData.type}
+                                       handleOnchangeRadio={(data: any) =>
+                                         setFormData({ ...formData, type: data })
+                                       }
+                                     />
+                                   </div> */}
+                                 </div>
+                                 <TextArea
+                                   label="Ghi chú"
+                                   placeholder="Mô tả công việc"
+                                   required
+                                   id=""
+                                   readOnly={false}
+                                   value={formData.note}
+                                   handleOnchange={(e) =>
+                                     setFormData({ ...formData, note: e.target.value })
+                                   }
+                                 />
+                               </div>
+                               <div className="t-list_job_form_content_btn">
+                                 <div
+                                   className="blue-hover-effect"
+                                   style={{
+                                     display: "flex",
+                                     textAlign: "center",
+                                     minWidth: "100px",
+                                     justifyContent: "center",
+                                     alignItems: "center",
+                                     gap: "5px",
+                                     fontWeight: "600",
+                                     border: "1px solid #e3e1e1",
+                                     padding: "5px",
+                                     borderRadius: "5px",
+                                     cursor: "pointer",
+                                   }}
+                                   onClick={() => {
+                                     setIsAddTask(false);
+                                     setIsUpdateTask(false);
+                                   }}
+                                 >
+                                   <Typography
+                                     type="span"
+                                     modifiers={["400", "16x24"]}
+                                     content="Đóng"
+                                   />
+                                 </div>
+                                 <div
+                                   onClick={handleAddTask}
+                                   //   className='orange-hover-effect'
+                                   className={mapModifiers(
+                                     "green-hover-effect",
+                                     isLoadingGetService && "pendding"
+                                   )}
+                                   style={{
+                                     display: "flex",
+                                     minWidth: "100px",
+                                     justifyContent: "center",
+                                     alignItems: "center",
+                                     gap: "5px",
+                                     border: "1px solid #e3e1e1",
+                                     padding: "5px",
+                                     borderRadius: "5px",
+                                     cursor: "pointer",
+                                   }}
+                                 >
+                                   {isLoadingGetService ? (
+                                     <Icon iconName={"loading_crm"} isPointer />
+                                   ) : (
+                                     <Typography
+                                       type="span"
+                                       modifiers={["400", "16x24"]}
+                                       content="Lưu công việc"
+                                     />
+                                   )}
+                                 </div>
+                               </div>
+                             </div>
                      </CModal>
         <CModal
                     isOpen={stateChangeStatusTask.openModal}
