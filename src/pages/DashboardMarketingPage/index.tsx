@@ -850,7 +850,7 @@ const monthlyTotals = useMemo(() => {
       }
 const statisticHeader = useMemo(
   () => (
-   <HeaderNew/>
+   <HeaderNew title='Dashboard thống kê Marketing'/>
   ),
   [stateBreakPoint, filterData]
 );

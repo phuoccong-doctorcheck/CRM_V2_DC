@@ -1043,7 +1043,7 @@ const totalCostGoods = brandGroups.reduce(
       </div>
 
       {/* Thống kê tổng quan */}
-        <div >
+        <div style={{maxHeight:"93vh", overflowY:"auto",}}>
            <div
         style={{
           display: "flex",

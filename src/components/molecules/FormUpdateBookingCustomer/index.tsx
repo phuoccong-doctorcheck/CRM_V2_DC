@@ -878,7 +878,13 @@ const FormUpdateBookingCustomer: React.FC<FormAddCustomerProps> = ({
      }
    };
      const employeeId1 = localStorage.getItem("employee_id");
-        const [employeeId, setStateEmployeeId] = useState<any>(employeeId1 ? JSON.parse(employeeId1) : "");
+        const [employeeId, setStateEmployeeId] =useState<any>(() => {
+              try {
+                return employeeId1 ? JSON.parse(employeeId1) : "";
+              } catch {
+                return employeeId1 || "";
+              }
+            });
      const getName = Cookies.get('fullname');
   // Submit add customer
   const [stateListSource,setStateListSource] = useState<any[]>([])

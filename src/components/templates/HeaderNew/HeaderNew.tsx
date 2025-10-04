@@ -1,6 +1,8 @@
 "use client"
-
-export default function HeaderNew() {
+interface Props {
+  title: string
+}
+export default function HeaderNew({title}:Props) {
 
   
   return (
@@ -24,7 +26,7 @@ export default function HeaderNew() {
           boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
         }}
       >
-        <div style={{ color: "#1890ff", fontWeight: "600", fontSize: "16px" }}>Dashboard thống kê Marketing</div>
+        <div style={{ color: "#1890ff", fontWeight: "600", fontSize: "16px" }}>{title}</div>
         <div style={{ display: "flex", gap: "8px" }}>
          
         </div>

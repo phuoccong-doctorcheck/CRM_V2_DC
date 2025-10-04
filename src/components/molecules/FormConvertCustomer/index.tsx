@@ -330,7 +330,13 @@ const FormConvertCustomer: React.FC<FormAddCustomerProps> = ({
   moment.locale("vi");
   const dispatch = useAppDispatch();
   const employeeId1 = localStorage.getItem("employee_id");
-    const [employeeId, setStateEmployeeId] = useState<any>(employeeId1 ? JSON.parse(employeeId1) : "");
+    const [employeeId, setStateEmployeeId] =useState<any>(() => {
+          try {
+            return employeeId1 ? JSON.parse(employeeId1) : "";
+          } catch {
+            return employeeId1 || "";
+          }
+        });
     const getName = Cookies.get('fullname');
   const [api, contextHolder] = notification.useNotification();
 

@@ -71,6 +71,7 @@ import DashboardPage from 'pages/DashboardPage';
 import DashboardMarketingPage from 'pages/DashboardMarketingPage';
 import CallReExamination from 'pages/CallReExamination';
 import UserGuids from 'pages/UserGuids';
+import DashboardSalesPage from 'pages/DashboardSalesPage';
 
 
 const routes = [
@@ -282,6 +283,10 @@ const routes = [
           {
     path: '/call-re-examination',
     element: <CallReExamination />, // đang phát triển
+  },
+            {
+    path: '/dashboard-sale',
+    element: <DashboardSalesPage />, // đang phát triển
   },
 ];
 const queryClient = new QueryClient({

@@ -897,7 +897,13 @@ const FormConvertCustomerSaleOrder: React.FC<FormAddCustomerProps> = ({
   /* Clear state function */
   const [showDVK, setShowDVL] = useState(dataForm.typeBooking);
    const employeeId1 = localStorage.getItem("employee_id");
-      const [employeeId, setStateEmployeeId] = useState<any>(employeeId1 ? JSON.parse(employeeId1) : "");
+      const [employeeId, setStateEmployeeId] = useState<any>(() => {
+            try {
+              return employeeId1 ? JSON.parse(employeeId1) : "";
+            } catch {
+              return employeeId1 || "";
+            }
+          });
    const getName = Cookies.get('fullname');
   useEffect(() => {
     setShowDVL(dataForm.typeBooking);
