@@ -239,9 +239,9 @@ const CallReExamination: React.FC = () => {
       )
     : []
 );
-
+  console.log(dmtimedoctorschedules)
   const [selectedStatus, setSelectedStatus] = useState<string>("new");
-  const [selectedDays, setSelectedDays] = useState<number>(9999);
+  const [selectedDays, setSelectedDays] = useState<number>(3);
   /*  */
   const [openNote, setOpenNote] = useState(false);
   const [saveItem, setSaveItem] = useState<ItemListAfterExams>();
@@ -389,8 +389,8 @@ const CallReExamination: React.FC = () => {
     dispatch(
       getListCallReExammingMaster({
         c_schedule_type_id: dataFilter?.c_schedule_type_id || "all",
-        from_date: null,
-        to_date: null,
+from_date: moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss"), // 00:00:00
+    to_date: moment().add(1, "day").endOf("day").format("YYYY-MM-DDTHH:mm:ss"),     // 23:59:59
         status: dataFilter?.status || "new",
         page_number: 1,
         page_size: 10000,
@@ -1390,14 +1390,57 @@ const CallReExamination: React.FC = () => {
         </div>
       ),
     },
-     {
+    //  {
+    //   title: (
+    //     <Typography
+    //       content="Ngày checkin"
+    //       modifiers={["12x18", "500", "center", "uppercase"]}
+    //     />
+    //   ),
+    //   dataIndex: "create_datetime",
+    //   align: "center",
+    //   width: 100,
+    //   className: "ant-table-column_wrap",
+    //   render: (record: any, data: any) => (
+    //     <div
+    //       className="ant-table-column_item"
+    //       onClick={() => {
+    //         const { customer_id, customer_fullname, ...prevData } = data;
+    //         if (customer_id) {
+    //           Cookies.set("id_customer", customer_id);
+    //           dispatch(getInfosCustomerById({ customer_id: customer_id }));
+    //           const newTab = window.open(
+    //             `/customer-info/id/${customer_id}/history-interaction`,
+    //             "_blank"
+    //           );
+    //           if (newTab) {
+    //             newTab.focus();
+    //           }
+    //         } else {
+    //           toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
+    //         }
+    //       }}
+    //     >
+    //       <Typography
+    //         content={moment(record).format("DD/MM/YYYY")}
+    //         modifiers={[
+    //           "13x18",
+    //           "500",
+    //           "center",
+    //          "main"
+    //         ]}
+    //       />
+    //     </div>
+    //   ),
+    // },
+    {
       title: (
         <Typography
-          content="Ngày checkin"
+          content="Ngày BS đề xuất"
           modifiers={["12x18", "500", "center", "uppercase"]}
         />
       ),
-      dataIndex: "create_datetime",
+      dataIndex: "c_schedule_datetime",
       align: "center",
       width: 100,
       className: "ant-table-column_wrap",
@@ -1405,21 +1448,15 @@ const CallReExamination: React.FC = () => {
         <div
           className="ant-table-column_item"
           onClick={() => {
-            const { customer_id, customer_fullname, ...prevData } = data;
-            if (customer_id) {
-              Cookies.set("id_customer", customer_id);
-              dispatch(getInfosCustomerById({ customer_id: customer_id }));
-              const newTab = window.open(
-                `/customer-info/id/${customer_id}/history-interaction`,
-                "_blank"
-              );
-              if (newTab) {
-                newTab.focus();
-              }
-            } else {
-              toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
-            }
-          }}
+              setDataDelay({
+                ...dataDelay,
+                openDelay: true,
+                id: data.c_schedule_id,
+                c_schedule_datetime: moment(data.c_schedule_datetime).format(
+                  "YYYY-MM-DD 00:00:00"
+                ),
+              });
+            }}
         >
           <Typography
             content={moment(record).format("DD/MM/YYYY")}
@@ -1427,7 +1464,7 @@ const CallReExamination: React.FC = () => {
               "13x18",
               "500",
               "center",
-             "main"
+              `${data.is_high_light === true ? "cg-red" : "main"}`,
             ]}
           />
         </div>
@@ -1436,11 +1473,11 @@ const CallReExamination: React.FC = () => {
     {
       title: (
         <Typography
-          content="Ngày hẹn dự kiến"
+          content="Ngày thực hiện"
           modifiers={["12x18", "500", "center", "uppercase"]}
         />
       ),
-      dataIndex: "c_schedule_datetime",
+      dataIndex: "remind_datetime",
       align: "center",
       width: 100,
       className: "ant-table-column_wrap",
@@ -2492,7 +2529,8 @@ const statisticHeader = useMemo(() => {
                     .format("YYYY-MM-DD");
                   const tomorrow = moment().add(1, "days").format("YYYY-MM-DD");
                   const next7To = moment().add(7, "days").format("YYYY-MM-DD");
-
+                  const next14To = moment().add(14, "days").format("YYYY-MM-DD");
+                  const next1MTo = moment().add(14, "days").format("YYYY-MM-DD");
                   if (selectedValue === 9999) {
                     // Tất cả
                     setListCallReExamming([]);
@@ -2566,7 +2604,7 @@ const statisticHeader = useMemo(() => {
                         to_date: to,
                       } as any)
                     );
-                  } else if (selectedValue === 1) {
+                  } else if (selectedValue === 3) {
                     // Ngày mai
                     const from = `${tomorrow} 00:00:00`;
                     const to = `${tomorrow} 23:59:59`;
@@ -2586,7 +2624,7 @@ const statisticHeader = useMemo(() => {
                         
                       } as any)
                     );
-                  } else if (selectedValue === 7) {
+                  } else if (selectedValue === 4) {
                     // 7 ngày tới
                     const from = `${tomorrow} 00:00:00`;
                     const to = `${next7To} 23:59:59`;
@@ -2605,7 +2643,48 @@ const statisticHeader = useMemo(() => {
                         to_date: to,
                       } as any)
                     );
-                  } else if (selectedValue === -2) {
+                  }
+                   else if (selectedValue === 5) {
+                    // 7 ngày tới
+                    const from = `${tomorrow} 00:00:00`;
+                    const to = `${next14To} 23:59:59`;
+                    setListCallReExamming([]);
+                    setDataFilter({
+                      ...dataFilter,
+                      from_date: from,
+                      to_date: to,
+                      from_date1: from,
+                      to_date1: to,
+                    });
+                    dispatch(
+                      getListCallReExammingMaster({
+                        ...propsData,
+                        from_date: from,
+                        to_date: to,
+                      } as any)
+                    );
+                  }
+                     else if (selectedValue === 6) {
+                    // 7 ngày tới
+                    const from = `${tomorrow} 00:00:00`;
+                    const to = `${next1MTo} 23:59:59`;
+                    setListCallReExamming([]);
+                    setDataFilter({
+                      ...dataFilter,
+                      from_date: from,
+                      to_date: to,
+                      from_date1: from,
+                      to_date1: to,
+                    });
+                    dispatch(
+                      getListCallReExammingMaster({
+                        ...propsData,
+                        from_date: from,
+                        to_date: to,
+                      } as any)
+                    );
+                  }
+                  else if (selectedValue === -2) {
                     // Tùy chọn
                     setDataFilter({ ...dataFilter });
                   }
@@ -2618,8 +2697,31 @@ const statisticHeader = useMemo(() => {
                   gap: "5px",
                 }}
               >
-               {dmtimedoctorschedules
-                .filter((option:any) => option.value !== 7)
+               {[
+  // Lọc bỏ các value không muốn hiển thị
+  ...dmtimedoctorschedules.filter(
+    (option: any) => ![7, 1, 0, -1, -9999,9999,-2].includes(option.value)
+  ),
+  // Thêm 4 option mới
+  {
+    label: 'Trước 1 ngày',
+    value: 3,
+  },
+  {
+    label: 'Trước 1 tuần',
+    value: 4,
+  },
+  {
+    label: 'Trước 2 tuần',
+    value: 5,
+  },
+  {
+    label: 'Trước 1 tháng',
+    value: 6,
+  },
+  ...dmtimedoctorschedules.filter((option: any) => option.value === -2),
+
+]
                 .map(option => (
                   <Radio key={option.value} value={option.value} style={{fontSize:12}}>
                     {option.label}
@@ -2627,8 +2729,8 @@ const statisticHeader = useMemo(() => {
               ))}
 
               </Radio.Group>
-
-              <div style={{ marginTop: "10px" }}>
+              {
+                selectedDays === -2 && (<div style={{ marginTop: "10px" }}>
                 <RangeDate
                   variant="simple"
                   value={{
@@ -2689,7 +2791,9 @@ const statisticHeader = useMemo(() => {
                     }
                   }}
                 />
-              </div>
+              </div>)
+              }
+              
             </div>
           }
         />

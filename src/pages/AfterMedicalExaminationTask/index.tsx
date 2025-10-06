@@ -121,7 +121,7 @@ const AfterMedicalExaminationTask: React.FC = () => {
   const [stateScheduleTypes, setstateScheduleTypes] = useState<DropdownData[]>(schedule_types ? JSON.parse(schedule_types) : []);
   const [stateLaunchSourceGroups, setstateLaunchSourceGroups] = useState<DropdownData[]>(storageLaunchSourcesGroup ? JSON.parse(storageLaunchSourcesGroup) : []);
     const [stateLaunchSource, setstateLaunchSource] = useState<DropdownData[]>(storageLaunchSources ? JSON.parse(storageLaunchSources) : []);
-
+  console.log("stateScheduleTypes",stateScheduleTypes)
   const [stateLaunchSourceTypes, setstateLaunchSourceTypes] = useState<DropdownData[]>(storageLaunchSourcesType ? JSON.parse(storageLaunchSourcesType) : []);
   const [listStateInStorage, setListStateInStorage] = useState(listStages ? JSON.parse(listStages || '') : undefined);
   const [stateAfterExams2, setStateAfterExams2] = useState([{ id: '', label: 'Tất cả', value: 'all' }, ...dataStateAfterExams]);
@@ -538,55 +538,32 @@ const AfterMedicalExaminationTask: React.FC = () => {
               </div>
             ),
           },
-    {
-      title: <Typography content="Ngày thực hiện" modifiers={['12x18', '500', 'center', 'uppercase']} />,
-      dataIndex: 'cs_remind_date',
-      align: 'center',
-      width: 70,
-      className: "ant-table-column_wrap",
-      render: (record: any, data: any) => (
-        <div className="ant-table-column_item" onClick={() => {
-          const { customer_id, customer_fullname, ...prevData } = data;
-          if (customer_id) {
-            Cookies.set('id_customer', customer_id);
-            dispatch(getInfosCustomerById({ customer_id: customer_id }));
-            const newTab = window.open(`/customer-info/id/${customer_id}/history-interaction`, '_blank');
-            if (newTab) {
-              newTab.focus();
-            }
-          } else {
-            toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
-          }
-        }}>
-          <Typography content={moment(record).format('DD/MM/YYYY')} modifiers={['13x18', '500', 'center', 'main']} />
-        </div>
-      ),
-    },
+    // {
+    //   title: <Typography content="Ngày thực hiện" modifiers={['12x18', '500', 'center', 'uppercase']} />,
+    //   dataIndex: 'cs_remind_date',
+    //   align: 'center',
+    //   width: 70,
+    //   className: "ant-table-column_wrap",
+    //   render: (record: any, data: any) => (
+    //     <div className="ant-table-column_item" onClick={() => {
+    //       const { customer_id, customer_fullname, ...prevData } = data;
+    //       if (customer_id) {
+    //         Cookies.set('id_customer', customer_id);
+    //         dispatch(getInfosCustomerById({ customer_id: customer_id }));
+    //         const newTab = window.open(`/customer-info/id/${customer_id}/history-interaction`, '_blank');
+    //         if (newTab) {
+    //           newTab.focus();
+    //         }
+    //       } else {
+    //         toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
+    //       }
+    //     }}>
+    //       <Typography content={moment(record).format('DD/MM/YYYY')} modifiers={['13x18', '500', 'center', 'main']} />
+    //     </div>
+    //   ),
+    // },
   
-    {
-      title: <Typography content="Lần" modifiers={['12x18', '500', 'center', 'uppercase']} />,
-      dataIndex: 'cs_count',
-      align: 'center',
-      width: 40,
-      className: "ant-table-column_wrap",
-      render: (record: any, data: any) => (
-        <div className="ant-table-column_item" onClick={() => {
-          const { customer_id, customer_fullname, ...prevData } = data;
-          if (customer_id) {
-            Cookies.set('id_customer', customer_id);
-            dispatch(getInfosCustomerById({ customer_id: customer_id }));
-            const newTab = window.open(`/customer-info/id/${customer_id}/history-interaction`, '_blank');
-            if (newTab) {
-              newTab.focus();
-            }
-          } else {
-            toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
-          }
-        }}>
-          <Typography content={record.toString()} modifiers={['13x18', '600', 'center', 'main']} />
-        </div>
-      ),
-    },
+ 
     {
       title: <Typography content="Khách hàng" modifiers={['12x18', '500', 'center', 'uppercase']} styles={{ textAlign: "left", marginLeft: "12px" }} />,
       dataIndex: 'customer_fullname',
@@ -620,6 +597,30 @@ const AfterMedicalExaminationTask: React.FC = () => {
           whiteSpace: "normal", // Nội dung nhiều dòng
           textAlign:"left"
         }}/>
+        </div>
+      ),
+    },
+       {
+      title: <Typography content="Lần" modifiers={['12x18', '500', 'center', 'uppercase']} />,
+      dataIndex: 'cs_count',
+      align: 'center',
+      width: 40,
+      className: "ant-table-column_wrap",
+      render: (record: any, data: any) => (
+        <div className="ant-table-column_item" onClick={() => {
+          const { customer_id, customer_fullname, ...prevData } = data;
+          if (customer_id) {
+            Cookies.set('id_customer', customer_id);
+            dispatch(getInfosCustomerById({ customer_id: customer_id }));
+            const newTab = window.open(`/customer-info/id/${customer_id}/history-interaction`, '_blank');
+            if (newTab) {
+              newTab.focus();
+            }
+          } else {
+            toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
+          }
+        }}>
+          <Typography content={record.toString()} modifiers={['13x18', '600', 'center', 'main']} />
         </div>
       ),
     },
@@ -1644,7 +1645,15 @@ const AfterMedicalExaminationTask: React.FC = () => {
                  
               
               <Dropdown
-                dropdownOption={stateScheduleTypes}
+                dropdownOption={stateScheduleTypes
+  // chỉ lấy các id mong muốn
+  .filter((item:any) => ['n0', 'n1', 'nreexam'].includes(item.id))
+  // đổi label cho n0
+  .map(item => ({
+    ...item,
+    label: item.id === 'n0' ? 'Trước khám 1 ngày' : item.label,
+  }))
+}
                 values={dataFilter.type}
                 defaultValue={dataFilter.type}
                 handleSelect={(item: any) => {
@@ -1662,7 +1671,7 @@ const AfterMedicalExaminationTask: React.FC = () => {
                   // }));
                 }}
                 variant="simple"
-                placeholder='-- Chọn nhóm --'
+                placeholder='-- Loại công việc --'
               />
           
              

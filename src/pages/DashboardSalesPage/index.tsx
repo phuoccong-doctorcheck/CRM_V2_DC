@@ -477,11 +477,80 @@ function cleanLabel(str: string) {
         </table>
       </div>
     )
+}
+  
+  const potentialCustomerData = [
+    { label: "Tổng Inbox", count: 100, percentage: null, highlight: false },
+    { label: "Inbox Ẩn (chất lượng)", count: 80, percentage: "80.00%", highlight: false },
+    { label: "Chưa rõ trạng thái", count: 24, percentage: "30.00%", highlight: false },
+    { label: "Đặt hẹn thất bại", count: 20, percentage: "25.00%", highlight: true },
+    { label: "Đặt hẹn thành công", count: 36, percentage: "45.00%", highlight: true },
+    { label: "Hủy đặt hẹn", count: 8, percentage: "22.22%", highlight: false },
+    { label: "Đặt hẹn chưa đến", count: 6, percentage: "16.67%", highlight: false },
+    { label: "Đến không sử dụng dịch vụ", count: 2, percentage: "5.56%", highlight: false },
+    { label: "Hoàn thành khám", count: 20, percentage: "55.56%", highlight: false },
+  ]
+
+  const failedAppointmentData = [
+    { label: "Tổng đặt hẹn thất bại", count: 20, percentage: null, highlight: true },
+    { label: "Giá", count: 8, percentage: "40.00%", highlight: false },
+    { label: "Uy tín", count: 4, percentage: "20.00%", highlight: false },
+    { label: "Thời gian", count: 2, percentage: "10.00%", highlight: false },
+    { label: "Ở xa", count: 2, percentage: "10.00%", highlight: false },
+    { label: "Bận đột xuất", count: 1, percentage: "5.00%", highlight: false },
+    { label: "Khám nơi khác", count: 1, percentage: "5.00%", highlight: false },
+    { label: "Không rõ lý do", count: 2, percentage: "10.00%", highlight: false },
+  ]
+
+  const tableStyle: React.CSSProperties = {
+    width: "100%",
+    borderCollapse: "collapse",
+    border: "2px solid #333333",
+    marginBottom: "30px",
+  }
+
+  const headerStyle: React.CSSProperties = {
+    backgroundColor: "#0070c0",
+    color: "white",
+    padding: "3px",
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: "14px",
+    border: "1px solid #333333",
+  }
+
+  const cellStyle: React.CSSProperties = {
+    border: "1px solid #333333",
+    padding: "2px 10px",
+    fontSize: "13px",
+  }
+
+  const numberCellStyle: React.CSSProperties = {
+    ...cellStyle,
+    textAlign: "center",
+    fontWeight: "500",
+  }
+   const numberCellStyle1: React.CSSProperties = {
+    ...cellStyle,
+    textAlign: "right",
+    fontWeight: "500",
+  }
+
+  const highlightStyle: React.CSSProperties = {
+    color: "#d32f2f",
+    fontWeight: "500",
+}
+  const highlightBoldStyle: React.CSSProperties = {
+   
+    fontWeight: "600",
+}
+    const bgHighlightStyle: React.CSSProperties = {
+    backgroundColor: "#e3f2fd",
   }
 const DashboardSalesPage: React.FC = () => {
   const dispatch = useAppDispatch();
 
- 
+  
   const [loading, setLoading] = useState(true)
   const [isLead, setIsLead] = useState(true);
   const storeDashBoardMarketing = useAppSelector((state) => state.dashboard.dashboardMarketingMaster);
@@ -565,7 +634,15 @@ const [stateEmployeeId, setStateEmployeeId] = useState<any>(() => {
     return employeeId || "";
   }
 });
-
+   const shouldHighlightRed = (label: string) => {
+    return label === "Đặt hẹn thất bại" || label === "Tổng đặt hẹn thất bại"
+  }
+  const shouldHighlightBold = (label: string) => {
+    return label === "Tổng Inbox" || label === "Inbox Ẩn (chất lượng)" || label === "Đặt hẹn thành công"|| label === "Tổng đặt hẹn thất bại"
+  }
+  const shouldHighlightBackground = (label: string) => {
+    return label === "Inbox Ẩn (chất lượng)" || label === "Đặt hẹn thành công"
+  }
   const [data, setData] = useState<DashboardMarketingResponse>(storeDashBoardMarketing)
     const [dataADS, setDataADS] = useState<any>(storeADSMarketing)
    const [listCampaigns,setListCampaigns] = useState<any[]>([]);
@@ -591,113 +668,104 @@ const [expandedWeek, setExpandedWeek] = useState<number | null>(null)
   );
    const statisticBody = useMemo(
    () => (
-    <div
-      style={{
-        padding: "20px",
-        backgroundColor: "#f9f9f9",
-        minHeight: "100vh",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "5px",
-          maxWidth: "1600px",
-             margin: "0 auto",
-          maxHeight: "83vh",
-        overflowY: "auto",
-        }}
-      >
-        {/* Row 1: Potential Customers & Barriers Not Scheduled */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "5px",
-          }}
-        >
-          <div>
-            {renderTableV1("THỐNG KÊ KHÁCH HÀNG TIỀM NĂNG CHƯA ĐẶT HẸN TRONG 14 NGÀY", potentialCustomersData, "rgb(112, 48, 160)")}
-          </div>
-          <div>
-            {renderTableV2("THỐNG KÊ RÀO CẢN KHTH CHƯA ĐẶT HẸN TRONG 14 NGÀY", barriersNotScheduledData, "rgb(112, 48, 160)")}
-            {renderTableV2(
-              "THỐNG KÊ RÀO CẢN KHTH ĐẶT HẸN CHƯA ĐẾN - THÁNG 9/2025",
-              barriersScheduledNotArrivedData,
-              "rgb(112, 48, 160)",
-            )}
-          </div>
-        </div>
+   <div style={{ maxWidth: "500px", margin: "0 auto" }}>
+      {/* First Table - Potential Customer Statistics */}
+      <table style={tableStyle}>
+        <thead>
+          <tr>
+            <th style={headerStyle} colSpan={3}>
+              THỐNG KÊ KHÁCH HÀNG TIỀM NĂNG - TỪ {moment(filterData.from_date).format("DD-MM-YYYY")} ĐẾN {moment(filterData.to_date).format("DD-MM-YYYY")}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {potentialCustomerData.map((row, index) => (
+            <tr key={index}>
+              <td
+                style={{
+                  width: 300,
+                  ...cellStyle,
+                  ...(shouldHighlightRed(row.label) ? highlightStyle : {}),
+                    ...(shouldHighlightBold(row.label) ? highlightBoldStyle : {}),
+                  ...(shouldHighlightBackground(row.label) ? bgHighlightStyle : {}),
+                }}
+              >
+                {row.label}
+              </td>
+              <td
+                style={{
+                    width: 80,
+                  ...numberCellStyle,
+                  ...(shouldHighlightRed(row.label) ? highlightStyle : {}),
+                      ...(shouldHighlightBold(row.label) ? highlightBoldStyle : {}),
+                  ...(shouldHighlightBackground(row.label) ? bgHighlightStyle : {}),
+                }}
+              >
+                {row.count}
+              </td>
+              <td
+                style={{
+                  ...numberCellStyle1,
+                  ...(shouldHighlightRed(row.label) ? highlightStyle : {}),
+                  ...(shouldHighlightBold(row.label) ? highlightBoldStyle : {}),
+                  ...(shouldHighlightBackground(row.label) ? bgHighlightStyle : {}),
+                }}
+              >
+                {row.percentage || ""}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
-        {/* Row 2: Barriers Scheduled Not Arrived (standalone in purple section) */}
-   
-
-        {/* Row 3: Failed Appointments & Barriers Failed After 14 Days */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "5px",
-          }}
-        >
-          <div>
-            {renderTableV1(
-              "THỐNG KÊ KHÁCH HÀNG ĐẶT HẸN THẤT BẠI SAU 14 NGÀY - THÁNG 9/2025",
-              failedAppointmentsData,
-              "rgb(32, 97, 102)",
-            )}
-          </div>
-          <div>
-            {renderTableV2(
-              "THỐNG KÊ RÀO CẢN ĐẶT HẸN THẤT BẠI SAU 14 NGÀY - THÁNG 9/2025",
-              barriersFailedAfter14DaysData,
-              "rgb(32, 97, 102)",
-            )}
-          </div>
-        </div>
-
-        {/* Row 4: Successful Appointments (standalone) */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "5px",
-          }}
-        >
-          <div>
-            {renderTableV1(
-              "THỐNG KÊ KHÁCH HÀNG ĐẶT HẸN THÀNH CÔNG - THÁNG 9/2025",
-              successfulAppointmentsData,
-              "rgb(39, 126, 64)",
-            )}
-          </div>
-          <div></div>
-        </div>
-
-        {/* Row 5: TRI Effectiveness & Customers Arrived */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "5px",
-          }}
-        >
-          <div>{renderTableV1("THỐNG KÊ HIỆU QUẢ CỦA TRI - THÁNG 9/2025", triEffectivenessData, "rgb(26, 85,41)")}</div>
-          <div></div>
-           </div>
-               <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "5px",
-          }}
-           >
-             <div>{renderTableV1("THỐNG KÊ KHÁCH HÀNG ĐẾN - THÁNG 9/2025", customersArrivedData, "rgb(0, 176, 80)")}</div>
-        <div></div>
-        
-        </div>
-      </div>
+      {/* Second Table - Failed Appointment Barriers */}
+      <table style={tableStyle}>
+        <thead>
+          <tr>
+            <th style={headerStyle} colSpan={3}>
+              THỐNG KÊ RÀO CẢN ĐẶT HẸN THẤT BẠI - TỪ {moment(filterData.from_date).format("DD-MM-YYYY")} ĐẾN {moment(filterData.to_date).format("DD-MM-YYYY")}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {failedAppointmentData.map((row, index) => (
+            <tr key={index}>
+              <td
+                style={{
+                   width: 300,
+                  ...cellStyle,
+                  ...(shouldHighlightRed(row.label) ? highlightStyle : {}),
+                      ...(shouldHighlightBold(row.label) ? highlightBoldStyle : {}),
+                  ...(shouldHighlightBackground(row.label) ? bgHighlightStyle : {}),
+                }}
+              >
+                {row.label}
+              </td>
+              <td
+                style={{
+                    width: 80,
+                  ...numberCellStyle,
+                  ...(shouldHighlightRed(row.label) ? highlightStyle : {}),
+                      ...(shouldHighlightBold(row.label) ? highlightBoldStyle : {}),
+                  ...(shouldHighlightBackground(row.label) ? bgHighlightStyle : {}),
+                }}
+              >
+                {row.count}
+              </td>
+              <td
+                style={{
+                  ...numberCellStyle1,
+                  ...(shouldHighlightRed(row.label) ? highlightStyle : {}),
+                      ...(shouldHighlightBold(row.label) ? highlightBoldStyle : {}),
+                  ...(shouldHighlightBackground(row.label) ? bgHighlightStyle : {}),
+                }}
+              >
+                {row.percentage || ""}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
    ),
    [stateBreakPoint, filterData]
