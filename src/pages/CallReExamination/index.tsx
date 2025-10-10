@@ -1473,7 +1473,7 @@ from_date: moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss"), 
     {
       title: (
         <Typography
-          content="Ngày thực hiện"
+          content="Ngày chăm sóc"
           modifiers={["12x18", "500", "center", "uppercase"]}
         />
       ),
@@ -1507,71 +1507,71 @@ from_date: moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss"), 
         </div>
       ),
     },
-     {
-      title: (
-        <Typography
-          content="Đề xuất bởi"
-          modifiers={["12x18", "500", "center", "uppercase"]}
-          styles={{ textAlign: "left", marginLeft: "15px" }}
-        />
-      ),
-      dataIndex: "employee_signature_name",
-      width: 230,
-      className: "ant-table-column_wrap",
-      render: (record: any, data: any) => (
-        <div
-          className="ant-table-column_item"
-          onClick={() => {
-            const {
-              customer_id,
-              customer_fullname,
-              year_of_birth,
-              ...prevData
-            } = data;
-            if (customer_id) {
-              Cookies.set("id_customer", customer_id);
-              dispatch(getInfosCustomerById({ customer_id: customer_id }));
-              const newTab = window.open(
-                `/customer-info/id/${customer_id}/history-interaction`,
-                "_blank"
-              );
-              if (newTab) {
-                newTab.focus();
-              }
-            } else {
-              toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
-            }
-          }}
-          style={{
-            justifyContent: "start",
-            wordWrap: "break-word", // Cho phép xuống dòng
-            whiteSpace: "normal", // Đảm bảo nội dung hiển thị nhiều dòng
-            overflow: "hidden", // Xử lý tràn nếu cần
-            maxWidth: "250px",
-          }}
-        >
-          <Typography
-            content={record}
-            modifiers={[
-              "13x18",
-              "500",
-              "center",
-             `${data.is_high_light === true ? "main" : "main"}`,
-            ]}
-            styles={{
-              display: "block", // Đảm bảo hiển thị như block
-              wordWrap: "break-word", // Xuống dòng khi quá dài
-              whiteSpace: "normal", // Nội dung nhiều dòng
-              textAlign: "left",
-            }}
-          />
-        </div>
-      ),
-    },
+    //  {
+    //   title: (
+    //     <Typography
+    //       content="Đề xuất bởi"
+    //       modifiers={["12x18", "500", "center", "uppercase"]}
+    //       styles={{ textAlign: "left", marginLeft: "15px" }}
+    //     />
+    //   ),
+    //   dataIndex: "employee_signature_name",
+    //   width: 230,
+    //   className: "ant-table-column_wrap",
+    //   render: (record: any, data: any) => (
+    //     <div
+    //       className="ant-table-column_item"
+    //       onClick={() => {
+    //         const {
+    //           customer_id,
+    //           customer_fullname,
+    //           year_of_birth,
+    //           ...prevData
+    //         } = data;
+    //         if (customer_id) {
+    //           Cookies.set("id_customer", customer_id);
+    //           dispatch(getInfosCustomerById({ customer_id: customer_id }));
+    //           const newTab = window.open(
+    //             `/customer-info/id/${customer_id}/history-interaction`,
+    //             "_blank"
+    //           );
+    //           if (newTab) {
+    //             newTab.focus();
+    //           }
+    //         } else {
+    //           toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
+    //         }
+    //       }}
+    //       style={{
+    //         justifyContent: "start",
+    //         wordWrap: "break-word", // Cho phép xuống dòng
+    //         whiteSpace: "normal", // Đảm bảo nội dung hiển thị nhiều dòng
+    //         overflow: "hidden", // Xử lý tràn nếu cần
+    //         maxWidth: "250px",
+    //       }}
+    //     >
+    //       <Typography
+    //         content={record}
+    //         modifiers={[
+    //           "13x18",
+    //           "500",
+    //           "center",
+    //          `${data.is_high_light === true ? "main" : "main"}`,
+    //         ]}
+    //         styles={{
+    //           display: "block", // Đảm bảo hiển thị như block
+    //           wordWrap: "break-word", // Xuống dòng khi quá dài
+    //           whiteSpace: "normal", // Nội dung nhiều dòng
+    //           textAlign: "left",
+    //         }}
+    //       />
+    //     </div>
+    //   ),
+    // },
     {
       title: (
         <Typography
-          content="Ghi chú"
+          content="Ghi chú BS"
           modifiers={["12x18", "500", "center", "uppercase"]}
           styles={{ textAlign: "left", marginLeft: "12px" }}
         />
@@ -1623,7 +1623,7 @@ from_date: moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss"), 
               textAlign: "left",
             }}
           />
-          {data.cs_notes !== null && (
+          {/* {data.cs_notes !== null && (
             <Typography
               content={`(${data.cs_notes.employee_name}: ${data.cs_notes.cs_notes})`}
               modifiers={["13x18", "500", "center", "green"]}
@@ -1634,20 +1634,20 @@ from_date: moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss"), 
                 textAlign: "left",
               }}
             />
-          )}
+          )} */}
         </div>
       ),
     },
      {
       title: (
         <Typography
-          content="Lần liên hệ"
+          content="Ghi chú nhắc hẹn"
           modifiers={["12x18", "500", "center", "uppercase"]}
-          styles={{ textAlign: "center" }}
+          styles={{ textAlign: "left", marginLeft: "12px" }}
         />
       ),
-      dataIndex: "cs_count_communicate",
-      width: 80,
+      dataIndex: "c_schedule_note",
+      width: 370,
       className: "ant-table-column_wrap",
       render: (record: any, data: any) => (
         <div
@@ -1674,31 +1674,101 @@ from_date: moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss"), 
             }
           }}
           style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "start",
             justifyContent: "center",
             wordWrap: "break-word", // Cho phép xuống dòng
             whiteSpace: "normal", // Đảm bảo nội dung hiển thị nhiều dòng
             overflow: "hidden", // Xử lý tràn nếu cần
-            maxWidth: "250px",
           }}
         >
-          <Typography
-            content={record.toString()}
-            modifiers={[
-              "13x18",
-              "500",
-              "center",
-              `${data.is_high_light === true ? "main" : "main"}`,
-            ]}
+          {/* <Typography
+            content={record}
+            modifiers={["13x18", "500", "center", "main"]}
             styles={{
               display: "block", // Đảm bảo hiển thị như block
               wordWrap: "break-word", // Xuống dòng khi quá dài
               whiteSpace: "normal", // Nội dung nhiều dòng
               textAlign: "left",
             }}
-          />
+          /> */}
+          {data.cs_notes !== null && (
+            <Typography
+              content={`(${data.cs_notes.employee_name}: ${data.cs_notes.cs_notes})`}
+              modifiers={["13x18", "500", "center", "green"]}
+              styles={{
+                display: "block", // Đảm bảo hiển thị như block
+                wordWrap: "break-word", // Xuống dòng khi quá dài
+                whiteSpace: "normal", // Nội dung nhiều dòng
+                textAlign: "left",
+              }}
+            />
+          )}
         </div>
       ),
     },
+    //  {
+    //   title: (
+    //     <Typography
+    //       content="Lần liên hệ"
+    //       modifiers={["12x18", "500", "center", "uppercase"]}
+    //       styles={{ textAlign: "center" }}
+    //     />
+    //   ),
+    //   dataIndex: "cs_count_communicate",
+    //   width: 80,
+    //   className: "ant-table-column_wrap",
+    //   render: (record: any, data: any) => (
+    //     <div
+    //       className="ant-table-column_item"
+    //       onClick={() => {
+    //         const {
+    //           customer_id,
+    //           customer_fullname,
+    //           year_of_birth,
+    //           ...prevData
+    //         } = data;
+    //         if (customer_id) {
+    //           Cookies.set("id_customer", customer_id);
+    //           dispatch(getInfosCustomerById({ customer_id: customer_id }));
+    //           const newTab = window.open(
+    //             `/customer-info/id/${customer_id}/history-interaction`,
+    //             "_blank"
+    //           );
+    //           if (newTab) {
+    //             newTab.focus();
+    //           }
+    //         } else {
+    //           toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
+    //         }
+    //       }}
+    //       style={{
+    //         justifyContent: "center",
+    //         wordWrap: "break-word", // Cho phép xuống dòng
+    //         whiteSpace: "normal", // Đảm bảo nội dung hiển thị nhiều dòng
+    //         overflow: "hidden", // Xử lý tràn nếu cần
+    //         maxWidth: "250px",
+    //       }}
+    //     >
+    //       <Typography
+    //         content={record.toString()}
+    //         modifiers={[
+    //           "13x18",
+    //           "500",
+    //           "center",
+    //           `${data.is_high_light === true ? "main" : "main"}`,
+    //         ]}
+    //         styles={{
+    //           display: "block", // Đảm bảo hiển thị như block
+    //           wordWrap: "break-word", // Xuống dòng khi quá dài
+    //           whiteSpace: "normal", // Nội dung nhiều dòng
+    //           textAlign: "left",
+    //         }}
+    //       />
+    //     </div>
+    //   ),
+    // },
     {
       title: (
         <Typography
