@@ -865,6 +865,7 @@ const FormAddCustomer: React.FC<FormAddCustomerProps> = ({
               "",
             gclid: dataForm.gclid,
           },
+          master_note:dataForm.noteBooking,
           master: {
             c_object_id: "DV",
             launch_source_id: isBooking ? dataForm.origin?.value : null,
@@ -1023,6 +1024,7 @@ const FormAddCustomer: React.FC<FormAddCustomerProps> = ({
             "",
           gclid: dataForm.gclid,
         },
+        master_note:dataForm.noteBooking,
         master: {
           c_object_id: "DV",
           launch_source_id: isBooking ? dataForm.origin?.value : null,

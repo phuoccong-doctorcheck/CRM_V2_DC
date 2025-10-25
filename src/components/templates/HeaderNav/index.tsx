@@ -467,10 +467,7 @@ const HeaderNav: React.FC<HeaderNavProps> = ({
              "Thêm khách hàng thành công"
           );
           
-                              window.open(
-                                `/customer-info/id/${data.data}/history-interaction`,
-                                "_blank"
-                              );
+                          window.location.href =  `/customer-info/id/${data.data}/history-interaction`
                            
         //  postNotifyCustomer({employee_id: employeeId,customer_id:data.data})
           setIsClosePopup(true);
@@ -1108,17 +1105,17 @@ const HeaderNav: React.FC<HeaderNavProps> = ({
 />
       </div>
     </div> */}
-                <Typography content={`KẾT QUẢ: ${(insuranceResponse?.data.maKetQua === '000' || insuranceResponse?.data.maKetQua === '004') ? 'Được áp dụng tại DoctorCheck' : 'Không được áp dụng tại DoctorCheck'}`} modifiers={[insuranceResponse?.data && (insuranceResponse?.data.maKetQua === '000' || insuranceResponse?.data.maKetQua === '004') ? 'green' : 'cg-red', '600']} styles={{textTransform:"uppercase"}}/>
+                <Typography content={`KẾT QUẢ: ${(insuranceResponse?.data?.maKetQua === '000' || insuranceResponse?.data?.maKetQua === '004') ? 'Được áp dụng tại DoctorCheck' : 'Không được áp dụng tại DoctorCheck'}`} modifiers={[insuranceResponse?.data && (insuranceResponse?.data.maKetQua === '000' || insuranceResponse?.data.maKetQua === '004') ? 'green' : 'cg-red', '600']} styles={{textTransform:"uppercase"}}/>
                
                 {
-                  (insuranceResponse?.data.maKetQua === '000' || insuranceResponse?.data.maKetQua === '004') &&
+                  (insuranceResponse?.data?.maKetQua === '000' || insuranceResponse?.data?.maKetQua === '004') &&
                    <Typography
   content={`Mức hưởng: ${insuranceResponse?.data?.insurance_object_index.toString()}(${insuranceResponse?.data?.insurance_object_ratio.toString()}%) `}
   modifiers={['green', '400']}
 />
                 }
               
-                <Typography content={insurance.result} modifiers={[insuranceResponse?.data && (insuranceResponse?.data.maKetQua === '000' || insuranceResponse?.data.maKetQua === '004') ? 'green' : 'cg-red', '400']} />
+                <Typography content={insurance.result} modifiers={[insuranceResponse?.data && (insuranceResponse?.data?.maKetQua === '000' || insuranceResponse?.data?.maKetQua === '004') ? 'green' : 'cg-red', '400']} />
            </div>
           }
         </div>

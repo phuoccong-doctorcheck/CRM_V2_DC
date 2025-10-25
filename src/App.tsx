@@ -72,6 +72,7 @@ import DashboardMarketingPage from 'pages/DashboardMarketingPage';
 import CallReExamination from 'pages/CallReExamination';
 import UserGuids from 'pages/UserGuids';
 import DashboardSalesPage from 'pages/DashboardSalesPage';
+import AddAimDashboardPage from 'pages/AddAimDashboardPage';
 
 
 const routes = [
@@ -287,6 +288,10 @@ const routes = [
             {
     path: '/dashboard-sale',
     element: <DashboardSalesPage />, // đang phát triển
+  },
+             {
+    path: '/add-dashboard-sales',
+    element: <AddAimDashboardPage />, // đang phát triển
   },
 ];
 const queryClient = new QueryClient({

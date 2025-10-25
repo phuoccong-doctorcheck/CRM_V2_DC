@@ -20,26 +20,26 @@ const OptionTab = [
     label: 'Tags',
     children: <ManageTags />,
   },
-  {
-    key: 3,
-    label: 'Tự dộng hóa',
-    children: <LinkedAccountSetting />,
-  },
-  {
-    key: 0,
-    label: 'Danh mục',
-    children: <CampaignTemplateSetting />,
-  },
-  {
-    key: 2,
-    label: 'Tài liệu hướng dẫn',
-    children: <TagSetting />,
-  },
-  {
-    key: 4,
-    label: 'Người dùng',
-    children: <NotificationSetting />,
-  },
+  // {
+  //   key: 3,
+  //   label: 'Tự dộng hóa',
+  //   children: <LinkedAccountSetting />,
+  // },
+  // {
+  //   key: 0,
+  //   label: 'Danh mục',
+  //   children: <CampaignTemplateSetting />,
+  // },
+  // {
+  //   key: 2,
+  //   label: 'Tài liệu hướng dẫn',
+  //   children: <TagSetting />,
+  // },
+  // {
+  //   key: 4,
+  //   label: 'Người dùng',
+  //   children: <NotificationSetting />,
+  // },
   {
     key: 5,
     label: 'Ca trực',

@@ -152,7 +152,7 @@ const CustomerInfomation2: React.FC<CustomerInformationProps> = ({
    useEffect(() => {
     setStateDataUpdateBooking(stateDetallVisit?.data?.master)
   },[stateDetallVisit])
-  console.log(stateIds)
+  console.log(stateDataUpdateBooking)
    useEffect(() => {
       setStateDetailVisit(storeVisit);
     },[storeVisit])

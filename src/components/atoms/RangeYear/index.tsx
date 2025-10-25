@@ -28,7 +28,7 @@ const YearSelector: React.FC<YearSelectorProps> = ({
   }
 
   return (
-    <div style={{ display: 'flex', gap: '16px', alignItems: 'center',border: "1px solid #d9d9d9", padding:5, borderRadius: 5 }}>
+    <div style={{ display: 'flex', gap: '16px', alignItems: 'center', padding:5, borderRadius: 5 }}>
     
       <DatePicker
         picker="year"

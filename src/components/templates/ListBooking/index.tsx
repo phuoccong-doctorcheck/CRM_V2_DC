@@ -63,12 +63,12 @@ const formatDateTime = (dateString: string): string => {
 // }
 export default function ListBooking(data: any) {
   console.log(data.data[0])
-  const [selectedAppointment, setSelectedAppointment] = useState(data.data[data.data.length - 1]);
+  const [selectedAppointment, setSelectedAppointment] = useState(data.data[0]);
   const storeVisit = useAppSelector((state) => state.listVisit.listVisitItemMaster);
   const [stateDetallVisit, setStateDetailVisit] = useState(storeVisit);
   const [stateMaster, setStateMaster] = useState("");
   const [stateCustomer, setStateCustomer] = useState("");
-  console.log(selectedAppointment)
+  console.log(data.data[0],data.data.length)
   useEffect(() => {
     setStateDetailVisit(storeVisit);
   }, [storeVisit])
@@ -88,7 +88,7 @@ export default function ListBooking(data: any) {
                 setStateMaster(selectedAppointment.master_id);
                 setStateCustomer(selectedAppointment.customer_id);
                 dispatch(getListVisitItemMaster(body))
-  }, [])
+  }, [data.data[0]])
   const [activeTab, setActiveTab] = useState("result");
   const dispatch = useAppDispatch();
   const getStatusStyle = (status: string) => {

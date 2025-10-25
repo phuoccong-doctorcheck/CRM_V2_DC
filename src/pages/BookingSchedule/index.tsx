@@ -17,6 +17,7 @@ import TextArea from 'components/atoms/TextArea';
 import Typography from 'components/atoms/Typography';
 import FloatFilter from 'components/molecules/FloatFilter';
 import FormAddCustomer from 'components/molecules/FormAddCustomer';
+import FormAddCustomerNew from 'components/molecules/FormAddCustomerNew';
 import PublicTable from 'components/molecules/PublicTable';
 import CCollapse from 'components/organisms/CCollapse';
 import CModal from 'components/organisms/CModal';
@@ -30,7 +31,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useMutation } from 'react-query';
 import { toast } from 'react-toastify';
 import { postPrintAppointmentServicepoint } from 'services/api/appointmentView';
-import { postNotifyCustomer, postSaveCustomerBeforeExams } from 'services/api/beforeExams';
+import { postAddNewCustomer, postNotifyCustomer, postSaveCustomerBeforeExams } from 'services/api/beforeExams';
 import { BookingScheduleItem } from 'services/api/booking_schedule/types';
 import { postCanceledAppointment, postDelayAppointment } from 'services/api/customerInfo';
 import { getListBooking, postLoadingBooking } from 'store/booking_schedule';
@@ -168,30 +169,39 @@ const BookingSchedule: React.FC = () => {
     },
   );
   // React Query lưu thông tin khách hàng
-  const { mutate: postSaveCustomer } = useMutation(
-    'post-footer-form',
-    (data: any) => postSaveCustomerBeforeExams(data),
+ const { mutate: postSaveCustomer } = useMutation(
+    "post-footer-form",
+    (data: any) => postAddNewCustomer(data),
     {
       onSuccess: (data) => {
         if (data.status) {
-          setDateBooking(undefined as any)
-          dispatch(getListBooking({} as any));
-          
-                              window.open(
-                                `/customer-info/id/${data.data}/history-interaction`,
-                                "_blank"
-                              );
-                    
-           postNotifyCustomer({employee_id: employeeId,customer_id:data.data})
+        
+          // setTableLoading(false);
+         
+
+         
+          toast.success(
+             "Thêm khách hàng thành công"
+          );
+          window.location.href =  `/customer-info/id/${data.data}/history-interaction`
+                              // window.open(
+                              //   `/customer-info/id/${data.data}/history-interaction`,
+                              //   "_blank"
+                              // );
+                           
+        //  postNotifyCustomer({employee_id: employeeId,customer_id:data.data})
+       
+          setIsOpenPopup(false);
         } else {
-          setDateBooking(undefined as any)
           toast.error(data.message);
+        
+          setIsOpenPopup(false);
         }
       },
       onError: (e) => {
-        toast.error('Đã có lỗi xảy ra ...!');
+        toast.error("Đã có lỗi xảy ra ...!");
       },
-    },
+    }
   );
   // React Query về In chỉ in 
   const { mutate: printAppointmentServicepoint } = useMutation(
@@ -912,7 +922,10 @@ const BookingSchedule: React.FC = () => {
             className="p-booking_schedule_header_public"
             handleFilter={() => { }}
             isHideFilter
+            isDial = {false}
             isClearFilter={storeLoadingBookingSchedule}
+            isHideCleanFilter
+            isHideEmergency
             handleCleanFilter={() => {
               setDataFilter({
                 ...dataFilter,
@@ -934,7 +947,7 @@ const BookingSchedule: React.FC = () => {
             handleClickFilterMobile={() => { }}
             isUseSearch
             tabLeft={(
-              <div className='p-booking_schedule_form_filter'>
+              <><div className='p-booking_schedule_form_filter'>
                 <div style={{marginBottom:"5px"}}>
                     <CDatePickers
                   handleOnChange={(date: any) => {
@@ -966,9 +979,7 @@ const BookingSchedule: React.FC = () => {
                     }}
                   />}
               </div>
-            )}
-            tabBottom={(
-              <div className='p-booking_schedule_form_filter_bottom'>
+                 <div className='p-booking_schedule_form_filter_bottom' style={{marginBottom:10}}>
                 <Dropdown
                   dropdownOption={[{ id: 99, label: 'Tất cả', value: null as any }, ...OptionTypeCustomerBooking]}
                   placeholder="Lọc theo trạng thái"
@@ -1009,7 +1020,7 @@ const BookingSchedule: React.FC = () => {
                     dispatch(getListBooking({ ...propsData, launchSourceTypeId: item?.value } as any));
                   }}
                 />
-                <div style={{marginTop:"6px"}}>
+                <div style={{marginTop:"0px"}}>
                   <Input
                   id='search-booking'
                   type="text"
@@ -1032,7 +1043,75 @@ const BookingSchedule: React.FC = () => {
                 />
                 </div>
               </div>
+              </>
+              
             )}
+            // tabBottom={(
+            //   <div className='p-booking_schedule_form_filter_bottom'>
+            //     <Dropdown
+            //       dropdownOption={[{ id: 99, label: 'Tất cả', value: null as any }, ...OptionTypeCustomerBooking]}
+            //       placeholder="Lọc theo trạng thái"
+            //       variant="simple"
+            //       values={OptionTypeCustomerBooking.find((e) => e.value === dataFilter?.altStatus)}
+            //       handleSelect={(e: any) => {
+            //         setDataFilter({ ...dataFilter, altStatus: e?.value })
+            //         dispatch(getListBooking({ ...propsData, altStatus: e?.value } as any));
+            //       }}
+            //     />
+            //     <Dropdown
+            //       dropdownOption={stateLaunchSourceGroups}
+            //       variant="simple"
+            //       placeholder='-- Chọn nhóm nguồn --'
+            //       values={stateLaunchSourceGroups.find((e) => e.value === dataFilter?.launchSourceGroupId)}
+            //       handleSelect={(item: any) => {
+            //         setDataFilter({ ...dataFilter, launchSourceGroupId: item?.value })
+            //         dispatch(getListBooking({ ...propsData, launchSourceGroupId: item?.value } as any));
+            //       }}
+            //     />
+            //     <Dropdown
+            //       dropdownOption={[{ id: 99, label: 'Tất cả', value: null as any }, ...listLaunchSources]}
+            //       variant="simple"
+            //       placeholder="Lọc theo nguồn"
+            //       values={listLaunchSources.find((e) => e.value === dataFilter?.launchSourceId)}
+            //       handleSelect={(e: any) => {
+            //         setDataFilter({ ...dataFilter, launchSourceId: e?.value })
+            //         dispatch(getListBooking({ ...propsData, launchSourceId: e?.value } as any));
+            //       }}
+            //     />
+            //     <Dropdown
+            //       dropdownOption={stateLaunchSourceTypes}
+            //       variant="simple"
+            //       placeholder='-- Chọn hình thức chuyển đổi --'
+            //       values={stateLaunchSourceTypes.find((e) => e.value === dataFilter?.launchSourceTypeId)}
+            //       handleSelect={(item: any) => {
+            //         setDataFilter({ ...dataFilter, launchSourceTypeId: item?.value })
+            //         dispatch(getListBooking({ ...propsData, launchSourceTypeId: item?.value } as any));
+            //       }}
+            //     />
+            //     <div style={{marginTop:"6px"}}>
+            //       <Input
+            //       id='search-booking'
+            //       type="text"
+            //       variant='simple'
+            //       value={dataFilter.keySearch}
+            //       placeholder='Nhập tên, địa chỉ, số điện thoại,.. để tìm kiếm khách hàng'
+            //       onChange={(event: any) => {
+            //         setDataFilter({
+            //           ...dataFilter,
+            //           keySearch: event?.target?.value
+            //         })
+            //       }}
+            //       handleEnter={() => {
+            //         dispatch(getListBooking({ ...propsData, keySearch: dataFilter.keySearch } as any));
+            //       }}
+            //       handleClickIcon={() => {
+            //         dispatch(getListBooking({ ...propsData, keySearch: dataFilter.keySearch } as any));
+            //       }}
+            //       iconName='search'
+            //     />
+            //     </div>
+            //   </div>
+            // )}
           />
           {/* End Header lọc lịch khám */}
 
@@ -1123,7 +1202,7 @@ const BookingSchedule: React.FC = () => {
 
       {/* Popup Add lịch khám bênh */}
       {isOpenPopup &&
-        <FormAddCustomer
+        <FormAddCustomerNew
           isOpenPopup={isOpenPopup}
           handleClosePopup={() => { setIsOpenPopup(false); setDateBooking(undefined as any) }}
           positionDrawer="left"

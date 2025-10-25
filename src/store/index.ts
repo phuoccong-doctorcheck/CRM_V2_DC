@@ -21,6 +21,7 @@ import infoCustomer from "./customerInfo";
 import listCustomerReducer from "./customerList"
 import CustomerWOMReducer from "./customerWOM_view"
 import dashboardReducer from "./dashboard";
+import dashboardSalesReducer from "./dashboardSales";
 import exampleReducer from "./example";
 import homeReducer from "./home";
 import KPIMonthViewReducer from "./kpi_month"
@@ -64,7 +65,8 @@ const rootReducer = combineReducers({
   listVisit: listVisitReducer,
   listCustomer: listCustomerReducer,
   listSurvey: listSurveyReducer,
-    callReExamming: callReExammingReducer
+  callReExamming: callReExammingReducer,
+  dashboardSales: dashboardSalesReducer,
 });
 
 // Apply Redux Persist to the root reducer

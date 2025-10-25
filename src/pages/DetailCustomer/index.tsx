@@ -1508,7 +1508,7 @@ const [dataPrint, setDataPrint] = useState<DataPrint | null>(null);
       ...formDataGuid,
   
     }));
-  }, []);
+  }, [infoCustomer]);
  useEffect(() => {
 
        dispatch(getListTask({ ...filterTask,task_type_id:"all",id: infoCustomer?.data?.customer?.customer_id } as unknown as any));

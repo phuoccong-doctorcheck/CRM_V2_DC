@@ -381,7 +381,7 @@ const CReport: React.FC = () => {
       title: <Typography content="Ngày đặt lịch" modifiers={['12x18', '500', 'center']} />,
       align: 'center',
       dataIndex: 'appointment_date',
-      width: 135,
+      width: 105,
       className: "ant-table-column_wrap",
       render: (record: any, data: any) => (
         <div className="ant-table-column_item" onClick={() => {
@@ -447,7 +447,7 @@ const CReport: React.FC = () => {
       ),
     },
     {
-      title: <Typography content="Năm sinh" modifiers={['12x18', '500', 'center']} />,
+      title: <Typography content="Năm sinh" modifiers={['12x18', '500', 'center']} styles={{marginLeft:5}}/>,
       align: 'center',
       dataIndex: 'year_of_birth',
       width: 120,
@@ -473,7 +473,7 @@ const CReport: React.FC = () => {
       ),
     },
       {
-      title: <Typography content="Loại khách hàng" modifiers={['12x18', '500', 'center']} />,
+      title: <Typography content="Loại khách hàng" modifiers={['12x18', '500', 'center']} styles={{marginLeft:8}}/>,
       align: 'center',
       dataIndex: 'f_type',
       width: 140,
@@ -519,7 +519,7 @@ const CReport: React.FC = () => {
       ),
     },
     {
-      title: <Typography content="Người chăm sóc" modifiers={['12x18', '500', 'center']} />,
+      title: <Typography content="Người chăm sóc" modifiers={['12x18', '500', 'center']} styles={{marginLeft:8}}/>,
       align: 'center',
       dataIndex: 'follower_employee_name',
       width: 140,
@@ -884,26 +884,26 @@ const CReport: React.FC = () => {
         </div>
       ),
     },
-     {
-      title: <Typography content="" modifiers={["12x18", "500", "center"]} />,
-      align: "center",
-      dataIndex: "",
-      className: "",
-       width: 80,
-       fixed: 'right',
-      render: (record: any, data: any) => (
-       <CTooltip placements={'top'} title={'Gửi tin nhắn'}>  <div className="ant-table-column_item" style={{ display: "flex", justifyContent: "center",alignItems:"center"}}>
-          <Icon iconName="sending" onClick={() => setSendSMS({
-            ...sendSMS, openModal: true, type: 'one',
-            listCS: [{
-              customer_ref: data.customer_id,
-              ago_month:data.appointment_date !== null ? getDayago(data.appointment_date) : 0,
-              // current_point: 200
-            }] as any
-          })} />
-        </div></CTooltip>
-      ),
-    },
+    //  {
+    //   title: <Typography content="" modifiers={["12x18", "500", "center"]} />,
+    //   align: "center",
+    //   dataIndex: "",
+    //   className: "",
+    //    width: 80,
+    //    fixed: 'right',
+    //   render: (record: any, data: any) => (
+    //    <CTooltip placements={'top'} title={'Gửi tin nhắn'}>  <div className="ant-table-column_item" style={{ display: "flex", justifyContent: "center",alignItems:"center"}}>
+    //       <Icon iconName="sending" onClick={() => setSendSMS({
+    //         ...sendSMS, openModal: true, type: 'one',
+    //         listCS: [{
+    //           customer_ref: data.customer_id,
+    //           ago_month:data.appointment_date !== null ? getDayago(data.appointment_date) : 0,
+             
+    //         }] as any
+    //       })} />
+    //     </div></CTooltip>
+    //   ),
+    // },
   ];
 
   const ColumnTableDetailService = [
@@ -982,7 +982,7 @@ const CReport: React.FC = () => {
         rowkey="master_id"
         size="small"
         pageSizes={100}
-        isHideRowSelect={false}
+        isHideRowSelect={true}
         isbordered={false}
         scroll={{
           x: 'max-content',

@@ -440,7 +440,7 @@ const [stateEmployeeId, setStateEmployeeId] = useState<any>(() => {
     to_date: moment().format('YYYY-MM-DDT23:59:59'),
     search_text: "",
     page_index: 1,
-    row_limit: 200
+    row_limit: 10000
   });
 
   const payloadBeforeExam = {
@@ -454,7 +454,7 @@ const [stateEmployeeId, setStateEmployeeId] = useState<any>(() => {
     to_date:filterData.to_date,
     search_text: "",
     page_index: 1,
-    row_limit: 200,
+    row_limit: 10000,
   };
   const bodyGetList = {
      owner_id: filterData.owner_id,
@@ -467,7 +467,7 @@ const [stateEmployeeId, setStateEmployeeId] = useState<any>(() => {
     to_date:filterData.to_date,
     search_text: filterData.search_text,
     page_index: 1,
-    row_limit: 200,
+    row_limit: 10000,
   };
   console.log(bodyGetList)
   const [filterColumn, setFilterColumn] = useState({
@@ -1302,7 +1302,18 @@ const [stateEmployeeId, setStateEmployeeId] = useState<any>(() => {
   );
   const [stateLeadId, setStateLeadId] = useState(0)
   const tableColumns = [
-    
+     {
+        title: (<Typography content="STT" modifiers={["12x18", "500", "center", "main"]} />),
+        align: "center",
+        dataIndex: "index",
+        width: 20,
+        className: "ant-table-column_wrap",
+        render: (record: any, data: any, index: any) => (
+          <div className="ant-table-column_item">
+            < Typography content={`${index + 1}`} modifiers={['13x18', '600', 'center']} />
+          </div>
+        ),
+      },
     {
       title: (<Typography content="Ngày tạo" modifiers={["14x20", "500", "center", "main"]} />),
       dataIndex: "create_date",
@@ -1319,7 +1330,7 @@ const [stateEmployeeId, setStateEmployeeId] = useState<any>(() => {
         >
           <Typography
          content={record ? moment(record).format('DD/MM/YYYY') : "---"}
-            modifiers={["14x20", "600", "center", "uppercase"]}
+            modifiers={["14x20", "500", "center", "uppercase"]}
           />
         
         </div>
@@ -1342,37 +1353,9 @@ const [stateEmployeeId, setStateEmployeeId] = useState<any>(() => {
         >
           <Typography
          content={record ? record : "---"}
-            modifiers={["14x20", "600", "justify", "uppercase"]}
+            modifiers={["14x20", "500", "justify", "uppercase"]}
           />
         
-        </div>
-      ),
-    },
-    
-    {
-      title: (
-        <Typography content="Số điện thoại" modifiers={["14x20", "500", "center", "main"]} />
-      ),
-      dataIndex: "customer_phone",
-      align: "center",
-      width:100,
-      className: "ant-table-column_wrap",
-      sorter: (a:any, b:any) => {
-        const hasPhoneA = a.lead_phone ? 1 : 0;
-        const hasPhoneB = b.lead_phone ? 1 : 0;
-        return hasPhoneB - hasPhoneA; // giá trị có sđt lên trước
-      },
-      render: (record: any, data: any) => (
-        <div
-          className="ant-table-column_item"
-          onClick={() => {
-             window.location.href =  `/customer-info/id/${data.customer_id}/history-interaction`;
-          }}
-        >
-          <Typography
-            content={record ? record.replace(/^.{4}/, "0") : "---"}
-            modifiers={["14x20", "400", "center"]}
-          />
         </div>
       ),
     },
@@ -1393,26 +1376,54 @@ const [stateEmployeeId, setStateEmployeeId] = useState<any>(() => {
           >
               <Typography
          content={record ? record : "---"}
-            modifiers={["14x20", "500", "justify", "uppercase"]}
+            modifiers={["14x20", "500", "justify", ]}
           />
           </div>
         </div>
       ),
     },
     {
+      title: (
+        <Typography content="Số điện thoại" modifiers={["14x20", "500", "center", "main"]} />
+      ),
+      dataIndex: "customer_phone",
+      align: "center",
+      width:100,
+      className: "ant-table-column_wrap",
+      // sorter: (a:any, b:any) => {
+      //   const hasPhoneA = a.lead_phone ? 1 : 0;
+      //   const hasPhoneB = b.lead_phone ? 1 : 0;
+      //   return hasPhoneB - hasPhoneA; // giá trị có sđt lên trước
+      // },
+      render: (record: any, data: any) => (
+        <div
+          className="ant-table-column_item"
+          onClick={() => {
+             window.location.href =  `/customer-info/id/${data.customer_id}/history-interaction`;
+          }}
+        >
+          <Typography
+            content={record ? record.replace(/^.{4}/, "0") : "---"}
+            modifiers={["14x20", "400", "center"]}
+          />
+        </div>
+      ),
+    },
+    
+    {
       title: (<Typography content="Loại khách hàng" modifiers={["14x20", "500", "center", "main"]} />),
       dataIndex: "f_type",
       align: "center",
       width: 70,
       className: "ant-table-column_wrap",
-       filters: fType.map((group) => {
-        const obj = { text: group.label, value: group.value }
-        return obj;
-      }),
-      onFilter: (value: any, record: any) => {
-        console.log(value,record.f_type)
-        return record.f_type === value
-      },
+      //  filters: fType.map((group) => {
+      //   const obj = { text: group.label, value: group.value }
+      //   return obj;
+      // }),
+      // onFilter: (value: any, record: any) => {
+      //   console.log(value,record.f_type)
+      //   return record.f_type === value
+      // },
       render: (record: any, data: any) => (
         <div className="ant-table-column_item"
           onClick={() => {
@@ -1423,7 +1434,7 @@ const [stateEmployeeId, setStateEmployeeId] = useState<any>(() => {
           >
               <Typography
          content={record ? record : "---"}
-            modifiers={["14x20", "500", "justify", "uppercase"]}
+            modifiers={["14x20", "500", "justify", ]}
           />
           </div>
         </div>
@@ -1448,7 +1459,7 @@ const [stateEmployeeId, setStateEmployeeId] = useState<any>(() => {
         }}>
             <Typography
          content={record ? record : "---"}
-            modifiers={["14x20", "500", "justify", "uppercase"]}
+           modifiers={["14x20", "500", "justify", ]}
           />
         </div>
       ),
@@ -1473,7 +1484,7 @@ const [stateEmployeeId, setStateEmployeeId] = useState<any>(() => {
         }}>
   <Typography
          content={record ? record : "---"}
-            modifiers={["14x20", "500", "justify", "uppercase"]}
+           modifiers={["14x20", "500", "justify", ]}
           />        </div>
       ),
     },
@@ -2268,7 +2279,7 @@ const [stateEmployeeId, setStateEmployeeId] = useState<any>(() => {
             }}
             totalItem={
                (
-                dataListCustomer?.data?.paging?.total_count) ||
+                dataListCustomer?.data?.items?.length) ||
                0
             }
            
@@ -2912,7 +2923,7 @@ const [stateEmployeeId, setStateEmployeeId] = useState<any>(() => {
         iconName="search"
                               /></div>
                              
-           <div className='p-after_examination_filter_bottom' style={{paddingBottom:4, marginLeft:6}}>
+           <div className='p-after_examination_filter_bottom' style={{paddingBottom:1, marginLeft:6}}>
                              
                               
                                <Dropdown

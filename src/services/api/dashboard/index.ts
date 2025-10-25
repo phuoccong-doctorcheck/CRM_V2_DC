@@ -87,21 +87,21 @@ export const getListSourceCustomer = async (data: string) => {
 };
 // API lấy thông tin khách hành theo sdt
 export const getCustomerWhenCallIn = async (data: string) => {
-  const response = await axiosInstance.post("/cs/call-incomming-customer", {
+  const response = await axiosInstance.post("/customer/call-incomming-customer", {
     phonenumber: data,
   });
   return response.data.data;
 };
 export const getAgentRecentlyHistoried = async (agent: string) => {
   const response = await axiosInstance.post(
-    "/cs/get-agent-recently-histories",
+    "/customer/get-agent-recently-histories",
     { phone_agent: agent }
   );
   return response.data.data;
 };
 
 export const postMergeustomer = async (body: any) => {
-  const response = await axiosInstance.post("/cs/merge-customer", body);
+  const response = await axiosInstance.post("/customer/merge-customer", body);
   return response.data;
 };
 // Lấy các gói dịch vụ như:

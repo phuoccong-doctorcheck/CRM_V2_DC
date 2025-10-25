@@ -129,7 +129,7 @@ export const postAssignedToID = async (id: string) => {
     lead_id: id,
     follow_staff_id: employeeId || Cookies.get("employee_id"),
   };
-  const response = await axiosInstance.post("/cs/save-lead-assigned", body);
+  const response = await axiosInstance.post("/customer/save-lead-assigned", body);
   return response.data;
 };
 export const postNoteByCID = async (data: any) => {
@@ -182,7 +182,7 @@ export const postRemoveObjectTag = async (data: any) => {
 
 export const postChangeProcessId = async (body: any) => {
   const response = await axiosInstance.post(
-    "/cs/change-process-id-before",
+    "/customer/change-process-id-before",
     body
   );
   return response.data;

@@ -1,5 +1,15 @@
 /* stylelint-disable scss/selector-no-redundant-nesting-selector */
 /* stylelint-disable max-nesting-depth */
+.ant-table-filter-column {
+    padding-right: 3px !important;
+    padding-left: 3px !important;
+}
+
+.ant-table-column-sorters {
+    padding-right: 3px !important;
+    padding-left: 3px !important;
+}
+
 .p-appointment_view {
     &_column_care {
         padding: 0 !important;

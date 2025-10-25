@@ -68,7 +68,7 @@ export const getSurveyUrl = async (body: any) => {
 };
 
 export const postCallOutCustomer = async (body: any) => {
-  const response = await axiosInstance.post("/cs/call-out-customer", body);
+  const response = await axiosInstance.post("/customer/call-out-customer", body);
   return response.data;
 };
 
@@ -300,7 +300,7 @@ export const getExternalFieById = async (data: any) => {
 /* External File */
 
 export const getOTPCustomerById = async (data: string) => {
-  const response = await axiosInstance.post(`/cs/get-otp-customer`, {
+  const response = await axiosInstance.post(`/customer/get-otp-customer`, {
     customer_id: data,
   });
   return response.data;
@@ -324,7 +324,7 @@ export const postCheckInsurance = async (body: any) => {
 // API xem danh sách bệnh viện cho sử dụng BHYT
 export const getInsuranceHospitals = async (body: any) => {
   const response = await axiosInstance.post(
-    `/cs/get-insurance-hospitals`,
+    `/customer/get-insurance-hospitals`,
     body
   );
   return response.data;

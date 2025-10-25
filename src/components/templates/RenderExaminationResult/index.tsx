@@ -621,7 +621,7 @@ const getNameFileFromURL = (url: string) => {
               </div>
             )
         );
-  {/*    case 'VACCINE':
+   case 'VACCINE':
         return (
           error?.trim() ? (
             <div className="t-examination_result_error">
@@ -632,17 +632,17 @@ const getNameFileFromURL = (url: string) => {
               <div className="t-examination_result_public">
                 <div className={mapModifiers('t-examination_result_xq', _.isEmpty(data?.damnifics?.image_path) && 'none_img')}>
                   <div style={{ display: 'flex', alignItems: 'flex-start', marginBottom: 8 }} className="t-examination_result_xq_wrap" >
-                    <p style={{ width: '70%' }}>
+                    <p style={{ width: '70%', display:"flex", flexDirection:"row", gap:8 }}>
                      
-                      <Typography content="Kết luận:" type='span' modifiers={['16x28', '700', 'uppercase']} />
-                      <RichTextEditor typeText={'notHeadernotBordernotBG'} isDisabled data={data?.check_conclude || ''} />
+                      <Typography content="Tình trạng sau tiêm:"  modifiers={['13x18', '500', 'uppercase']} />
+                      <Typography content={data?.check_conclude}  modifiers={['13x18', '600', 'uppercase']} />
                     </p>
                    
                   </div>
                   <div className="t-examination_result_gpb_header" style={{gridTemplateColumns:"repeat(4,1fr)"}}>
           <div className="t-examination_result_gpb_header_item">
             <span>Mạch:</span>
-            <Typography content={data?.heart_rate ? data?.heart_rate : "--"} />
+            <Typography content={data?.heart_rate ? data?.heart_rate  + "(lần/phút)": "--"} />
           </div>
           <div className="t-examination_result_gpb_header_item">
             <span>Huyết áp:</span>
@@ -676,7 +676,7 @@ Xử trí:</span>
                 </div>
               </div>
             )
-        ); */}
+        ); 
         case 'KHAMPK':
         return (
           error?.trim() ? (
@@ -1539,7 +1539,7 @@ Có đang áp dụng BPTT:</span>
           
         </div>
       )}
-       {/*   {['VACCINE'].includes(type as any) && (
+        {['VACCINE'].includes(type as any) && (
         <div className="t-examination_result_gpb_header" style={{gridTemplateColumns:"repeat(3,1fr)", paddingLeft:"8px"}}>
           <div className="t-examination_result_gpb_header_item">
             <span>Ngày giờ sàng lọc:</span>
@@ -1593,7 +1593,7 @@ Có đang áp dụng BPTT:</span>
             <Typography content={data?.route  ?data?.route  : '--'} />
           </div>
         </div>
-      )} */}
+      )} 
       {type === 'GPB' && (
         <div className="t-examination_result_gpb_header">
           <div className="t-examination_result_gpb_header_item">
@@ -1622,7 +1622,7 @@ Có đang áp dụng BPTT:</span>
           </div>
         </div>
       )}
-      {type !== 'EMR' && type !== 'XNHT' && type !== 'XN' && type !== 'XNSHPT' && type !== 'overview' &&  type !== 'KHAMPK' && type !== 'XNHPV' && type !== 'XNPAP' && type !== 'SLLX' && (
+      {type !== 'EMR' && type !== 'XNHT' && type !== 'XN' && type !== 'XNSHPT' && type !== 'overview' &&  type !== 'KHAMPK' && type !== 'XNHPV' && type !== 'XNPAP' && type !== 'SLLX'&& type !== 'VACCINE' && (
         <div className="t-examination_result_header_diagnose_note">
           <span>
             Chẩn đoán:
@@ -1845,19 +1845,24 @@ Genotype HPV 18/45
             <p style={{ marginRight: "5px", fontSize: "14px", color: "#d32f2f", }}>
               📄
             </p>
-            <a
-                        href={ data?.hpv_file}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
+         
+                        <p>
+              
+                <span
+                 style={{
                 color: "#007bff",
                 textDecoration: "none",
                 fontSize: "14px",
-                fontWeight: "bold",
+                            fontWeight: "bold",
+                cursor: 'pointer',
               }}
-            >
-             File kết quả (gốc)
-            </a>
+                  onClick={() => {
+                    // window.open(data?.molecule?.result_file);
+                    window.open(new URL(encodeURI(data?.hpv_file
+), 'https://imaging02.doctorcheck.online:9988').toString())
+                  }}
+                >File kết quả (gốc)</span>
+              </p>
           </div>
        
       </div>

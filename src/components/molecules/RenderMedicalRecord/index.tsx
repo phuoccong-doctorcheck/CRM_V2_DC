@@ -221,7 +221,7 @@ const RenderMedicalRecord: React.FC<RenderMedicalRecordProps> = ({ data }) => {
           <div className="m-medical_record_chapter_content_ix_info">
             <div className="m-medical_record_chapter_content_ix_info_item">
               <span>- Ngày hẹn khám lại: </span>
-              <span>{moment(data?.re_exams_card?.appointment_date).format('HH:mm - DD-MM-YYYY')} </span>
+              <span>{data?.re_exams_card?.appointment_date && moment(data?.re_exams_card?.appointment_date).format('HH:mm - DD-MM-YYYY')} </span>
             </div>
             <div className="m-medical_record_chapter_content_ix_info_item">
               <span>- Nội dung hẹn khám lại:</span>

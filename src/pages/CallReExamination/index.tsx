@@ -32,6 +32,7 @@ import PublicHeaderStatistic from "components/templates/PublicHeaderStatistic";
 import PublicLayout from "components/templates/PublicLayout";
 import { useSip } from "components/templates/SipProvider";
 import Cookies from "js-cookie";
+import _ from "lodash";
 import moment from "moment";
 import React, { useEffect, useMemo, useState } from "react";
 import { useMutation } from "react-query";
@@ -140,6 +141,27 @@ const listF = [
     value: "BSCD",
   },
 ]
+
+const listTypeDay = [
+  {
+    id: 1,
+    label: "Theo ngày BS đề xuất",
+    value: "bs",
+  },
+   {
+    id: 2,
+    label: "Theo ngày liên hệ cuối",
+    value: "cs",
+  },
+]
+const toTitleCase = (input: string): string => {
+  return input
+    .toLowerCase()
+    .split(" ")
+    .filter(word => word.trim() !== "")
+    .map(word => word[0].toUpperCase() + word.slice(1))
+    .join(" ");
+};
 const CallReExamination: React.FC = () => {
   const dispatch = useAppDispatch();
   /*  */
@@ -182,6 +204,7 @@ const CallReExamination: React.FC = () => {
     setListCallReExamming(dataListCallReExamming.data.data);
   }, [dataListCallReExamming]);
   /*  */
+  
   const storageLaunchSourcesGroup = localStorage.getItem("launchSourcesGroups");
   const storageLaunchSources = localStorage.getItem("launchSources");
   const storageLaunchSourcesType = localStorage.getItem("launchSourcesTypes");
@@ -242,6 +265,7 @@ const CallReExamination: React.FC = () => {
   console.log(dmtimedoctorschedules)
   const [selectedStatus, setSelectedStatus] = useState<string>("new");
   const [selectedDays, setSelectedDays] = useState<number>(3);
+    const [selectedDays2, setSelectedDays2] = useState<number>(2);
   /*  */
   const [openNote, setOpenNote] = useState(false);
   const [saveItem, setSaveItem] = useState<ItemListAfterExams>();
@@ -265,8 +289,10 @@ const CallReExamination: React.FC = () => {
     year: undefined as unknown as DropdownData,
     source: undefined as unknown as DropdownData,
     sourceGroup: undefined as unknown as DropdownData,
-    stateF:  undefined as unknown as DropdownData,
+    stateF: undefined as unknown as DropdownData,
+      typeDate:  undefined as unknown as DropdownData,
   });
+  console.log("dataFilter",dataFilter)
   const listNotesCustomer = useAppSelector(
     (state) => state.infosCustomer.noteListCR
   );
@@ -281,10 +307,11 @@ const CallReExamination: React.FC = () => {
     c_schedule_type_id: dataFilter.c_schedule_type_id || "all",
     from_date: dataFilter.from_date,
     to_date: dataFilter.to_date,
-    year: dataFilter.year || "all",
+    // year: dataFilter.year || "all",
     launch_source_id: dataFilter?.source || 0,
     launch_source_group_id: dataFilter?.sourceGroup || 0,
-     f_type: dataFilter?.stateF || "all",
+    f_type: dataFilter?.stateF || "all",
+     date_type: dataFilter?.typeDate?.value || "bs",
   };
   const [assigntTasks, setAssigntTasks] = useState({
     openModal: false,
@@ -383,8 +410,8 @@ const CallReExamination: React.FC = () => {
   useEffect(() => {
         setDataFilter({
                       ...dataFilter,
-                      from_date: null,
-                      to_date: null,
+                      from_date:  moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss"),
+                      to_date:  moment().add(1, "day").endOf("day").format("YYYY-MM-DDTHH:mm:ss"),
                     });
     dispatch(
       getListCallReExammingMaster({
@@ -397,7 +424,8 @@ from_date: moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss"), 
         keyWord: dataFilter.keyWord,
         f_type: "all",
         launch_source_group_id: 0,
-        launch_source_id:0
+        launch_source_id: 0,
+        date_type:"bs",
       } as any)
     );
     document.title = "Nhắc tầm soát lại - nội soi - tầm soát lại | CRM";
@@ -868,7 +896,7 @@ from_date: moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss"), 
         className: "ant-table-column_wrap",
         render: (record: any, data: any, index: any) => (
           <div className="ant-table-column_item">
-            < Typography content={`${index + 1}`} modifiers={['13x18', '600', 'center']} />
+            < Typography content={`${index + 1}`} modifiers={['13x18', '500', 'center',"main"]} />
           </div>
         ),
       },
@@ -916,18 +944,19 @@ from_date: moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss"), 
           }}
         >
           <Typography
-            content={record}
+            content={toTitleCase(record)}
             modifiers={[
               "13x18",
               "500",
               "center",
-              `${data.is_high_light === true ? "blueNavy" : "blueNavy"}`,
+              `${data.is_high_light === true ? "main" : "main"}`,
             ]}
             styles={{
               display: "block", // Đảm bảo hiển thị như block
               wordWrap: "break-word", // Xuống dòng khi quá dài
               whiteSpace: "normal", // Nội dung nhiều dòng
               textAlign: "left",
+              textTransform: "capitalize",
             }}
           />
         </div>
@@ -1447,16 +1476,19 @@ from_date: moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss"), 
       render: (record: any, data: any) => (
         <div
           className="ant-table-column_item"
-          onClick={() => {
-              setDataDelay({
-                ...dataDelay,
-                openDelay: true,
-                id: data.c_schedule_id,
-                c_schedule_datetime: moment(data.c_schedule_datetime).format(
-                  "YYYY-MM-DD 00:00:00"
-                ),
-              });
-            }}
+        onClick={() => {
+  if (position === "BOD") {
+    setDataDelay({
+      ...dataDelay,
+      openDelay: true,
+      id: data.c_schedule_id,
+      c_schedule_datetime: moment(data.c_schedule_datetime).format(
+        "YYYY-MM-DD 00:00:00"
+      ),
+    });
+  }
+}}
+
         >
           <Typography
             content={moment(record).format("DD/MM/YYYY")}
@@ -1470,43 +1502,77 @@ from_date: moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss"), 
         </div>
       ),
     },
-    {
+     {
       title: (
         <Typography
-          content="Ngày chăm sóc"
+          content="Liên hệ cuối"
           modifiers={["12x18", "500", "center", "uppercase"]}
         />
       ),
-      dataIndex: "remind_datetime",
+      dataIndex: "cs_last_communicate",
       align: "center",
       width: 100,
       className: "ant-table-column_wrap",
       render: (record: any, data: any) => (
         <div
           className="ant-table-column_item"
-          onClick={() => {
-              setDataDelay({
-                ...dataDelay,
-                openDelay: true,
-                id: data.c_schedule_id,
-                c_schedule_datetime: moment(data.c_schedule_datetime).format(
-                  "YYYY-MM-DD 00:00:00"
-                ),
-              });
-            }}
+       
+
         >
           <Typography
-            content={moment(record).format("DD/MM/YYYY")}
+            content={record ? moment(record).format("DD/MM/YYYY hh:mm") : "Chưa thực hiện"}
             modifiers={[
               "13x18",
               "500",
               "center",
-              `${data.is_high_light === true ? "cg-red" : "main"}`,
+             record ? "green" : "cg-red",
             ]}
           />
+           {!_.isNull(data?.cs_employee_name) && (
+                        <p style={{ fontSize: 12, color: "#04566e" }}>
+                          Bởi:&nbsp;{data?.cs_employee_name}
+                        </p>
+                      )}
         </div>
       ),
     },
+    // {
+    //   title: (
+    //     <Typography
+    //       content="Ngày chăm sóc"
+    //       modifiers={["12x18", "500", "center", "uppercase"]}
+    //     />
+    //   ),
+    //   dataIndex: "remind_datetime",
+    //   align: "center",
+    //   width: 100,
+    //   className: "ant-table-column_wrap",
+    //   render: (record: any, data: any) => (
+    //     <div
+    //       className="ant-table-column_item"
+    //       onClick={() => {
+    //           setDataDelay({
+    //             ...dataDelay,
+    //             openDelay: true,
+    //             id: data.c_schedule_id,
+    //             c_schedule_datetime: moment(data.c_schedule_datetime).format(
+    //               "YYYY-MM-DD 00:00:00"
+    //             ),
+    //           });
+    //         }}
+    //     >
+    //       <Typography
+    //         content={moment(record).format("DD/MM/YYYY")}
+    //         modifiers={[
+    //           "13x18",
+    //           "500",
+    //           "center",
+    //           `${data.is_high_light === true ? "cg-red" : "main"}`,
+    //         ]}
+    //       />
+    //     </div>
+    //   ),
+    // },
     //  {
     //   title: (
     //     <Typography
@@ -1614,7 +1680,7 @@ from_date: moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss"), 
           }}
         >
           <Typography
-            content={record}
+            content={toTitleCase(record)}
             modifiers={["13x18", "500", "center", "main"]}
             styles={{
               display: "block", // Đảm bảo hiển thị như block
@@ -1647,7 +1713,7 @@ from_date: moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss"), 
         />
       ),
       dataIndex: "c_schedule_note",
-      width: 370,
+      width: 350,
       className: "ant-table-column_wrap",
       render: (record: any, data: any) => (
         <div
@@ -2558,7 +2624,8 @@ const statisticHeader = useMemo(() => {
                   placeholder="Phân loại"
                 />
               </div>
- <div style={{ width: "80px" }}>
+
+               <div style={{ width: "80px" }}>
                 <Dropdown4
                   dropdownOption={dmYearDoctorSchedules}
                   values={dataFilter.year}
@@ -2588,7 +2655,78 @@ const statisticHeader = useMemo(() => {
                   placeholder="Năm"
                 />
               </div>
-              <Radio.Group
+               <div style={{ width: "180px" }}>
+                <Dropdown4
+                  dropdownOption={listTypeDay}
+                  values={dataFilter.typeDate}
+                  defaultValue={listTypeDay[0]}
+                  handleSelect={(item: any) => {
+                    setDataFilter({ ...dataFilter, typeDate: item });
+                    setListCallReExamming([]);
+                    if (item.value === "bs") {
+                      
+                      setSelectedDays(3);
+                        setDataFilter({
+                          ...dataFilter,
+                             typeDate: item,
+                      from_date:  moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss"),
+                      to_date:  moment().add(1, "day").endOf("day").format("YYYY-MM-DDTHH:mm:ss"),
+                    });
+    dispatch(
+      getListCallReExammingMaster({
+        c_schedule_type_id: dataFilter?.c_schedule_type_id || "all",
+from_date: moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss"), // 00:00:00
+    to_date: moment().add(1, "day").endOf("day").format("YYYY-MM-DDTHH:mm:ss"),     // 23:59:59
+        status: dataFilter?.status || "new",
+        page_number: 1,
+        page_size: 10000,
+        keyWord: dataFilter.keyWord,
+        f_type: "all",
+        launch_source_group_id: 0,
+        launch_source_id: 0,
+        date_type:"bs",
+      } as any))
+                      
+                    }
+                    else {
+                      setSelectedDays2(2);
+                        setDataFilter({
+                          ...dataFilter,
+                        typeDate: item,
+                      from_date:  moment().startOf("day").format("YYYY-MM-DDTHH:mm:ss"),
+                      to_date:  moment().endOf("day").format("YYYY-MM-DDTHH:mm:ss"),
+                    });
+                        dispatch(
+      getListCallReExammingMaster({
+        c_schedule_type_id: dataFilter?.c_schedule_type_id || "all",
+from_date: moment().startOf("day").format("YYYY-MM-DDTHH:mm:ss"), // 00:00:00
+    to_date: moment().endOf("day").format("YYYY-MM-DDTHH:mm:ss"),     // 23:59:59
+        status: dataFilter?.status || "new",
+        page_number: 1,
+        page_size: 10000,
+        keyWord: dataFilter.keyWord,
+        f_type: "all",
+        launch_source_group_id: 0,
+        launch_source_id: 0,
+        date_type:"cs",
+      } as any))
+}
+                  }}
+
+                  variant="simple"
+                  placeholder=""
+                />
+              </div>
+              {
+                 propsData?.date_type === "bs" && <div style={{fontSize:"12px", marginTop:"10px"}}>
+                Trước:
+              </div> 
+              }
+             
+              {
+              propsData?.date_type === "bs" ? 
+                  <Radio.Group
+                    
                 onChange={(e) => {
                   const selectedValue = e.target.value;
                   setSelectedDays(selectedValue);
@@ -2764,7 +2902,7 @@ const statisticHeader = useMemo(() => {
                   display: "flex",
                   justifyContent: "start",
                   marginTop: "10px",
-                  gap: "5px",
+                  gap: "0px",
                 }}
               >
                {[
@@ -2774,21 +2912,21 @@ const statisticHeader = useMemo(() => {
   ),
   // Thêm 4 option mới
   {
-    label: 'Trước 1 ngày',
+    label: '1 ngày',
     value: 3,
   },
   {
-    label: 'Trước 1 tuần',
+    label: '1 tuần',
     value: 4,
   },
   {
-    label: 'Trước 2 tuần',
+    label: '2 tuần',
     value: 5,
   },
-  {
-    label: 'Trước 1 tháng',
-    value: 6,
-  },
+  // {
+  //   label: '1 tháng',
+  //   value: 6,
+  // },
   ...dmtimedoctorschedules.filter((option: any) => option.value === -2),
 
 ]
@@ -2798,9 +2936,138 @@ const statisticHeader = useMemo(() => {
                   </Radio>
               ))}
 
+                  </Radio.Group>
+                  :
+                   <Radio.Group
+                onChange={(e) => {
+                  const selectedValue = e.target.value;
+                  setSelectedDays2(selectedValue);
+
+                  const today = moment().format("YYYY-MM-DD");
+                  const yesterday = moment()
+                    .subtract(1, "days")
+                    .format("YYYY-MM-DD");
+                  // const tomorrow = moment().add(1, "days").format("YYYY-MM-DD");
+                  // const next7To = moment().add(7, "days").format("YYYY-MM-DD");
+                  // const next14To = moment().add(14, "days").format("YYYY-MM-DD");
+                  // const next1MTo = moment().add(14, "days").format("YYYY-MM-DD");
+                  // if (selectedValue === 9999) {
+                  //   // Tất cả
+                  //   setListCallReExamming([]);
+                  //  setDataFilter({
+                  //     ...dataFilter,
+                  //     from_date: null,
+                  //     to_date: null,
+                  //   });
+                  //   dispatch(
+                  //     getListCallReExammingMaster({
+                  //       ...propsData,
+                  //       from_date: null,
+                  //       to_date: null,
+                  //         from_date1:  moment().format("YYYY-MM-DD 00:00:00"),
+                  //     to_date1:  moment().format("YYYY-MM-DD 00:00:00"),
+                  //     } as any)
+                  //   );
+                  // } else if (selectedValue === -9999) {
+                  //   // Quá khứ
+                  //   const to = `${yesterday} 23:59:59`;
+                  //   setListCallReExamming([]);
+                  //  setDataFilter({
+                  //     ...dataFilter,
+                  //     from_date: null,
+                  //    to_date: to,
+                  //     from_date1: to,
+                  //     to_date1: to,
+                  //   });
+                  //   dispatch(
+                  //     getListCallReExammingMaster({
+                  //       ...propsData,
+                  //       from_date: null,
+                  //       to_date: to,
+                  //     } as any)
+                  //   );
+                  // } else
+                    if (selectedValue === 1) {
+                    // Hôm qua
+                    const from = `${yesterday} 00:00:00`;
+                    const to = `${yesterday} 23:59:59`;
+                    setListCallReExamming([]);
+                    setDataFilter({
+                      ...dataFilter,
+                      from_date: from,
+                      to_date: to,
+                      from_date1: from,
+                      to_date1: to,
+                    });
+                    dispatch(
+                      getListCallReExammingMaster({
+                        ...propsData,
+                        from_date: from,
+                        to_date: to,
+                      } as any)
+                    );
+                  } else if (selectedValue === 2) {
+                    // Hôm nay
+                    const from = `${today} 00:00:00`;
+                    const to = `${today} 23:59:59`;
+                    setListCallReExamming([]);
+                    setDataFilter({
+                      ...dataFilter,
+                      from_date: from,
+                      to_date: to,
+                      from_date1: from,
+                      to_date1: to,
+                    });
+                    dispatch(
+                      getListCallReExammingMaster({
+                        ...propsData,
+                        from_date: from,
+                        to_date: to,
+                      } as any)
+                    );
+                  }                   else if (selectedValue === 0) {
+                    // Tùy chọn
+                    setDataFilter({ ...dataFilter });
+                  }
+                }}
+                value={selectedDays2}
+                style={{
+                  display: "flex",
+                  justifyContent: "start",
+                  marginTop: "10px",
+                  gap: "5px",
+                }}
+              >
+               {[
+
+  // Thêm 4 option mới
+  {
+    label: 'Hôm qua',
+    value: 1,
+  },
+  {
+    label: 'Hôm nay',
+    value: 2,
+  },
+  {
+    label: 'Tùy chọn',
+    value: 0,
+  },
+
+
+
+]
+                .map(option => (
+                  <Radio key={option.value} value={option.value} style={{fontSize:12}}>
+                    {option.label}
+                  </Radio>
+              ))}
+
               </Radio.Group>
+              }
+             
               {
-                selectedDays === -2 && (<div style={{ marginTop: "10px" }}>
+               ( selectedDays === -2 && propsData?.date_type === "bs" ) && (<div style={{ marginTop: "10px" }}>
                 <RangeDate
                   variant="simple"
                   value={{
@@ -2863,7 +3130,70 @@ const statisticHeader = useMemo(() => {
                 />
               </div>)
               }
-              
+               {
+               ( selectedDays2 === 0 && dataFilter?.typeDate.value === "cs" ) && (<div style={{ marginTop: "10px" }}>
+                <RangeDate
+                  variant="simple"
+                  value={{
+                    from: dataFilter?.from_date1,
+                    to: dataFilter?.to_date1,
+                  }}
+                  defaultValue={{
+                       from: dataFilter?.from_date1,
+                    to: dataFilter?.to_date1,
+                  }}
+                  handleOnChange={(from: any, to: any) => {
+                    const yesterday = moment()
+                      .subtract(1, "days")
+                      .format("YYYY-MM-DD");
+                    const today = moment().format("YYYY-MM-DD");
+                    const tomorrow = moment()
+                      .add(1, "days")
+                      .format("YYYY-MM-DD");
+                    const fromDate = moment(from).format("YYYY-MM-DD 00:00:00");
+                    const toDate = moment(to).format("YYYY-MM-DD 23:59:59");
+
+                    // Nếu from và to không khớp hôm qua, hôm nay, mai => set về tùy chọn
+                    if (
+                      !(fromDate === yesterday && toDate === yesterday) &&
+                      !(fromDate === today && toDate === today) &&
+                      !(fromDate === tomorrow && toDate === tomorrow)
+                    ) {
+                      console.log(234)
+                      setSelectedDays2(0); // chuyển về "Tùy chọn"
+                      setListCallReExamming([]);
+                      
+                      dispatch(
+                        getListCallReExammingMaster({
+                          ...propsData,
+                          from_date: fromDate,
+                          to_date: toDate,
+                        } as any)
+                      );
+                    }
+
+                    setDataFilter({
+                      ...dataFilter,
+                      from_date: fromDate,
+                      to_date: toDate,
+                      from_date1: from,
+                      to_date1: to,
+                    });
+
+                    if (selectedDays === -2) {
+                      setListCallReExamming([]);
+                      dispatch(
+                        getListCallReExammingMaster({
+                          ...propsData,
+                          from_date: fromDate,
+                          to_date: toDate,
+                        } as any)
+                      );
+                    }
+                  }}
+                />
+              </div>)
+              }
             </div>
           }
         />

@@ -49,7 +49,21 @@ import { getInfosCustomerById } from "store/customerInfo";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import mapModifiers, { downloadBlobPDF, previewBlobPDFOpenLink } from "utils/functions";
 import { stateAppointView } from "utils/staticState";
-
+const extractBracketValue = (input: string): string | null => {
+  const match = input.match(/\[(.*?)\]/);
+  return match ? match[1] : null;
+};
+const extractName = (input: string): string => {
+  return input.replace(/\[.*?\]\s*/, "").trim();
+};
+const toTitleCase = (input: string): string => {
+  return input
+    .toLowerCase()
+    .split(" ")
+    .filter(word => word.trim() !== "")
+    .map(word => word[0].toUpperCase() + word.slice(1))
+    .join(" ");
+};
 const AppointmentView: React.FC = () => {
   const dispatch = useAppDispatch();
   const { makeCall } = useSip();
@@ -129,6 +143,7 @@ const [dataFilter, setDataFilter] = useState({
     partner: [],
     package: [],
     typeCustomer: [],
+    next_appointment_id:[],
   });
 
   const [dataStatistic, setDataStatistic] = useState({
@@ -149,7 +164,7 @@ const [dataFilter, setDataFilter] = useState({
 
   useEffect(() => {
     dispatch(getListAppointmentMaster(propsData as any));
-    dispatch(getStatisticAppointment(initial as any));
+ 
     document.title = "Theo dõi lịch hẹn | CRM";
   }, []);
   
@@ -270,7 +285,7 @@ const [dataFilter, setDataFilter] = useState({
             ...propsData,
           } as any)
         );
-        dispatch(getStatisticAppointment(initial as any));
+        // dispatch(getStatisticAppointment(initial as any));
       },
       onError: (error) => {
         console.log("🚀: error --> getCustomerByCustomerId:", error);
@@ -355,7 +370,7 @@ const [dataFilter, setDataFilter] = useState({
         limits: size || 30,
       } as any)
     );
-    dispatch(getStatisticAppointment(initial as any));
+    // dispatch(getStatisticAppointment(initial as any));
   };
   const descriptionGrid = [
     { id: 0, color: '#fbf7aadb', title: 'Chưa đến', type: 'new' },
@@ -372,17 +387,17 @@ const [dataFilter, setDataFilter] = useState({
       className: "ant-table-column_wrap",
       render: (record: any, data: any, index: any) => (
         <div className="ant-table-column_item">
-          <Typography content={`${index + 1}`} modifiers={["14x20", "600", "center"]} />
+          <Typography content={`${index + 1}`} modifiers={["14x20", "500", "center"]} />
         </div>
       ),
     },
     {
-      title: (<Typography content="Ngày đặt lịch" modifiers={["12x18", "500", "center"]} />),
+      title: (<Typography content="Lịch hẹn đến" modifiers={["12x18", "500", "center"]} />),
       align: "center",
       dataIndex: "appointment_date",
-      width: 160,
-      showSorterTooltip: false,
-      sorter: (a: any, b: any) => new Date(a?.appointment_date).valueOf() - new Date(b?.appointment_date).valueOf(),
+      width: 100,
+      // showSorterTooltip: false,
+      // sorter: (a: any, b: any) => new Date(a?.appointment_date).valueOf() - new Date(b?.appointment_date).valueOf(),
       className: "ant-table-column_wrap",
       render: (record: any, data: any) => (
         <div className="ant-table-column_item" onClick={() => {
@@ -398,7 +413,7 @@ const [dataFilter, setDataFilter] = useState({
             toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
           }
         }}>
-          <Typography content={record ? moment(record).format("YYYY-MM-DD HH:mm") : ""} modifiers={["14x20", "jetSub", "600", "center"]} />
+          <Typography content={record ? moment(record).format("YYYY-MM-DD HH:mm") : ""} modifiers={["13x18", "jetSub", "500", "center"]} />
         </div>
       ),
     },
@@ -406,9 +421,9 @@ const [dataFilter, setDataFilter] = useState({
       title: (<Typography content="Ngày checkin" modifiers={["12x18", "500", "center"]} />),
       align: "center",
       dataIndex: "register_date",
-      width: 160,
-      showSorterTooltip: false,
-      sorter: (a: any, b: any) => new Date(a?.register_date).valueOf() - new Date(b?.register_date).valueOf(),
+      width: 110,
+      // showSorterTooltip: false,
+      // sorter: (a: any, b: any) => new Date(a?.register_date).valueOf() - new Date(b?.register_date).valueOf(),
       className: "ant-table-column_wrap",
       render: (record: any, data: any) => (
         <div className="ant-table-column_item" onClick={() => {
@@ -424,7 +439,7 @@ const [dataFilter, setDataFilter] = useState({
             toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
           }
         }}>
-          <Typography content={record ? moment(record).format("YYYY-MM-DD HH:mm") : ""} modifiers={["14x20", "jetSub", "600", "center"]} />
+          <Typography content={record ? moment(record).format("YYYY-MM-DD HH:mm") : ""} modifiers={["13x18", "jetSub", "500", "center"]} />
         </div>
       ),
     },
@@ -432,10 +447,10 @@ const [dataFilter, setDataFilter] = useState({
     {
       title: (<Typography content="Họ và tên" modifiers={["12x18", "500", "center"]} styles={{textAlign:"left", marginLeft:"18px"}}/>),
       align: "center",
-      sorter: (a: any, b: any) => (a?.customer_fullname || "").localeCompare(b?.customer_fullname || ""),
-      showSorterTooltip: false,
+      // sorter: (a: any, b: any) => (a?.customer_fullname || "").localeCompare(b?.customer_fullname || ""),
+      // showSorterTooltip: false,
       dataIndex: "customer_fullname",
-      width: 220,
+      width: 200,
       className: "ant-table-column_wrap-column",
       render: (record: any, data: any) => {
         const { year_of_birth, gender_name } = data;
@@ -456,93 +471,96 @@ const [dataFilter, setDataFilter] = useState({
           style={{marginLeft:"12px"}}
           >
             <Typography
-              content={record}
-              modifiers={["14x20", "main", "600", "justify"]}
-              styles={{marginLeft:"10px"}}
+content={
+  toTitleCase(record) +
+  " (" +
+  data?.year_of_birth +
+  (toTitleCase(data?.gender_name)  ? ", " + toTitleCase(data?.gender_name) : "") +
+  ")"
+}
+              modifiers={["13x18", "jetSub", "500", "justify"]}
+              
+              styles={{marginLeft:"10px",textTransform:"capitalize"}}
             />
-            {/* <div>
-              <span style={{ color: "#28a745" }}>{year_of_birth}</span>
-              &nbsp;-&nbsp;
-              <span style={{ color: "#f00" }}>{gender_name}</span>
-            </div> */}
+           
           </div>
         );
       },
     },
-    {
-      title: (<Typography content="Năm sinh" modifiers={["12x18", "500", "center"]} />),
-      align: "center",
-      sorter: (a: any, b: any) => (a?.customer_fullname || "").localeCompare(b?.customer_fullname || ""),
-      showSorterTooltip: false,
-      dataIndex: "customer_fullname",
-      width: 120,
-      className: "ant-table-column_wrap-column",
-      render: (record: any, data: any) => {
-        const { year_of_birth, gender_name } = data;
-        return (
-          <div className="ant-table-column_item" onClick={() => {
-            const { customer_id, customer_fullname, ...prevData } = data;
-            if (customer_id) {
-              Cookies.set("id_customer", customer_id);
-              dispatch(getInfosCustomerById({ customer_id: customer_id }));
-              window.open(
-                `/customer-info/id/${customer_id}/history-interaction`,
-                "_blank"
-              );
-            } else {
-              toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
-            }
-          }}>
-            <Typography
-              content={year_of_birth}
-              modifiers={["14x20", "main", "600", "center"]}
-            />
-            {/* <div>
-              <span style={{ color: "#28a745" }}>{year_of_birth}</span>
-            </div> */}
-          </div>
-        );
-      },
-    },
-     {
-      title: (<Typography content="Giới tính" modifiers={["12x18", "500", "center"]} />),
-      align: "center",
-      sorter: (a: any, b: any) => (a?.customer_fullname || "").localeCompare(b?.customer_fullname || ""),
-      showSorterTooltip: false,
-      dataIndex: "customer_fullname",
-      width: 120,
-      className: "ant-table-column_wrap-column",
-      render: (record: any, data: any) => {
-        const { year_of_birth, gender_name } = data;
-        return (
-          <div className="ant-table-column_item" onClick={() => {
-            const { customer_id, customer_fullname, ...prevData } = data;
-            if (customer_id) {
-              Cookies.set("id_customer", customer_id);
-              dispatch(getInfosCustomerById({ customer_id: customer_id }));
-              window.open(
-                `/customer-info/id/${customer_id}/history-interaction`,
-                "_blank"
-              );
-            } else {
-              toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
-            }
-          }}>
-            <Typography
-              content={gender_name}
-              modifiers={["14x20", "main", "600", "center"]}
-            />
-            {/* <div>
-              <span style={{ color: "#28a745" }}>{year_of_birth}</span>
-            </div> */}
-          </div>
-        );
-      },
-    },
+    // {
+    //   title: (<Typography content="Năm sinh" modifiers={["12x18", "500", "center"]} />),
+    //   align: "center",
+    //   // sorter: (a: any, b: any) => (a?.customer_fullname || "").localeCompare(b?.customer_fullname || ""),
+    //   // showSorterTooltip: false,
+    //   dataIndex: "customer_fullname",
+    //   width: 70,
+    //   className: "ant-table-column_wrap-column",
+    //   render: (record: any, data: any) => {
+    //     const { year_of_birth, gender_name } = data;
+    //     return (
+    //       <div className="ant-table-column_item" onClick={() => {
+    //         const { customer_id, customer_fullname, ...prevData } = data;
+    //         if (customer_id) {
+    //           Cookies.set("id_customer", customer_id);
+    //           dispatch(getInfosCustomerById({ customer_id: customer_id }));
+    //           window.open(
+    //             `/customer-info/id/${customer_id}/history-interaction`,
+    //             "_blank"
+    //           );
+    //         } else {
+    //           toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
+    //         }
+    //       }}>
+    //         <Typography
+    //           content={year_of_birth}
+    //           modifiers={["14x20", "main", "500", "center"]}
+    //         />
+    //         {/* <div>
+    //           <span style={{ color: "#28a745" }}>{year_of_birth}</span>
+    //         </div> */}
+    //       </div>
+    //     );
+    //   },
+    // },
+    //  {
+    //   title: (<Typography content="Giới tính" modifiers={["12x18", "500", "center"]} />),
+    //   align: "center",
+    //   // sorter: (a: any, b: any) => (a?.customer_fullname || "").localeCompare(b?.customer_fullname || ""),
+    //   // showSorterTooltip: false,
+    //   dataIndex: "customer_fullname",
+    //   width: 70,
+    //   className: "ant-table-column_wrap-column",
+    //   render: (record: any, data: any) => {
+    //     const { year_of_birth, gender_name } = data;
+    //     return (
+    //       <div className="ant-table-column_item" onClick={() => {
+    //         const { customer_id, customer_fullname, ...prevData } = data;
+    //         if (customer_id) {
+    //           Cookies.set("id_customer", customer_id);
+    //           dispatch(getInfosCustomerById({ customer_id: customer_id }));
+    //           window.open(
+    //             `/customer-info/id/${customer_id}/history-interaction`,
+    //             "_blank"
+    //           );
+    //         } else {
+    //           toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
+    //         }
+    //       }}>
+    //         <Typography
+    //           content={gender_name}
+    //           modifiers={["14x20", "main", "500", "center"]}
+    //         />
+    //         {/* <div>
+    //           <span style={{ color: "#28a745" }}>{year_of_birth}</span>
+    //         </div> */}
+    //       </div>
+    //     );
+    //   },
+    // },
     {
       title: (<Typography content="Phân loại" modifiers={["12x18", "500", "center"]} />),
       align: "center",
-      width: 160,
+      width: 80,
       dataIndex: "f_type",
       filters: filterColumn.typeCustomer,
       onFilter: (value: any, record: any) => { return stateAppointView.find((i) => i.value === record.f_type)?.label?.includes(value); },
@@ -561,16 +579,16 @@ const [dataFilter, setDataFilter] = useState({
             toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
           }
         }}>
-          <Typography content={(stateAppointView || []).find((i: any) => i?.value === record)?.label} modifiers={["14x20", "600", "center", record === "Khách hàng mới" ? "blueNavy" : 'main',]} />
+          <Typography content={(stateAppointView || []).find((i: any) => i?.value === record)?.label} modifiers={["13x18", "500", "center", record === "Khách hàng mới" ? "jetSub" : 'jetSub',]} />
         </div>
       ),
     },
     {
-      title: (<Typography content="Công ty" modifiers={["12x18", "500", "center"]} />),
+      title: (<Typography content="Brand" modifiers={["12x18", "500", "center"]} />),
       align: "center",
       dataIndex: "launch_source_group_name",
       showSorterTooltip: false,
-      width: 200,
+      width: 170,
       filters: filterColumn.company,
       onFilter: (value: any, record: any) => { return record.launch_source_group_name?.includes(value); },
       className: "ant-table-column_wrap",
@@ -588,14 +606,14 @@ const [dataFilter, setDataFilter] = useState({
             toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
           }
         }}>
-          <Typography content={record} modifiers={["14x20", "600", "center", "blueNavy"]} />
+          <Typography content={record} modifiers={["13x18", "500", "center", "jetSub"]} />
         </div>
       ),
     },
     {
-      title: (<Typography content="Nguồn" modifiers={["12x18", "500", "center"]} />),
+      title: (<Typography content="Nguồn" modifiers={["12x18", "500", "center"]} styles={{marginLeft:8}}/>),
       align: "center",
-      width: 220,
+      width: 110,
       dataIndex: "launch_source_name",
       showSorterTooltip: false,
       filters: filterColumn.launch_source,
@@ -625,13 +643,13 @@ const [dataFilter, setDataFilter] = useState({
             toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
           }
         }}>
-          <Typography content={record} modifiers={["14x20", "600", "center", data?.affiliate_type && data?.affiliate_type === "BSCD" ? "cg-red" : "green"]} />
+          <Typography content={record === "KH Cũ Giới Thiệu (WoM)" ? "WOM" :record} modifiers={["13x18", "500", "center", data?.affiliate_type && data?.affiliate_type === "BSCD" ? "cg-red" : "jetSub"]} />
         </div>
       ),
     },
     {
-      title: (data: any) => { return (<Typography content="Người giới thiệu" modifiers={["12x18", "500", "center"]} />); },
-      width: 260,
+      title: (data: any) => { return (<Typography content="Người giới thiệu" modifiers={["12x18", "500", "center"]}  styles={{marginLeft:10}}/>); },
+      width: 150,
       dataIndex: "affiliate_name",
       filters: filterColumn.partner,
       filterSearch: true,
@@ -655,29 +673,34 @@ const [dataFilter, setDataFilter] = useState({
       render: (record: any, data: any) => (
         <div className="ant-table-column_item" onClick={() => {
           const { customer_id, customer_fullname, ...prevData } = data;
-          if (customer_id) {
-            Cookies.set("id_customer", customer_id);
+          if (data.launch_source_name === "KH Cũ Giới Thiệu (WoM)") {
+            Cookies.set("id_customer", extractBracketValue(data.affiliate_name) || "" );
+            dispatch(getInfosCustomerById({ customer_id: extractBracketValue(data.affiliate_name) }));
+            window.open(
+              `/customer-info/id/${extractBracketValue(data.affiliate_name)}/history-interaction`,
+              "_blank"
+            );
+          } else {
+              Cookies.set("id_customer",customer_id );
             dispatch(getInfosCustomerById({ customer_id: customer_id }));
             window.open(
               `/customer-info/id/${customer_id}/history-interaction`,
               "_blank"
             );
-          } else {
-            toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
           }
         }}>
           {/* {(data?.affiliate_type !== "customer" && data?.affiliate_type !== "BSCD") ? (
             <Typography content={data?.affiliate_type} modifiers={["14x20", "600", "center", data?.affiliate_type === "BSCD" ? "cg-red" : "blueNavy",]} />
           ) : null} */}
-          <Typography content={record === "[] " ? "" : record} modifiers={["14x20", "600", "center", data?.affiliate_type === "BSCD" ? "cg-red" : "blueNavy",]} />
+          <Typography content={record === "[] " ? "" : data?.launch_source_name === "KH Cũ Giới Thiệu (WoM)" ? toTitleCase(extractName(record)) : record} modifiers={["13x18", "500", "center", data?.affiliate_type === "BSCD" ? "cg-red" : "jetSub",]} />
         </div>
       ),
     },
     {
-      title: (<Typography content="Dịch vụ" modifiers={["12x18", "500", "center"]} />),
+      title: (<Typography content="Dịch vụ" modifiers={["12x18", "500", "left"]} styles={{textAlign:"left",marginLeft:8}}/>),
       dataIndex: "note",
-      align: "center",
-      width: 320,
+      align: "left",
+      width: 280,
       filters: filterColumn.package,
       filterSearch: true,
       onFilter: (value: any, record: any) => {
@@ -694,33 +717,96 @@ const [dataFilter, setDataFilter] = useState({
             width: "100%",
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
+            alignItems: "left",
             cursor: "pointer",
+            marginLeft: "11px",
           }}
         >
           {data?.package_name && (
             <Typography
               type="span"
               content={data?.package_name}
-              modifiers={["14x20", "600", "justify", "cg-red"]}
+              modifiers={["14x20", "500", "justify", "jetSub"]}
             />
           )}
           <Typography
             content={record}
-            modifiers={["13x18", "600", "justify", "blueNavy"]}
+            modifiers={["13x18", "500", "justify", "blueNavy"]}
           />
         </div>
       ),
     },
-    {
-      title: (
-        <Typography content="Ghi chú" modifiers={["12x18", "500", "center"]} />
-      ),
-      align: "justify",
-      dataIndex: "appointment_note",
-      width: 240,
+   {
+  title: (
+    <Typography
+      content="Ghi chú"
+      modifiers={["12x18", "500", "center"]}
+      styles={{ textAlign: "left", marginLeft: 8 }}
+    />
+  ),
+  align: "left",
+  dataIndex: "appointment_note",
+  width: 460,
+  // ❌ bỏ ellipsis để cho phép xuống dòng
+  ellipsis: false,
+  className: "ant-table-column_wrap",
+  render: (record: any, data: any) => (
+    <div
+      style={{
+        marginLeft: 3,
+        textAlign: "left",
+        whiteSpace: "normal", // ✅ cho phép xuống dòng
+        wordBreak: "break-word", // ✅ tự ngắt khi từ quá dài
+        cursor: "pointer",
+        justifyContent: "left",
+      }}
+      className="ant-table-column_item"
+      onClick={() => {
+        const { customer_id, customer_fullname } = data;
+        if (customer_id) {
+          Cookies.set("id_customer", customer_id);
+          dispatch(getInfosCustomerById({ customer_id }));
+          window.open(
+            `/customer-info/id/${customer_id}/history-interaction`,
+            "_blank"
+          );
+        } else {
+          toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
+        }
+      }}
+    >
+      <Typography
+        content={record}
+        modifiers={["13x18", "500", "left", "jetSub"]}
+        styles={{
+          whiteSpace: "normal", // ✅ vẫn cho phép xuống dòng trong Typography
+          wordBreak: "break-word",
+        }}
+      />
+    </div>
+  ),
+},
+ {
+      title: (<Typography content="Lịch hẹn tiếp" modifiers={["12x18", "500", "center"]} />),
+      align: "center",
+      dataIndex: "next_appointment_id",
+        width: 100,
       ellipsis: true,
-      className: "ant-table-column_wrap",
+      // fixed: 'right',
+       className: "ant-table-column_wrap",
+       filters: [
+         { text: 'Có', value: 'Có' },
+         { text: 'Không', value: 'Không' },
+       ],
+      onFilter: (value: any, record: any) => {
+         if (record.next_appointment_id != null && value === 'Có') {
+           return record.next_appointment_id !== null;
+         }
+          else if (record.next_appointment_id == null && value === 'Không') {
+          return record.next_appointment_id === null;
+         }
+        
+      },
       render: (record: any, data: any) => (
         <div className="ant-table-column_item" onClick={() => {
           const { customer_id, customer_fullname, ...prevData } = data;
@@ -735,23 +821,23 @@ const [dataFilter, setDataFilter] = useState({
             toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
           }
         }}>
-          <Typography content={record} modifiers={["14x20", "600", "left", "blueNavy"]} />
+          <Typography content={record && "Có"} modifiers={["14x20", "400", "center", 'green']} />
         </div>
       ),
     },
     {
-      title: (<Typography content="Tình trạng" modifiers={["12x18", "500", "center"]} />),
+      title: (<Typography content="Tình trạng" modifiers={["12x18", "500", "center"]} styles={{marginLeft:8}}/>),
       align: "center",
       dataIndex: "is_care",
       className: "p-appointment_view_column_care",
       showSorterTooltip: false,
-      fixed: 'right',
-      sorter: (a: any, b: any) =>
-        (a?.status_display || "").localeCompare(b?.status_display || ""),
-      width: 150,
+      // fixed: 'right',
+      // sorter: (a: any, b: any) =>
+      //   (a?.status_display || "").localeCompare(b?.status_display || ""),
+      width: 130,
       ellipsis: true,
       render: (record: any, data: any) => {
-        const { care_employee_name, care_employee_id, master_id, is_care,customer_id } =
+        const { care_employee_name, care_employee_id, master_id, is_care,customer_id ,affiliate_type} =
           data;
         return (
           <div
@@ -763,7 +849,7 @@ const [dataFilter, setDataFilter] = useState({
               if (
                 care_employee_id === null ||
                 !is_care ||
-                care_employee_id === employeeId
+                care_employee_id === employeeId || (care_employee_name === null && affiliate_type === "BSCD")
               ) {
                 console.log(data)
                  await postChangeStatusCustomer(master_id);
@@ -775,12 +861,12 @@ const [dataFilter, setDataFilter] = useState({
             }}
           >
             <Typography
-              content={record ? "Đã chăm sóc" : "Chưa chăm sóc"}
+              content={record ? ((care_employee_name === null && affiliate_type === "BSCD") ? "Chưa chăm sóc" : "Đã chăm sóc") : "Chưa chăm sóc"}
               modifiers={[
                 "14x20",
-                "600",
+                "500",
                 "center",
-                record ? "green" : "cg-red",
+            record ? ((care_employee_name === null && affiliate_type === "BSCD") ? "cg-red" : "green") : "cg-red"
               ]}
             />
             {!_.isNull(care_employee_name) && (
@@ -792,6 +878,7 @@ const [dataFilter, setDataFilter] = useState({
         );
       },
     },
+    
     {
       title: (<Typography content="Trạng thái" modifiers={["12x18", "500", "center"]} />),
       align: "center",
@@ -799,7 +886,7 @@ const [dataFilter, setDataFilter] = useState({
       showSorterTooltip: false,
       sorter: (a: any, b: any) => (a?.status_display || "").localeCompare(b?.status_display || ""), width: 140,
       ellipsis: true,
-      fixed: 'right',
+      // fixed: 'right',
       className: "ant-table-column_wrap",
       render: (record: any, data: any) => (
         <div className="ant-table-column_item" onClick={() => {
@@ -815,10 +902,11 @@ const [dataFilter, setDataFilter] = useState({
             toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
           }
         }}>
-          <Typography content={record} modifiers={["14x20", "400", "center", data?.status === 'done' ? 'green' : data?.status === 'inprogress' ? 'blueNavy' : 'cg-red', '600']} />
+          <Typography content={record} modifiers={["14x20", "400", "center", data?.status === 'done' ? 'green' : data?.status === 'inprogress' ? 'blueNavy' : 'cg-red', '500']} />
         </div>
       ),
     },
+    
     {
       title: <Typography content="" modifiers={["12x18", "500", "center"]} />,
       align: "center",
@@ -826,7 +914,7 @@ const [dataFilter, setDataFilter] = useState({
       className: "",
       width: 40,
       ellipsis: true,
-      fixed: 'right',
+      // fixed: 'right',
       render: (record: any, data: any) => (
           <CTooltip placements="top" title="Xem chỉ định"><div className={mapModifiers("p-appointment_view_column_pdf")}>
         
@@ -860,7 +948,7 @@ const [dataFilter, setDataFilter] = useState({
       className: "",
       width: 40,
       ellipsis: true,
-      fixed: 'right',
+      // fixed: 'right',
       render: (record: any, data: any) => (
         <CTooltip placements={"top"} title={'Thêm ghi chú'}>
           <div className={mapModifiers("p-appointment_view_column_pdf")}>
@@ -883,7 +971,7 @@ const [dataFilter, setDataFilter] = useState({
       className: "",
       width: 40,
       ellipsis: true,
-      fixed: 'right',
+      // fixed: 'right',
       render: (record: any, data: any) => (
          <CTooltip placements={"top"} title={'Gọi điện'}> <div className={mapModifiers("p-appointment_view_column_pdf")}>
           <Icon
@@ -1299,12 +1387,12 @@ const [dataFilter, setDataFilter] = useState({
         title="Theo dõi lịch hẹn"
         isSendRequest={isLoadingStatistic}
         handleClick={(data: any) => {
-          dispatch(
-            getStatisticAppointment({
-              fromDate: moment(data.from).format("YYYY-MM-DD"),
-              toDate: moment(data.to).format("YYYY-MM-DD"),
-            } as any)
-          );
+          // dispatch(
+          //   getStatisticAppointment({
+          //     fromDate: moment(data.from).format("YYYY-MM-DD"),
+          //     toDate: moment(data.to).format("YYYY-MM-DD"),
+          //   } as any)
+          // );
         }}
         isStatistic={false}
         valueRangeDate={{
@@ -1350,12 +1438,12 @@ const [dataFilter, setDataFilter] = useState({
                       date: moment(item.date).format("YYYY-MM-DDTHH:mm:ss"),
                     } as any)
                   );
-                  dispatch(
-                    getStatisticAppointment({
-                      fromDate: moment(item.date).format("YYYY-MM-DD"),
-                      toDate: moment(item.date).format("YYYY-MM-DD"),
-                    } as any)
-                  );
+                  // dispatch(
+                  //   getStatisticAppointment({
+                  //     fromDate: moment(item.date).format("YYYY-MM-DD"),
+                  //     toDate: moment(item.date).format("YYYY-MM-DD"),
+                  //   } as any)
+                  // );
                 }
               }}
             >
@@ -1376,6 +1464,9 @@ const [dataFilter, setDataFilter] = useState({
         
         <PublicHeader
           titlePage=""
+          isDial={false}
+          isHideService
+          
           className="p-appointment_view_header_public"
           handleFilter={() => { }}
           isHideFilter
@@ -1388,7 +1479,7 @@ const [dataFilter, setDataFilter] = useState({
               keyWord: "",
             });
             dispatch(getListAppointmentMaster({} as any));
-            dispatch(getStatisticAppointment(initial as any));
+            // dispatch(getStatisticAppointment(initial as any));
           }}
           handleGetTypeSearch={() => { }}
           handleOnClickSearch={(data) => {
@@ -1396,9 +1487,10 @@ const [dataFilter, setDataFilter] = useState({
           }}
           isUseSearch
           isHideFilterMobile={false}
+          isHideEmergency
           handleClickFilterMobile={() => { }}
           tabLeft={
-            <div className="p-appointment_view_filter">
+            <> <div className="p-appointment_view_filter">
               <CDatePickers
                 fomat="YYYY-MM-DD"
                 variant="simple"
@@ -1436,16 +1528,14 @@ const [dataFilter, setDataFilter] = useState({
                   }}
                 />}
             </div>
-          }
-          tabBottom={
-            <div className="p-appointment_view_filter_bottom">
+             <div className="p-appointment_view_filter_bottom" style={{marginBottom:10}}>
               <Dropdown
                 dropdownOption={[
                   { id: 99, label: "Tất cả", value: null as any },
                   ...stateLaunchSourceGroups,
                 ]}
                 variant="simple"
-                placeholder="Nhóm nguồn"
+                placeholder="-- Chọn brand --"
                 values={dataFilter.launchSourceGroup}
                 handleSelect={(e: any) => {
                   setDataFilter({ ...dataFilter, launchSourceGroup: e });
@@ -1504,9 +1594,79 @@ const [dataFilter, setDataFilter] = useState({
               />
               </div>
             </div>
+            </>
+           
           }
+          // tabBottom={
+          //   <div className="p-appointment_view_filter_bottom">
+          //     <Dropdown
+          //       dropdownOption={[
+          //         { id: 99, label: "Tất cả", value: null as any },
+          //         ...stateLaunchSourceGroups,
+          //       ]}
+          //       variant="simple"
+          //       placeholder="Nhóm nguồn"
+          //       values={dataFilter.launchSourceGroup}
+          //       handleSelect={(e: any) => {
+          //         setDataFilter({ ...dataFilter, launchSourceGroup: e });
+          //         dispatch(
+          //           getListAppointmentMaster({
+          //             ...propsData,
+          //             launchSourceGroupID: e?.value || 0,
+          //           } as any)
+          //         );
+          //       }}
+          //     />
+          //     <Dropdown
+          //       dropdownOption={[
+          //         { id: 99, label: "Tất cả", value: null as any },
+          //         ...listLaunchSources,
+          //       ]}
+          //       variant="simple"
+          //       placeholder="-- Chọn nguồn --"
+          //       values={dataFilter.launchSourceId}
+          //       handleSelect={(e: any) => {
+          //         setDataFilter({ ...dataFilter, launchSourceId: e });
+          //         dispatch(
+          //           getListAppointmentMaster({
+          //             ...propsData,
+          //             launchSourceId: e.value || "all",
+          //           } as any)
+          //         );
+          //       }}
+          //     />
+          //     <div style={{marginTop:"10px"}}>
+          //         <Input
+          //       id="user_name"
+          //       variant="simple"
+          //       onChange={(e) => {
+          //         setDataFilter({ ...dataFilter, keyWord: e.target.value });
+          //       }}
+          //       value={dataFilter.keyWord}
+          //       placeholder="Nhập tên, địa chỉ, số điện thoại,.. để tìm kiếm"
+          //       handleClickIcon={() => {
+          //         dispatch(
+          //           getListAppointmentMaster({
+          //             ...propsData,
+          //             keyWord: dataFilter.keyWord || 0,
+          //           } as any)
+          //         );
+          //       }}
+          //       handleEnter={() => {
+          //         dispatch(
+          //           getListAppointmentMaster({
+          //             ...propsData,
+          //             keyWord: dataFilter.keyWord || 0,
+          //           } as any)
+          //         );
+          //       }}
+          //       iconName="search"
+          //     />
+          //     </div>
+          //   </div>
+          // }
           isHideCleanFilter
-          tabBottomRight={
+          listBtn={
             <div className="p-appointment_view_filter_bottom_right">
               <div style={{ color: "#f00", fontSize: 15, minWidth: 120 }}>
                 <span style={{ color: "#333", marginRight: 6 }}>Có:</span>
@@ -1522,7 +1682,7 @@ const [dataFilter, setDataFilter] = useState({
             {memoryListRecentDay}
           </div>
         )}
-        <div className="p-appointment_view_table">
+        <div className="p-appointment_view_table" style={{height:"calc(100vh - 180px)"}}>
           {stateBreakPoint < 980 ? collapseBeforeExams : TableMemory}
         </div>
       </PublicLayout>

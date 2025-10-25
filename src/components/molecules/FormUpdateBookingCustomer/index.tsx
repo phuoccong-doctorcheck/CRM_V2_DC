@@ -315,7 +315,8 @@ const FormUpdateBookingCustomer: React.FC<FormAddCustomerProps> = ({
   );
   const [stateAppointmentTypes, setstateAppointmentTypes] = useState<
     GroupRadioType[]
-  >(storageAppointmentTypes ? JSON.parse(storageAppointmentTypes) : []);
+    >(storageAppointmentTypes ? JSON.parse(storageAppointmentTypes) : []);
+  console.log(stateAppointmentTypes)
   useEffect(() => {
     // Filter and update labels directly in stateAppointmentTypes
     const updatedAppointmentTypes = (
@@ -1178,14 +1179,14 @@ const FormUpdateBookingCustomer: React.FC<FormAddCustomerProps> = ({
           
          
         };
-        console.log(request)
+        console.log(request,dataForm)
         if (handleAddCustomer) {
             clearStateForm();
             clearGastrointestinal();
             setCustomerPortrait(false);
            setServiceSelected([]);
            handleLoading(true)
-            handleAddCustomer(request);
+             handleAddCustomer(request);
         }
       } else {
         toast.error("Vui lòng chọn dịch vụ");
@@ -1613,7 +1614,7 @@ const FormUpdateBookingCustomer: React.FC<FormAddCustomerProps> = ({
                   (i) =>
                     i.value ===
                     (valUpdate?.appointment_type === "services"
-                      ? "services"
+                      ? "services" : valUpdate?.appointment_type === "endoscopics"  ? "services"
                       : valUpdate?.appointment_type)
                 ) as GroupRadioType),
                
