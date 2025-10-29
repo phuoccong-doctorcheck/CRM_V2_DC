@@ -1285,9 +1285,6 @@ const AfterMedicalExaminationTask: React.FC = () => {
             <div className='p-after_examination_total_item'>
               <span>Có: <strong style={{ color: '#f00' }}>{listAfterExamsTask?.data?.data?.length || 0} </strong> công việc hôm nay <div>(hoàn tất : <strong style={{ color: '#f00' }}>{dataListAfterExamTask?.data?.data.filter((item) => item.cs_status === "done").length|| 0}</strong>)</div></span>
             </div>
-            
-             
-      
       </div>
     </PublicHeaderStatistic>
   ), [statisticAfterExams?.data, dataStatisticAfterExams.data,assigntTasks.listTask.length,listAfterExamsTask])
@@ -1643,40 +1640,41 @@ const AfterMedicalExaminationTask: React.FC = () => {
               />
               </div>
                  
-              
-              <Dropdown
-                dropdownOption={stateScheduleTypes
-  // chỉ lấy các id mong muốn
-  .filter((item:any) => ['n0', 'n1', 'nreexam'].includes(item.id))
-  // đổi label cho n0
-  .map(item => ({
-    ...item,
-    label: item.id === 'n0' ? 'Trước khám 1 ngày' : item.label,
-  }))
-}
-                values={dataFilter.type}
-                defaultValue={dataFilter.type}
-                handleSelect={(item: any) => {
-                  setDataFilter({ ...dataFilter, type: item?.value });
-                 
-               
-                     dispatch(getListAfterExamTaskMaster({
-                       ...propsData,
-                       
-                    type:  item?.value,
-                  } as any));
-                  // dispatch(getStatisticAllowRangeDate({
-                  //   fromdate: moment(dataFilter?.fromDays).format('YYYY-MM-DDT00:00:00'),
-                  //   todate: moment(dataFilter?.toDays).format('YYYY-MM-DDTHH:mm:ss'),
-                  // }));
-                }}
-                variant="simple"
-                placeholder='-- Loại công việc --'
-              />
-          
+              <div style={{minWidth:"210px"}}>
+             <Dropdown4
+  dropdownOption={stateScheduleTypes
+    // chỉ lấy các id mong muốn
+    .filter((item: any) => ['n0', 'n1', 'nreexam'].includes(item.id))
+    // sắp xếp lại thứ tự mong muốn
+    .sort((a: any, b: any) => {
+      const order = ['n0', 'nreexam', 'n1'];
+      return order.indexOf(a.id) - order.indexOf(b.id);
+    })
+    // đổi label cho n0
+    .map(item => ({
+      ...item,
+      label: item.id === 'n0' ? 'Trước khám (lần đầu) 1 ngày' : item.label,
+    }))
+  }
+  values={dataFilter.type}
+  defaultValue={dataFilter.type}
+  handleSelect={(item: any) => {
+    setDataFilter({ ...dataFilter, type: item?.value });
+    dispatch(getListAfterExamTaskMaster({
+      ...propsData,
+      type: item?.value,
+    } as any));
+  }}
+  variant="simple"
+  placeholder="-- Loại công việc --"
+/>
+
+              </div>
              
                 <Dropdown
-                dropdownOption={optionStateStatusAfterTask}
+                dropdownOption={optionStateStatusAfterTask.filter(
+                  (option: any) => !["inprogress"].includes(option.value)
+                )}
                 values={dataFilter.status}
                 defaultValue={propsData.status}
                 handleSelect={(item: any) => {
@@ -2257,7 +2255,9 @@ const AfterMedicalExaminationTask: React.FC = () => {
       >
         <div style={{marginBottom:"10px"}}>
            <Dropdown
-                dropdownOption={optionStateStatusAfterTask2}
+                dropdownOption={optionStateStatusAfterTask2.filter(
+                  (option: any) => !["inprogress"].includes(option.value)
+                )}
             values={dataChangeStatus.cs_status}
             defaultValue={dataChangeStatus.cs_status}
                 handleSelect={(item: any) => {

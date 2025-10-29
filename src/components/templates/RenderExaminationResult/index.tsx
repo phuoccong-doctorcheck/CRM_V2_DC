@@ -1310,7 +1310,7 @@ Có đang áp dụng BPTT:</span>
     {
     
       }
-      <div className="o-categories_customer_right_title">
+      <div className="o-categories_customer_right_title" style={{fontSize:18,fontWeight:600,marginBottom:"10px"}}>
         <Typography content={title} />
       </div>
       {['XQ', 'DT', 'SA', 'NS', 'XN','KHAMPK'].includes(type as any) && (

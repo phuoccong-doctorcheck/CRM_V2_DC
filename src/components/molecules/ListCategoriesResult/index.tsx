@@ -94,7 +94,7 @@ const ListCategoriesResult: React.FC<ListCategoriesResultProps> = ({
                     className="m-list_categories_child"
                     key={children.id}
                     onClick={(e) => {
-                      if (handleTitle) handleTitle(item.group_result_name);
+                      if (handleTitle) handleTitle(children.name);
                       if (handleType) handleType(children.service_group_type);
                       console.log(children,responses)
                       if (handleRespDataToPrint) handleRespDataToPrint({

@@ -2737,22 +2737,7 @@ const FormUpdateCustomer: React.FC<FormAddCustomerProps> = ({
             <form>
               {!csPortrait && (
                 <div className="m-form_update_customer_wrap">
-                  <div
-                    style={{
-                      borderBottom: "1px solid #dee2e6",
-                      marginBottom: "5px",
-                    }}
-                  >
-                    <Typography
-                      content="Thông tin khách hàng"
-                      modifiers={["13x18", "main", "500", "uppercase"]}
-                      styles={{
-                        fontSize: "14px",
-                        color: "#353B41 ",
-                        fontWeight: "600",
-                      }}
-                    />
-                  </div>
+                  
                   <div
                     className="m-form_update_customer_row gap_10"
                     style={{ alignItems: "self-start" }}

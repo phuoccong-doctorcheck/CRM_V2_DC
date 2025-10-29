@@ -36,6 +36,7 @@ import _ from "lodash";
 import moment from "moment";
 import React, { useEffect, useMemo, useState } from "react";
 import { useMutation } from "react-query";
+import { useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   postStagesByIdAfterExams,
@@ -165,6 +166,12 @@ const toTitleCase = (input: string): string => {
 const CallReExamination: React.FC = () => {
   const dispatch = useAppDispatch();
   /*  */
+   const [params] = useSearchParams();
+  const fullName1 = params.get("keyword") ? decodeURIComponent(params.get("keyword")!) : "";
+  const CType = params.get("type")
+  const parser = new DOMParser();
+  const fullName = parser.parseFromString(fullName1, "text/html").documentElement.textContent;
+  console.log("fullName",CType)
   const { makeCall } = useSip();
   const storageGroupTask = localStorage.getItem("groupTask");
   const storageEmployeeTeams = localStorage.getItem("employeeTeams");
@@ -246,6 +253,7 @@ const CallReExamination: React.FC = () => {
   const [dcdmcschedules, setstateDcdmcschedules] = useState<DropdownData[]>(
     dc_dm_cschedules ? JSON.parse(dc_dm_cschedules) : []
   );
+  console.log(dcdmcschedules)
   const [dmtimedoctorschedules, setstateDmtimedoctorschedules] = useState<
     DropdownData[]
     >(dm_time_doctor_schedules ? JSON.parse(dm_time_doctor_schedules) : []);
@@ -262,7 +270,6 @@ const CallReExamination: React.FC = () => {
       )
     : []
 );
-  console.log(dmtimedoctorschedules)
   const [selectedStatus, setSelectedStatus] = useState<string>("new");
   const [selectedDays, setSelectedDays] = useState<number>(3);
     const [selectedDays2, setSelectedDays2] = useState<number>(2);
@@ -301,10 +308,20 @@ const CallReExamination: React.FC = () => {
   );
   const propsData = {
     keyWord: dataFilter?.keyWord,
-    status: dataFilter?.status || "new",
+    status: dataFilter?.status || "all",
     page_number: 1,
     page_size: 10000,
-    c_schedule_type_id: dataFilter.c_schedule_type_id || "all",
+   c_schedule_type_id:
+  dataFilter.c_schedule_type_id ||
+  (
+    CType === "HDVK" ? 
+      "HDVK"
+    :
+    CType === "HKSK" ? "HKSK" :
+    CType === "HTK" ? "HTK" :
+    CType === "HNS" ? "HNS" : "all"
+  )
+    ,
     from_date: dataFilter.from_date,
     to_date: dataFilter.to_date,
     // year: dataFilter.year || "all",
@@ -411,23 +428,51 @@ const CallReExamination: React.FC = () => {
         setDataFilter({
                       ...dataFilter,
                       from_date:  moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss"),
-                      to_date:  moment().add(1, "day").endOf("day").format("YYYY-MM-DDTHH:mm:ss"),
-                    });
-    dispatch(
-      getListCallReExammingMaster({
-        c_schedule_type_id: dataFilter?.c_schedule_type_id || "all",
-from_date: moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss"), // 00:00:00
-    to_date: moment().add(1, "day").endOf("day").format("YYYY-MM-DDTHH:mm:ss"),     // 23:59:59
-        status: dataFilter?.status || "new",
-        page_number: 1,
-        page_size: 10000,
-        keyWord: dataFilter.keyWord,
-        f_type: "all",
-        launch_source_group_id: 0,
-        launch_source_id: 0,
-        date_type:"bs",
-      } as any)
-    );
+          to_date: moment().add(1, "day").endOf("day").format("YYYY-MM-DDTHH:mm:ss"),
+          keyWord: fullName || "",
+                
+        });
+    if (fullName === "") {
+      dispatch(
+        getListCallReExammingMaster({
+          // eslint-disable-next-line no-constant-condition
+       
+  c_schedule_type_id: dataFilter?.c_schedule_type_id || "all",
+          from_date: moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss"), // 00:00:00
+          to_date: moment().add(1, "day").endOf("day").format("YYYY-MM-DDTHH:mm:ss"),     // 23:59:59
+          status: dataFilter?.status || "new",
+          page_number: 1,
+          page_size: 10000,
+          keyWord: dataFilter.keyWord,
+          f_type: "all",
+          launch_source_group_id: 0,
+          launch_source_id: 0,
+          date_type: "bs",
+        } as any)
+      );
+    } else {
+      setSelectedDays(-1000)
+       dispatch(
+        getListCallReExammingMaster({
+               c_schedule_type_id :
+  CType === "HDVK" ? "HDVK" :
+  CType === "HNS"  ? "HNS"  :
+  CType === "HTK"  ? "HTK"  :
+  CType === "HKSK" ? "HKSK" :
+  "all",
+          from_date: moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss"), // 00:00:00
+          to_date: moment().add(1, "day").endOf("day").format("YYYY-MM-DDTHH:mm:ss"),     // 23:59:59
+          status: dataFilter?.status || "new",
+          page_number: 1,
+          page_size: 10000,
+          keyWord: fullName,
+          f_type: "all",
+          launch_source_group_id: 0,
+          launch_source_id: 0,
+          date_type: "bs",
+        } as any)
+      );
+    }
     document.title = "Nhắc tầm soát lại - nội soi - tầm soát lại | CRM";
   }, []);
   const [loadingPage, setLoadingPage] = useState(false);
@@ -623,7 +668,6 @@ from_date: moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss"), 
         status: "inprogress",
         task_id: formData?.id || null,
       };
-      console.log(body,formData)
        await postTask(body);
     }
   };
@@ -944,7 +988,7 @@ from_date: moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss"), 
           }}
         >
           <Typography
-            content={toTitleCase(record)}
+            content={record}
             modifiers={[
               "13x18",
               "500",
@@ -2462,6 +2506,7 @@ const statisticHeader = useMemo(() => {
                   });
                 }}
                 handleEnter={() => {
+                  setSelectedDays(3)
                   setListCallReExamming([]);
                   dispatch(
                     getListCallReExammingMaster({
@@ -2472,6 +2517,7 @@ const statisticHeader = useMemo(() => {
                   );
                 }}
                 handleClickIcon={() => {
+                   setSelectedDays(3)
                   setListCallReExamming([]);
                   dispatch(
                     getListCallReExammingMaster({
@@ -2494,7 +2540,7 @@ const statisticHeader = useMemo(() => {
                 <Dropdown4
                   dropdownOption={dcdmcschedules}
                   values={dataFilter.c_schedule_type_id}
-                  // defaultValue={propsData.c_schedule_type_id}
+                   defaultValue={propsData.c_schedule_type_id}
                   handleSelect={(item: any) => {
                     setDataFilter({
                       ...dataFilter,
@@ -3095,7 +3141,6 @@ from_date: moment().startOf("day").format("YYYY-MM-DDTHH:mm:ss"), // 00:00:00
                       !(fromDate === today && toDate === today) &&
                       !(fromDate === tomorrow && toDate === tomorrow)
                     ) {
-                      console.log(234)
                       setSelectedDays(-2); // chuyển về "Tùy chọn"
                       setListCallReExamming([]);
                       
@@ -3159,7 +3204,6 @@ from_date: moment().startOf("day").format("YYYY-MM-DDTHH:mm:ss"), // 00:00:00
                       !(fromDate === today && toDate === today) &&
                       !(fromDate === tomorrow && toDate === tomorrow)
                     ) {
-                      console.log(234)
                       setSelectedDays2(0); // chuyển về "Tùy chọn"
                       setListCallReExamming([]);
                       

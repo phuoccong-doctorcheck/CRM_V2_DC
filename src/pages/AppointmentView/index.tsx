@@ -114,7 +114,7 @@ const AppointmentView: React.FC = () => {
     item: undefined as unknown as GroupRadioType,
   });
 const [dataFilter, setDataFilter] = useState({
-    date:  moment().add(1, 'days').toDate(),
+    date:  moment().add(0, 'days').toDate(),
     launchSourceId: undefined as unknown as DropdownData,
     launchSourceGroup: undefined as unknown as DropdownData,
     keyWord: "",
@@ -413,11 +413,12 @@ const [dataFilter, setDataFilter] = useState({
             toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
           }
         }}>
-          <Typography content={record ? moment(record).format("YYYY-MM-DD HH:mm") : ""} modifiers={["13x18", "jetSub", "500", "center"]} />
+          <Typography content={record ? moment(record).format("DD-MM-YYYY HH:mm") : ""} modifiers={["13x18", "jetSub", "500", "center"]} />
         </div>
       ),
     },
-    {
+    
+     {
       title: (<Typography content="Ngày checkin" modifiers={["12x18", "500", "center"]} />),
       align: "center",
       dataIndex: "register_date",
@@ -439,11 +440,10 @@ const [dataFilter, setDataFilter] = useState({
             toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
           }
         }}>
-          <Typography content={record ? moment(record).format("YYYY-MM-DD HH:mm") : ""} modifiers={["13x18", "jetSub", "500", "center"]} />
+          <Typography content={record ? moment(record).format("DD-MM-YYYY HH:mm") : ""} modifiers={["13x18", "jetSub", "500", "center"]} />
         </div>
       ),
     },
-    
     {
       title: (<Typography content="Họ và tên" modifiers={["12x18", "500", "center"]} styles={{textAlign:"left", marginLeft:"18px"}}/>),
       align: "center",
@@ -461,8 +461,8 @@ const [dataFilter, setDataFilter] = useState({
               Cookies.set("id_customer", customer_id);
               dispatch(getInfosCustomerById({ customer_id: customer_id }));
               window.open(
-                `/customer-info/id/${customer_id}/history-interaction`,
-                "_blank"
+              `/customer-info/id/${customer_id}/history-interaction`,
+              "_blank"
               );
             } else {
               toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
@@ -472,7 +472,7 @@ const [dataFilter, setDataFilter] = useState({
           >
             <Typography
 content={
-  toTitleCase(record) +
+  record +
   " (" +
   data?.year_of_birth +
   (toTitleCase(data?.gender_name)  ? ", " + toTitleCase(data?.gender_name) : "") +
@@ -486,129 +486,6 @@ content={
           </div>
         );
       },
-    },
-    // {
-    //   title: (<Typography content="Năm sinh" modifiers={["12x18", "500", "center"]} />),
-    //   align: "center",
-    //   // sorter: (a: any, b: any) => (a?.customer_fullname || "").localeCompare(b?.customer_fullname || ""),
-    //   // showSorterTooltip: false,
-    //   dataIndex: "customer_fullname",
-    //   width: 70,
-    //   className: "ant-table-column_wrap-column",
-    //   render: (record: any, data: any) => {
-    //     const { year_of_birth, gender_name } = data;
-    //     return (
-    //       <div className="ant-table-column_item" onClick={() => {
-    //         const { customer_id, customer_fullname, ...prevData } = data;
-    //         if (customer_id) {
-    //           Cookies.set("id_customer", customer_id);
-    //           dispatch(getInfosCustomerById({ customer_id: customer_id }));
-    //           window.open(
-    //             `/customer-info/id/${customer_id}/history-interaction`,
-    //             "_blank"
-    //           );
-    //         } else {
-    //           toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
-    //         }
-    //       }}>
-    //         <Typography
-    //           content={year_of_birth}
-    //           modifiers={["14x20", "main", "500", "center"]}
-    //         />
-    //         {/* <div>
-    //           <span style={{ color: "#28a745" }}>{year_of_birth}</span>
-    //         </div> */}
-    //       </div>
-    //     );
-    //   },
-    // },
-    //  {
-    //   title: (<Typography content="Giới tính" modifiers={["12x18", "500", "center"]} />),
-    //   align: "center",
-    //   // sorter: (a: any, b: any) => (a?.customer_fullname || "").localeCompare(b?.customer_fullname || ""),
-    //   // showSorterTooltip: false,
-    //   dataIndex: "customer_fullname",
-    //   width: 70,
-    //   className: "ant-table-column_wrap-column",
-    //   render: (record: any, data: any) => {
-    //     const { year_of_birth, gender_name } = data;
-    //     return (
-    //       <div className="ant-table-column_item" onClick={() => {
-    //         const { customer_id, customer_fullname, ...prevData } = data;
-    //         if (customer_id) {
-    //           Cookies.set("id_customer", customer_id);
-    //           dispatch(getInfosCustomerById({ customer_id: customer_id }));
-    //           window.open(
-    //             `/customer-info/id/${customer_id}/history-interaction`,
-    //             "_blank"
-    //           );
-    //         } else {
-    //           toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
-    //         }
-    //       }}>
-    //         <Typography
-    //           content={gender_name}
-    //           modifiers={["14x20", "main", "500", "center"]}
-    //         />
-    //         {/* <div>
-    //           <span style={{ color: "#28a745" }}>{year_of_birth}</span>
-    //         </div> */}
-    //       </div>
-    //     );
-    //   },
-    // },
-    {
-      title: (<Typography content="Phân loại" modifiers={["12x18", "500", "center"]} />),
-      align: "center",
-      width: 80,
-      dataIndex: "f_type",
-      filters: filterColumn.typeCustomer,
-      onFilter: (value: any, record: any) => { return stateAppointView.find((i) => i.value === record.f_type)?.label?.includes(value); },
-      className: "ant-table-column_wrap",
-      render: (record: any, data: any) => (
-        <div className="ant-table-column_item" onClick={() => {
-          const { customer_id, customer_fullname, ...prevData } = data;
-          if (customer_id) {
-            Cookies.set("id_customer", customer_id);
-            dispatch(getInfosCustomerById({ customer_id: customer_id }));
-            window.open(
-              `/customer-info/id/${customer_id}/history-interaction`,
-              "_blank"
-            );
-          } else {
-            toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
-          }
-        }}>
-          <Typography content={(stateAppointView || []).find((i: any) => i?.value === record)?.label} modifiers={["13x18", "500", "center", record === "Khách hàng mới" ? "jetSub" : 'jetSub',]} />
-        </div>
-      ),
-    },
-    {
-      title: (<Typography content="Brand" modifiers={["12x18", "500", "center"]} />),
-      align: "center",
-      dataIndex: "launch_source_group_name",
-      showSorterTooltip: false,
-      width: 170,
-      filters: filterColumn.company,
-      onFilter: (value: any, record: any) => { return record.launch_source_group_name?.includes(value); },
-      className: "ant-table-column_wrap",
-      render: (record: any, data: any) => (
-        <div className="ant-table-column_item" onClick={() => {
-          const { customer_id, customer_fullname, ...prevData } = data;
-          if (customer_id) {
-            Cookies.set("id_customer", customer_id);
-            dispatch(getInfosCustomerById({ customer_id: customer_id }));
-            window.open(
-              `/customer-info/id/${customer_id}/history-interaction`,
-              "_blank"
-            );
-          } else {
-            toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
-          }
-        }}>
-          <Typography content={record} modifiers={["13x18", "500", "center", "jetSub"]} />
-        </div>
-      ),
     },
     {
       title: (<Typography content="Nguồn" modifiers={["12x18", "500", "center"]} styles={{marginLeft:8}}/>),
@@ -642,60 +519,184 @@ content={
           } else {
             toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
           }
-        }}>
-          <Typography content={record === "KH Cũ Giới Thiệu (WoM)" ? "WOM" :record} modifiers={["13x18", "500", "center", data?.affiliate_type && data?.affiliate_type === "BSCD" ? "cg-red" : "jetSub"]} />
+        }}
+          style={{ display: "flex", justifyContent: "center", alignItems:'center', flexDirection:"column" }}
+        >
+          <Typography content={record === "KH Cũ Giới Thiệu (WoM)" ? "WOM" :data?.affiliate_type && data?.affiliate_type === "BSCD" ? "" : record} modifiers={["13x18", "500", "center", data?.affiliate_type && data?.affiliate_type === "BSCD" ? "cg-red" : "jetSub"]} />
+           {!_.isNull(data?.affiliate_name) && (
+           <p
+  style={{
+    fontSize:data?.affiliate_type && data?.affiliate_type === "BSCD" ? 13: 12,
+    color: data?.affiliate_type === "BSCD" ? "#f43434" : "jetSub",
+  }}
+>
+ {data?.affiliate_name && data?.affiliate_name.trim() !== ""  ? (
+  data?.launch_source_name === "KH Cũ Giới Thiệu (WoM)" ? (
+    `(${toTitleCase(extractName(data?.affiliate_name))})`
+  )  : data?.affiliate_type === "BSCD"   ? data?.affiliate_name:(
+    `(${data?.affiliate_name})`
+  )
+) : (
+  ""
+)}
+
+</p>
+
+            )}
         </div>
       ),
     },
     {
-      title: (data: any) => { return (<Typography content="Người giới thiệu" modifiers={["12x18", "500", "center"]}  styles={{marginLeft:10}}/>); },
-      width: 150,
-      dataIndex: "affiliate_name",
-      filters: filterColumn.partner,
-      filterSearch: true,
-      onFilter: (value: string, record: any) => {
-        if (value.split("] ")[1]) {
-          return (
-            record.affiliate_name
-              .split("] ")[1]
-              ?.toLocaleLowerCase()
-              .search(value.split("] ")[1]?.toLocaleLowerCase()) !== -1
-          );
-        } else {
-          return (
-            record.affiliate_name
-              ?.toLocaleLowerCase()
-              .search(value.toLocaleLowerCase()) !== -1
-          );
-        }
-      },
-      className: "ant-table-column_wrap-column",
+      title: (<Typography content="Hẹn tái khám" modifiers={["12x18", "500", "center"]} />),
+      align: "center",
+      dataIndex: "next_reexamming_date",
+      width: 110,
+      // showSorterTooltip: false,
+      // sorter: (a: any, b: any) => new Date(a?.register_date).valueOf() - new Date(b?.register_date).valueOf(),
+      className: "ant-table-column_wrap",
       render: (record: any, data: any) => (
         <div className="ant-table-column_item" onClick={() => {
           const { customer_id, customer_fullname, ...prevData } = data;
-          if (data.launch_source_name === "KH Cũ Giới Thiệu (WoM)") {
-            Cookies.set("id_customer", extractBracketValue(data.affiliate_name) || "" );
-            dispatch(getInfosCustomerById({ customer_id: extractBracketValue(data.affiliate_name) }));
-            window.open(
-              `/customer-info/id/${extractBracketValue(data.affiliate_name)}/history-interaction`,
-              "_blank"
-            );
-          } else {
-              Cookies.set("id_customer",customer_id );
-            dispatch(getInfosCustomerById({ customer_id: customer_id }));
-            window.open(
-              `/customer-info/id/${customer_id}/history-interaction`,
-              "_blank"
-            );
-          }
+           if (record) {
+              Cookies.set("id_customer", customer_id);
+              dispatch(getInfosCustomerById({ customer_id: customer_id }));
+               const fullName = customer_id.trim();
+              const encoded = encodeURIComponent(fullName);
+              window.open(`/call-re-examination?keyword=${encoded}&type=HTK`, "_blank");
+            } 
         }}>
-          {/* {(data?.affiliate_type !== "customer" && data?.affiliate_type !== "BSCD") ? (
-            <Typography content={data?.affiliate_type} modifiers={["14x20", "600", "center", data?.affiliate_type === "BSCD" ? "cg-red" : "blueNavy",]} />
-          ) : null} */}
-          <Typography content={record === "[] " ? "" : data?.launch_source_name === "KH Cũ Giới Thiệu (WoM)" ? toTitleCase(extractName(record)) : record} modifiers={["13x18", "500", "center", data?.affiliate_type === "BSCD" ? "cg-red" : "jetSub",]} />
+          <Typography content={record ? moment(record).format("DD-MM-YYYY") : ""} modifiers={["13x18", "jetSub", "500", "center"]} styles={{
+            color:"#0317fc"
+          }}/>
         </div>
       ),
     },
+     {
+      title: (<Typography content="Hẹn NS định kỳ" modifiers={["12x18", "500", "center"]} />),
+      align: "center",
+      dataIndex: "next_endoscopic_date",
+      width: 110,
+      // showSorterTooltip: false,
+      // sorter: (a: any, b: any) => new Date(a?.register_date).valueOf() - new Date(b?.register_date).valueOf(),
+      className: "ant-table-column_wrap",
+      render: (record: any, data: any) => (
+        <div className="ant-table-column_item" onClick={() => {
+          const { customer_id, customer_fullname, ...prevData } = data;
+           if (record) {
+              Cookies.set("id_customer", customer_id);
+              dispatch(getInfosCustomerById({ customer_id: customer_id }));
+             const fullName = customer_id.trim();
+              const encoded = encodeURIComponent(fullName);
+              window.open(`/call-re-examination?keyword=${encoded}&type=HNS`, "_blank");
+            } 
+        }}>
+          <Typography content={record ? moment(record).format("DD-MM-YYYY") : ""} modifiers={["13x18", "jetSub", "500", "center"]} styles={{
+            color:"#0317fc"
+          }}/>
+        </div>
+      ),
+    },
+     {
+      title: (<Typography content="Hẹn KSK định kỳ" modifiers={["12x18", "500", "center"]} />),
+      align: "center",
+      dataIndex: "next_health_date",
+      width: 110,
+      // showSorterTooltip: false,
+      // sorter: (a: any, b: any) => new Date(a?.register_date).valueOf() - new Date(b?.register_date).valueOf(),
+      className: "ant-table-column_wrap",
+      render: (record: any, data: any) => (
+        <div className="ant-table-column_item" onClick={() => {
+          const { customer_id, customer_fullname, ...prevData } = data;
+          if (record) {
+              Cookies.set("id_customer", customer_id);
+              dispatch(getInfosCustomerById({ customer_id: customer_id }));
+               const fullName = customer_id.trim();
+              const encoded = encodeURIComponent(fullName);
+              window.open(`/call-re-examination?keyword=${encoded}&type=HKSK`, "_blank");
+            }
+        }}>
+           <Typography content={record ? moment(record).format("DD-MM-YYYY") : ""} modifiers={["13x18", "jetSub", "500", "center"]} styles={{
+            color:"#0317fc"
+          }}/>
+        </div>
+      ),
+    },
+     {
+      title: (<Typography content="Hẹn làm DV khác" modifiers={["12x18", "500", "center"]} />),
+      align: "center",
+      dataIndex: "next_service_date",
+      width: 110,
+      // showSorterTooltip: false,
+      // sorter: (a: any, b: any) => new Date(a?.register_date).valueOf() - new Date(b?.register_date).valueOf(),
+      className: "ant-table-column_wrap",
+      render: (record: any, data: any) => (
+        <div className="ant-table-column_item" onClick={() => {
+          const { customer_id, customer_fullname, ...prevData } = data;
+            if (record) {
+              Cookies.set("id_customer", customer_id);
+              dispatch(getInfosCustomerById({ customer_id: customer_id }));
+            const fullName = customer_id.trim();
+              const encoded = encodeURIComponent(fullName);
+              window.open(`/call-re-examination?keyword=${encoded}&type=HDVK`, "_blank");
+            }
+        }}>
+          <Typography content={record ? moment(record).format("DD-MM-YYYY") : ""} modifiers={["13x18", "jetSub", "500", "center"]} styles={{
+            color:"#0317fc"
+          }}/>
+        </div> 
+      ),
+    },
+   
+   
+    // {
+    //   title: (data: any) => { return (<Typography content="Người giới thiệu" modifiers={["12x18", "500", "center"]}  styles={{marginLeft:10}}/>); },
+    //   width: 150,
+    //   dataIndex: "affiliate_name",
+    //   filters: filterColumn.partner,
+    //   filterSearch: true,
+    //   onFilter: (value: string, record: any) => {
+    //     if (value.split("] ")[1]) {
+    //       return (
+    //         record.affiliate_name
+    //           .split("] ")[1]
+    //           ?.toLocaleLowerCase()
+    //           .search(value.split("] ")[1]?.toLocaleLowerCase()) !== -1
+    //       );
+    //     } else {
+    //       return (
+    //         record.affiliate_name
+    //           ?.toLocaleLowerCase()
+    //           .search(value.toLocaleLowerCase()) !== -1
+    //       );
+    //     }
+    //   },
+    //   className: "ant-table-column_wrap-column",
+    //   render: (record: any, data: any) => (
+    //     <div className="ant-table-column_item" onClick={() => {
+    //       const { customer_id, customer_fullname, ...prevData } = data;
+    //       if (data.launch_source_name === "KH Cũ Giới Thiệu (WoM)") {
+    //         Cookies.set("id_customer", extractBracketValue(data.affiliate_name) || "" );
+    //         dispatch(getInfosCustomerById({ customer_id: extractBracketValue(data.affiliate_name) }));
+    //         window.open(
+    //           `/customer-info/id/${extractBracketValue(data.affiliate_name)}/history-interaction`,
+    //           "_blank"
+    //         );
+    //       } else {
+    //           Cookies.set("id_customer",customer_id );
+    //         dispatch(getInfosCustomerById({ customer_id: customer_id }));
+    //         window.open(
+    //           `/customer-info/id/${customer_id}/history-interaction`,
+    //           "_blank"
+    //         );
+    //       }
+    //     }}>
+    //       {/* {(data?.affiliate_type !== "customer" && data?.affiliate_type !== "BSCD") ? (
+    //         <Typography content={data?.affiliate_type} modifiers={["14x20", "600", "center", data?.affiliate_type === "BSCD" ? "cg-red" : "blueNavy",]} />
+    //       ) : null} */}
+    //       <Typography content={record === "[] " ? "" : data?.launch_source_name === "KH Cũ Giới Thiệu (WoM)" ? toTitleCase(extractName(record)) : record} modifiers={["13x18", "500", "center", data?.affiliate_type === "BSCD" ? "cg-red" : "jetSub",]} />
+    //     </div>
+    //   ),
+    // },
     {
       title: (<Typography content="Dịch vụ" modifiers={["12x18", "500", "left"]} styles={{textAlign:"left",marginLeft:8}}/>),
       dataIndex: "note",
@@ -785,28 +786,15 @@ content={
       />
     </div>
   ),
-},
- {
-      title: (<Typography content="Lịch hẹn tiếp" modifiers={["12x18", "500", "center"]} />),
+    },
+  {
+      title: (<Typography content="Phân loại" modifiers={["12x18", "500", "center"]} />),
       align: "center",
-      dataIndex: "next_appointment_id",
-        width: 100,
-      ellipsis: true,
-      // fixed: 'right',
-       className: "ant-table-column_wrap",
-       filters: [
-         { text: 'Có', value: 'Có' },
-         { text: 'Không', value: 'Không' },
-       ],
-      onFilter: (value: any, record: any) => {
-         if (record.next_appointment_id != null && value === 'Có') {
-           return record.next_appointment_id !== null;
-         }
-          else if (record.next_appointment_id == null && value === 'Không') {
-          return record.next_appointment_id === null;
-         }
-        
-      },
+      width: 80,
+      dataIndex: "f_type",
+      filters: filterColumn.typeCustomer,
+      onFilter: (value: any, record: any) => { return stateAppointView.find((i) => i.value === record.f_type)?.label?.includes(value); },
+      className: "ant-table-column_wrap",
       render: (record: any, data: any) => (
         <div className="ant-table-column_item" onClick={() => {
           const { customer_id, customer_fullname, ...prevData } = data;
@@ -821,10 +809,76 @@ content={
             toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
           }
         }}>
-          <Typography content={record && "Có"} modifiers={["14x20", "400", "center", 'green']} />
+          <Typography content={(stateAppointView || []).find((i: any) => i?.value === record)?.label} modifiers={["13x18", "500", "center", record === "Khách hàng mới" ? "jetSub" : 'jetSub',]} />
         </div>
       ),
     },
+    {
+      title: (<Typography content="Brand" modifiers={["12x18", "500", "center"]} />),
+      align: "center",
+      dataIndex: "launch_source_group_name",
+      showSorterTooltip: false,
+      width: 170,
+      filters: filterColumn.company,
+      onFilter: (value: any, record: any) => { return record.launch_source_group_name?.includes(value); },
+      className: "ant-table-column_wrap",
+      render: (record: any, data: any) => (
+        <div className="ant-table-column_item" onClick={() => {
+          const { customer_id, customer_fullname, ...prevData } = data;
+          if (customer_id) {
+            Cookies.set("id_customer", customer_id);
+            dispatch(getInfosCustomerById({ customer_id: customer_id }));
+            window.open(
+              `/customer-info/id/${customer_id}/history-interaction`,
+              "_blank"
+            );
+          } else {
+            toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
+          }
+        }}>
+          <Typography content={record} modifiers={["13x18", "500", "center", "jetSub"]} />
+        </div>
+      ),
+    },
+//  {
+//       title: (<Typography content="Lịch hẹn tiếp" modifiers={["12x18", "500", "center"]} />),
+//       align: "center",
+//       dataIndex: "next_appointment_id",
+//         width: 100,
+//       ellipsis: true,
+//       // fixed: 'right',
+//        className: "ant-table-column_wrap",
+//        filters: [
+//          { text: 'Có', value: 'Có' },
+//          { text: 'Không', value: 'Không' },
+//        ],
+//       onFilter: (value: any, record: any) => {
+//          if (record.next_appointment_id != null && value === 'Có') {
+//            return record.next_appointment_id !== null;
+//          }
+//           else if (record.next_appointment_id == null && value === 'Không') {
+//           return record.next_appointment_id === null;
+//          }
+        
+//       },
+//       render: (record: any, data: any) => (
+//         <div className="ant-table-column_item" onClick={() => {
+//           const { customer_id, customer_fullname, ...prevData } = data;
+//           if (customer_id) {
+//             Cookies.set("id_customer", customer_id);
+//             dispatch(getInfosCustomerById({ customer_id: customer_id }));
+//             window.open(
+//               `/customer-info/id/${customer_id}/history-interaction`,
+//               "_blank"
+//             );
+//           } else {
+//             toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
+//           }
+//         }}>
+//           <Typography content={record && "Có"} modifiers={["14x20", "400", "center", 'green']} />
+//         </div>
+//       ),
+//     },
     {
       title: (<Typography content="Tình trạng" modifiers={["12x18", "500", "center"]} styles={{marginLeft:8}}/>),
       align: "center",
@@ -843,15 +897,13 @@ content={
           <div
             className="p-appointment_view_column_care_item"
             onClick={async () => {
-              console.log("🚀", care_employee_id === null,
-                !is_care,
-                care_employee_id === employeeId, care_employee_id, employeeId)
+             
               if (
                 care_employee_id === null ||
                 !is_care ||
                 care_employee_id === employeeId || (care_employee_name === null && affiliate_type === "BSCD")
               ) {
-                console.log(data)
+              
                  await postChangeStatusCustomer(master_id);
               } else {
                 toast.info(
