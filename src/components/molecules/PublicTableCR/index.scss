@@ -18,6 +18,11 @@
     }
 }
 
+:where(.css-dev-only-do-not-override-1c0na6j).ant-table-wrapper .ant-table-summary>tr>th,
+:where(.css-dev-only-do-not-override-1c0na6j).ant-table-wrapper .ant-table-summary>tr>td {
+    border-bottom: '1px solid #dcdcdc';
+}
+
 .ant-spin-nested-loading,
 .ant-spin-container,
 .ant-table-wrapper,
@@ -246,6 +251,147 @@
         display: none !important;
     }
     
+
+    .ant-spin {
+        max-height: unset !important;
+    }
+
+}
+
+.m-public_table1 {
+    height: 100%;
+    overflow: hidden;
+    // margin-top: 6px;
+
+
+    .ant-table-wrapper {
+        height: 100%;
+
+        .ant-spin-container {
+            height: 100%;
+
+            .ant-table {
+                height: calc(100% - 32px);
+
+                .ant-table-container {
+                    height: 100%;
+
+                    .ant-table-header>table>thead>tr>td::before {
+                        display: none !important;
+
+                        .ant-table-cell-fix-right {
+                            z-index: 0 !important;
+                        }
+                    }
+
+                    .ant-table-thead .ant-table-cell-fix-right {
+                        z-index: 0 !important;
+                    }
+
+                    .ant-table-body {
+                        height: calc(100% - 70px);
+                        max-height: unset;
+
+                        table {
+                            overflow: scroll !important;
+                            table-layout: unset !important;
+
+                            .ant-table-tbody {
+                                max-height: 100%;
+                                overflow: scroll !important;
+
+                                .ant-table-row {
+                                    height: fit-content;
+                                    cursor: pointer;
+
+                                    .ant-table-cell {
+                                        border-color: #dcdcdc;
+                                    }
+                                }
+
+                                .ant-table-cell-fix-right {
+                                    z-index: 1 !important;
+                                    background-color: $white !important;
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .ant-table-cell-row-hover {
+            background-color: #eeeeee62 !important;
+        }
+    }
+
+    &_row {
+        height: fit-content !important;
+    }
+
+    &-simple {
+        outline: 1px solid $gray-border;
+        border-radius: 4px;
+
+        .ant-table-wrapper {
+            height: 100%;
+
+            .ant-spin-container {
+                height: 100%;
+
+                .ant-table {
+                    height: calc(100% - 32px);
+
+                    .ant-table-container {
+                        height: 100%;
+
+                        .ant-table-header {
+                            border-bottom: 1px solid #ddd !important;
+                            border-radius: unset !important;
+
+                            table thead tr .ant-table-cell {
+                                background-color: transparent !important;
+                                box-shadow: unset !important;
+                                border-color: #ddd !important;
+
+                                .a-typography {
+                                    color: #000 !important;
+                                }
+                            }
+                        }
+                    }
+
+                    .ant-table-title {
+                        background-color: #ddd;
+                        border-radius: 0 !important;
+                    }
+                }
+            }
+        }
+    }
+
+    &-hide_body {
+        .ant-table-tbody {
+            display: none !important;
+        }
+    }
+
+    &-hide_title {
+        .ant-table-title {
+            display: none !important;
+        }
+    }
+
+    .ant-table-measure-row {
+        visibility: collapse !important;
+    }
+
+    .no-tooltip .ant-table-column-sorters~ :where(.css-dev-only-do-not-override-1m62vyb).ant-tooltip,
+    .no-tooltip .ant-table-column-sorters~ :where(.ant-tooltip) {
+        display: none !important;
+    }
+
 
     .ant-spin {
         max-height: unset !important;

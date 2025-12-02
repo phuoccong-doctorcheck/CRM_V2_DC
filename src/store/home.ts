@@ -120,7 +120,8 @@ const initialState: HomeState = {
       dc_dm_cschedules_status: [],
       dm_time_doctor_schedules: [],
       dm_year_doctor_schedules: [],
-      dc_dm_staffs:[]
+      dc_dm_staffs: [],
+      mtypes:[],
     },
     message: "",
     status: false,
@@ -214,6 +215,7 @@ export const homeSlice = createSlice({
         dc_dm_cschedules,
         dm_year_doctor_schedules,
         dc_dm_staffs,
+        mtypes,
         ...prevData
       } = action.payload.data;
       console.log(action.payload.data);
@@ -225,6 +227,7 @@ export const homeSlice = createSlice({
       const newNations: DropdownData[] = [];
       const newAffiliates: DropdownData[] = [];
       const newGenders: DropdownData[] = [];
+      const newMTypes: DropdownData[] = [];
       const newFType: DropdownData[] = [];
       const newCareers: DropdownData[] = [];
       const newPackages: DropdownData[] = [];
@@ -339,6 +342,19 @@ export const homeSlice = createSlice({
 
            };
            newAppointmentTypes.push(newItem as unknown as GroupRadioType);
+         });
+       mtypes?.length &&
+         mtypes.map((item, index) => {
+           const newItem = {
+             m_type_id: item.m_type_id,
+             label: item.m_type_name,
+             value: item.m_type_id,
+             m_type_group: item.m_type_group,
+             sequence: item.sequence,
+              id: item.sequence
+
+           };
+           newMTypes.push(newItem as unknown as GroupRadioType);
          });
         // categories.length &&
         // categories.map((item, index) => {
@@ -837,6 +853,10 @@ export const homeSlice = createSlice({
       localStorage.setItem(
         "appointment_types",
         JSON.stringify(newAppointmentTypes)
+      );
+      localStorage.setItem(
+        "m_types",
+        JSON.stringify(newMTypes)
       );
        localStorage.setItem(
         "userguid_types",

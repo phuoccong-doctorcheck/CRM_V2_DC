@@ -118,8 +118,8 @@ const CustomerInfomation2: React.FC<CustomerInformationProps> = ({
     master: infoCustomer?.data?.master,//
     allow_update_profile: infoCustomer?.data?.allow_update_profile,
     launch_source_group_id: infoCustomer?.data?.source_first?.launch_source_group_id,
-     launch_source_id: infoCustomer?.data?.source_first?.launch_source_id,
-     launch_source_type_id: infoCustomer?.data?.source_first?.launch_source_type_id,
+    launch_source_id: infoCustomer?.data?.source_first?.launch_source_id,
+    launch_source_type_id: infoCustomer?.data?.source_first?.launch_source_type_id,
   });
    const [isLoadingB, setIsLoadingB] = useState(false)
    const [isLoading,setIsLoading] = useState(false)
@@ -1894,7 +1894,8 @@ const CustomerInfomation2: React.FC<CustomerInformationProps> = ({
           handleAddCustomer={(data: any) => handleUpdateCustomer(data)}
           isHigh
           isUsedDrawer={false}
-          isBooking={false}
+        isBooking={false}
+          customerId= {infoCustomer?.data?.customer?.customer_id}
         />
       }
       {isUpdateInfo &&
@@ -1929,7 +1930,8 @@ const CustomerInfomation2: React.FC<CustomerInformationProps> = ({
         isUsedDrawer={false}
         isLoadingB={isLoading}
         handleLoading={setIsLoading}
-        listDataServices={ stateIds}
+        listDataServices={stateIds}
+        valUpdateBooking={stateDetallVisit.data}
         customerId= {infoCustomer?.data?.customer?.customer_id}
         />
       }

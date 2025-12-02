@@ -105,6 +105,7 @@ interface FormAddCustomerProps {
   handleLoading?: any;
     listDataServices?: any;
   customerId?: string;
+  valUpdateBooking?: any;
 }
 const Notification: React.FC<{
   message: string;
@@ -273,7 +274,8 @@ const FormUpdateBookingCustomer: React.FC<FormAddCustomerProps> = ({
   isLoadingB,
   handleLoading,
   listDataServices,
-  customerId
+  customerId,
+  valUpdateBooking
 }) => {
   moment.locale("vi");
   const dispatch = useAppDispatch();
@@ -1646,7 +1648,31 @@ const FormUpdateBookingCustomer: React.FC<FormAddCustomerProps> = ({
               ) as unknown as DropdownData,
               gclid: valUpdate?.gclid || valUpdate?.gclid,
               // numberDis
+              
             });
+       console.log('valUpdate?.owner',valUpdateBooking)
+       if(valUpdateBooking?.owner != undefined)
+       {
+          setKeysearch("")
+           handleGetSource(valUpdateBooking?.owner?.source?.id);
+         console.log('valUpdate?.owner?.source?.id',valUpdateBooking?.owner?.source?.id,valUpdate?.owner?.source?.name)
+         const v = Number(valUpdateBooking?.owner?.source?.id);
+                                            setNameSource([2, 3, 4, 12].includes(v) ? (valUpdateBooking?.owner?.source?.name ?? "") : [5].includes(v) ? "Nhân Viên" : "công ty");
+                                            if ([2, 3, 4, 12, 5].includes(v))
+                                            {
+                                              setIsCompany(true)
+                                            }
+                                            else {
+                                                setIsCompany(false)
+         }
+         setOwnerType(valUpdateBooking?.owner?.owner?.owner_type)
+                                          setOwnerId(valUpdateBooking?.owner?.owner?.owner_id)
+         
+       }
+        if(valUpdateBooking?.owner?.owner?.owner_type === "company")
+       {
+         setIsCompany(true)
+       }
           }, 1000);
       setValueUpdateCustomer(valUpdate);
 
@@ -3091,7 +3117,8 @@ content={moment(record).format("DD-MM-YYYY HH:mm")}
                                               dropdownOption={
                                                 stateListS
                                               }
-                                              values={dataForm.source}
+                      values={dataForm.source}
+                      defaultValue={valUpdateBooking?.owner?.owner?.owner_name}
                                               isRequired={false}
 placeholder={
   !isCompany && (Number.isNaN(Number(dataForm?.origin?.value)) || [1,6,7,9,11,10].includes(Number(dataForm?.origin?.value)))
@@ -4668,21 +4695,21 @@ placeholder={
           }}
         />
       </CModal>
-        {/* <CModal
-              isOpen={openModalSourceCustomer}
-              onCancel={() => setOpenModalSourceCustomer(false)}
-              title="Danh sách nhóm nguồn, nguồn, hình thức chuyển đổi cũ của khách hàng"
-              widths={800}
-              isHideFooter
-            >
-              <PublicTable
-                listData={stateListSource}
-                column={tableColumnListSource}
-                handleOnClick={(event: any, record: any, rowIndex: any) => { }}
-                pageSizes={100}
-                isHideRowSelect
-              />
-            </CModal> */}
+      <CModal
+             isOpen={openModalSourceCustomer}
+             onCancel={() => setOpenModalSourceCustomer(false)}
+             title="Danh sách nhóm nguồn, nguồn, hình thức chuyển đổi cũ của khách hàng"
+             widths={800}
+             isHideFooter
+           >
+             <PublicTable
+               listData={stateListSource}
+               column={tableColumnListSource}
+               handleOnClick={(event: any, record: any, rowIndex: any) => { }}
+               pageSizes={100}
+               isHideRowSelect
+             />
+           </CModal>
       {showNotification && (
         <Notification
           message="Số điện thoại đã được đăng ký"

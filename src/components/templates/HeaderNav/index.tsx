@@ -879,7 +879,7 @@ const HeaderNav: React.FC<HeaderNavProps> = ({
                 <Typography content={"Đặt lịch ngay"} />
               }
             </div>
-             {/*
+           
             <div className="t-header_wrapper_nav_right_insurance" onClick={() => {
               setIsMerge(true);
               setDataMerge({
@@ -892,7 +892,7 @@ const HeaderNav: React.FC<HeaderNavProps> = ({
                 <Typography content={"Gộp KH"} />
               }
             </div>
-    */}
+    
             <div className="t-header_wrapper_nav_right_insurance" onClick={() => { setIsOpenInsurance(true); }}>
               <Icon iconName='health-insurance' size="28x28" />
               {Number(currentWidth) > 900 &&

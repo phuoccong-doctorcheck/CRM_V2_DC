@@ -31,7 +31,7 @@ import mapModifiers from 'utils/functions';
 
 import { textStyle } from '../../../assets/data/index';
 
-export type ResultType = 'PCD' | 'XN' | 'XQ' | 'DT' | 'NS' | 'TDV' | 'EMR' | 'SA' | 'GPB' | 'XNHT' | 'XNSHPT' | 'KHAMPK' | 'VACCINE' | 'overview' | 'XNHPV' | 'XNPAP' | 'SLLX';
+export type ResultType = 'PCD' | 'XN' | 'XQ' | 'DT' | 'NS' | 'TDV' | 'EMR' | 'SA' | 'GPB' | 'XNHT' | 'XNSHPT' | 'KHAMPK' | 'VACCINE' | 'overview' | 'XNHPV' | 'XNPAP' | 'SLLX' | 'KHAMTM';
 
 interface RenderExaminationResultProps {
   type?: ResultType,
@@ -75,7 +75,7 @@ async function downloadFile(path: string, token?: string) {
 const RenderExaminationResult: React.FC<RenderExaminationResultProps> = ({
   type, data, title, registerDate, masterId, error, handlePrint, isPrintOption, isRenderDone,
 }) => {
-  console.log("data---------------------",data,type)
+  console.log("data---------------------",data?.self_smoking_no,type)
  const columnsPCD = [
     {
       title: <Typography content="Tên dịch vụ" modifiers={['14x20', '500', 'center']} />,
@@ -267,7 +267,7 @@ const RenderExaminationResult: React.FC<RenderExaminationResultProps> = ({
       render: (record: any, data: any) => (
         <div>
           <Typography content={`${record} - (${data?.drugs_active_ingredient})`} modifiers={['14x20', '600', 'left']} />
-          <p style={{ color: '#333', fontSize: 13, fontStyle: 'italic' }}>{data.how_to_use}</p>
+          <p style={{ color: '#333', fontSize: 13, fontStyle: 'italic' }}>{data?.how_to_use}</p>
         </div>
       ),
     },
@@ -448,31 +448,31 @@ const getNameFileFromURL = (url: string) => {
                       <RichTextEditor typeText='notHeadernotBordernotBG' isDisabled data={data?.imaging?.inferable_conclude || ''} />
                       {
                         (
-                           data.imaging?.service_group_type === "NS" &&
-    data.imaging?.surgeries_type?.id === "THUCQUAN" &&
-    data.imaging?.clotest !== null
+                           data?.imaging?.service_group_type === "NS" &&
+    data?.imaging?.surgeries_type?.id === "THUCQUAN" &&
+    data?.imaging?.clotest !== null
                        ) ? <div className="row form-group">
       <div className="col-sm-12">
         <div className="row form-group">
           <div className="col-sm-12 p-0 m-0">
             CLOTEST: <span
               className={`font-18 font-weight-bold ${
-                data.imaging.clotest.is_positive ? "text-danger" : "text-success"
+                data?.imaging.clotest.is_positive ? "text-danger" : "text-success"
                                   }`}
                                 style={{
-                                  color: `${data.imaging.clotest.is_positive ? "#e43434" : "#28a745"}`,
+                                  color: `${data?.imaging.clotest.is_positive ? "#e43434" : "#28a745"}`,
                                   fontSize: "18px",
                                   fontWeight: "bold",
                                 }}
             >
-              {data.imaging.clotest.is_positive ? "DƯƠNG TÍNH" : "ÂM TÍNH"}
+              {data?.imaging.clotest.is_positive ? "DƯƠNG TÍNH" : "ÂM TÍNH"}
             </span>
           </div>
         </div>
         <div className="row form-group" style={{ display: "flex", justifyContent: "start",gap:"40px", marginTop: 6 }}>
           <div className="col-sm-4 p-0 m-0">
             <img
-              src={data.imaging.clotest_root_image_path}
+              src={data?.imaging.clotest_root_image_path}
               alt="Mẫu đối chứng (-)"
               width={196}
               height={110}
@@ -481,12 +481,12 @@ const getNameFileFromURL = (url: string) => {
           </div>
           <div className="col-sm-4 p-0 m-0">
             <img
-              src={data.imaging.clotest.clotest_image_path}
-              alt={data.imaging.clotest.clotest_title}
+              src={data?.imaging.clotest.clotest_image_path}
+              alt={data?.imaging.clotest.clotest_title}
               width={196}
               height={110}
             />   <div className="col-sm-4 p-0 m-0 text-center font-14" style={{textAlign:"right"}}>
-            {data.imaging.clotest.clotest_title}
+            {data?.imaging.clotest.clotest_title}
           </div>
                             </div>
                          
@@ -501,11 +501,11 @@ const getNameFileFromURL = (url: string) => {
                     <img src={data?.imaging?.damnifics?.image_path} alt="" loading="lazy" style={{ height: 550 }} />
                   </div>
                   {
-                    data.imaging.items.filter((item: any) => item.is_print).length > 0 && ( 
+                    data?.imaging.items.filter((item: any) => item.is_print).length > 0 && ( 
                       <>
-                        <div className="font-18 dc-bold text-uppercase mt-2 text-center" style={{fontSize:"18px", fontWeight:"bold", textTransform:"uppercase", marginTop:"30px", textAlign:"center"}}>HÌNH ẢNH KẾT QUẢ {data.service.service_name}</div>
+                        <div className="font-18 dc-bold text-uppercase mt-2 text-center" style={{fontSize:"18px", fontWeight:"bold", textTransform:"uppercase", marginTop:"30px", textAlign:"center"}}>HÌNH ẢNH KẾT QUẢ {data?.service.service_name}</div>
                      <div className={mapModifiers('t-examination_result_xq_images', data?.imaging?.items?.length === 1 && 'one', type.toLowerCase())}>
-  {data.imaging.items
+  {data?.imaging.items
     .filter((item:any) => item.is_print)
     .sort((a:any, b:any) => a.damnific_index - b.damnific_index)
     .map((item:any, index:any) => (
@@ -540,11 +540,11 @@ const getNameFileFromURL = (url: string) => {
                     
                   }
                   {
-                   data.imaging.items.filter((item:any) => !item.is_print).length > 0 && ( 
+                   data?.imaging.items.filter((item:any) => !item.is_print).length > 0 && ( 
                       <>
                         <div className="font-18 dc-bold text-uppercase mt-2 text-center" style={{fontSize:"18px", fontWeight:"bold", textTransform:"uppercase", marginTop:"30px", textAlign:"center"}}>HÌNH ẢNH KHÁC </div>
                     <div className={mapModifiers('t-examination_result_xq_images', data?.imaging?.items?.length === 1 && 'one', type.toLowerCase())}>
-  {data.imaging.items
+  {data?.imaging.items
     .filter((item:any) => !item.is_print)
     .sort((a:any, b:any) => a.damnific_index - b.damnific_index)
     .map((item:any, index:any) => (
@@ -578,7 +578,7 @@ const getNameFileFromURL = (url: string) => {
                     )
                     
                   }
-                  {/* <div className="font-18 dc-bold text-uppercase mt-2 text-center" style={{fontSize:"18px", fontWeight:"bold", textTransform:"uppercase", marginTop:"30px", textAlign:"center"}}>HÌNH ẢNH KẾT QUẢ {data.service.service_name}</div>
+                  {/* <div className="font-18 dc-bold text-uppercase mt-2 text-center" style={{fontSize:"18px", fontWeight:"bold", textTransform:"uppercase", marginTop:"30px", textAlign:"center"}}>HÌNH ẢNH KẾT QUẢ {data?.service.service_name}</div>
                   <div className={mapModifiers('t-examination_result_xq_images', data?.imaging?.items?.length === 1 && 'one', type.toLowerCase())} style={{
                   }}>
                      
@@ -1314,37 +1314,55 @@ Có đang áp dụng BPTT:</span>
         <Typography content={title} />
       </div>
       {['XQ', 'DT', 'SA', 'NS', 'XN','KHAMPK'].includes(type as any) && (
-        <div className="o-categories_customer_right_info" style={{}}>
-          <div className="o-categories_customer_right_info_item">
+        <div className="o-categories_customer_right_info" style={{justifyContent:"start", gap:"100px",fontSize:"14px"}}>
+          <div className="o-categories_customer_right_info_item" style={{minWidth:"220px"}}>
             <span>Ngày chỉ định:</span>
-            <Typography content={data?.imaging?.servicepoint_create_date ? moment(data?.imaging?.servicepoint_create_date).format('YYYY/MM/DD HH:mm') : '--'} modifiers={['blueNavy', '13x18']} />
+            <Typography content={data?.imaging?.servicepoint_create_date ? moment(data?.imaging?.servicepoint_create_date).format('YYYY/MM/DD HH:mm') : '--'} modifiers={['blueNavy', '13x18']} styles={{fontSize:"14px"}}/>
           </div>
           <div className="o-categories_customer_right_info_item">
             <span>Mã phiếu:</span>
-            <Typography content={masterId} modifiers={['blueNavy', '13x18']} />
+            <Typography content={masterId} modifiers={['blueNavy', '13x18']} styles={{fontSize:"14px"}}/>
           </div>
+        </div>
+      )}
+       {['KHAMTM'].includes(type as any) && (
+        <div className="o-categories_customer_right_info o-categories_customer_right_info_pcd" style={{
+         fontSize:"14px",
+          display: "flex",
+         justifyContent:"start", gap:"150px",
+         alignItems:"center"
+        }}>
+         
+          <div className="o-categories_customer_right_info_item" style={{justifyContent:"start",fontSize:"14px",paddingLeft:"0px"}}>
+            <span>Mã phiếu:</span>
+            <Typography content={masterId} modifiers={['blueNavy', '13x18']} styles={{fontSize:"14px"}}/>
+          </div>
+         
         </div>
       )}
       {['PCD'].includes(type as any) && (
         <div className="o-categories_customer_right_info o-categories_customer_right_info_pcd" style={{
-          flexWrap: 'wrap'
+         fontSize:"14px",
+          display: "flex",
+         justifyContent:"start", gap:"150px",
+         alignItems:"center"
         }}>
-          <div className="o-categories_customer_right_info_item">
+          <div className="o-categories_customer_right_info_item" style={{justifyContent:"start",fontSize:"14px",paddingLeft:"0px"}}>
             <span>Ngày chỉ định:</span>
-            <Typography content={data?.servicepoint_datetime && moment(data?.servicepoint_datetime).format('YYYY/MM/DD HH:mm')} modifiers={['blueNavy', '13x18']} />
+            <Typography content={data?.servicepoint_datetime && moment(data?.servicepoint_datetime).format('YYYY/MM/DD HH:mm')} modifiers={['blueNavy', '13x18']} styles={{fontSize:"14px"}}/>
           </div>
-          <div className="o-categories_customer_right_info_item">
+          <div className="o-categories_customer_right_info_item" style={{justifyContent:"start",fontSize:"14px",paddingLeft:"0px"}}>
             <span>Mã phiếu:</span>
-            <Typography content={masterId} modifiers={['blueNavy', '13x18']} />
+            <Typography content={masterId} modifiers={['blueNavy', '13x18']} styles={{fontSize:"14px"}}/>
           </div>
-          <div className="o-categories_customer_right_info_item">
+          {/* <div className="o-categories_customer_right_info_item">
             <span>Người tạo phiếu:</span>
-            <Typography content={data?.servicepoint_affiliat_name} modifiers={['blueNavy', '13x18']} />
-          </div>
+            <Typography content={data?.servicepoint_affiliat_name ? data?.servicepoint_affiliat_name : "--"} modifiers={['blueNavy', '13x18']} styles={{fontSize:"14px"}}/>
+          </div> */}
         </div>
       )}
        {['XNHPV'].includes(type as any) && (
-        <div className="o-categories_customer_right_info o-categories_customer_right_info_pcd"style={{gridTemplateColumns:"repeat(4,1fr)",marginTop:"10px"}}>
+        <div className="o-categories_customer_right_info o-categories_customer_right_info_pcd"style={{gridTemplateColumns:"repeat(2,1fr)",marginTop:"10px"}}>
           <div className="o-categories_customer_right_info_item" style={{paddingLeft:"0px"}}>
             <span>BS Phụ khoa:</span>
             <Typography content={data?.doctor_signature_name} modifiers={['blueNavy', '13x18']} styles={{fontSize:"14px"}}/>
@@ -1364,7 +1382,7 @@ Có đang áp dụng BPTT:</span>
         </div>
       )}
             {['XNPAP'].includes(type as any) && (
-        <div className="o-categories_customer_right_info o-categories_customer_right_info_pcd"style={{gridTemplateColumns:"repeat(4,1fr)",marginTop:"10px"}}>
+        <div className="o-categories_customer_right_info o-categories_customer_right_info_pcd"style={{gridTemplateColumns:"repeat(2,1fr)",marginTop:"10px"}}>
           <div className="o-categories_customer_right_info_item" style={{paddingLeft:"0px"}}>
             <span>BS Phụ khoa:</span>
             <Typography content={data?.doctor_signature_name} modifiers={['blueNavy', '13x18']} styles={{fontSize:"14px"}}/>
@@ -1413,8 +1431,8 @@ Có đang áp dụng BPTT:</span>
         </div>
       )}
       {['XN'].includes(type as any) && (
-        <div className="t-examination_result_xn_header">
-          <div className="t-examination_result_xn_header_item">
+        <div className="t-examination_result_xn_header" style={{display:"flex",justifyContent:"start",alignItems:"center",gap:100, marginTop:0}}>
+          <div className="t-examination_result_xn_header_item" style={{minWidth:"200px"}}>
             <span>Thời gian lấy mẫu:</span>
             <Typography content={data?.take_samples_time ? moment(data?.take_samples_time).format('HH:mm - DD/MM/YYYY') : ''} />
           </div>
@@ -1422,13 +1440,13 @@ Có đang áp dụng BPTT:</span>
             <span>Thời gian nhập kết quả:</span>
             <Typography content={data?.approved_time ? moment(data?.approved_time).format('HH:mm - DD/MM/YYYY') : ''} />
           </div>
-          {
-            data?.status !== "done" &&  <div className="t-examination_result_xn_header_item">
-            <span>Hẹn trả kết quả lúc:</span>
-            <Typography content={data?.expected_results_time ? moment(data?.expected_results_time).format('HH:mm - DD/MM/YYYY') : ''} />
-          </div>
-            }
-         
+           {/* { 
+             data?.status !== "done" &&  <div className="t-examination_result_xn_header_item">
+             <span>Hẹn trả kết quả lúc:</span>
+             <Typography content={data?.expected_results_time ? moment(data?.expected_results_time).format('HH:mm - DD/MM/YYYY') : ''} />
+           </div>
+             }
+         */}
           <div className="t-examination_result_xn_header_item">
             <span>Mã bệnh phẩm (SID):</span>
             <Typography content={data?.labtests_sid || ''} />
@@ -1475,8 +1493,8 @@ Có đang áp dụng BPTT:</span>
        
       )}
       {['XQ'].includes(type as any) && (
-        <div className="t-examination_result_xn_header">
-          <div className="t-examination_result_xn_header_item">
+        <div className="t-examination_result_xn_header" style={{display:"flex",justifyContent:"start",alignItems:"center",gap:100, marginTop:0}}>
+          <div className="t-examination_result_xn_header_item" style={{minWidth:"220px"}}> 
             <span>Nơi thực hiện: </span>
             <Typography content={data?.imaging?.execution_department?.name} />
           </div>
@@ -1491,8 +1509,8 @@ Có đang áp dụng BPTT:</span>
         </div>
       )}
       {['NS'].includes(type as any) && (
-        <div className="t-examination_result_xn_header">
-          <div className="t-examination_result_xn_header_item">
+        <div className="t-examination_result_xn_header" style={{display:"flex",justifyContent:"start",alignItems:"center",gap:100, marginTop:0}}>
+          <div className="t-examination_result_xn_header_item" style={{minWidth:"220px"}}>
             <span>Nơi thực hiện: </span>
             <Typography content={data?.imaging?.execution_department?.name} />
           </div>
@@ -1507,8 +1525,8 @@ Có đang áp dụng BPTT:</span>
         </div>
       )}
       {['DT', 'SA'].includes(type as any) && (
-        <div className="t-examination_result_gpb_header">
-          <div className="t-examination_result_gpb_header_item">
+        <div className="t-examination_result_gpb_header" style={{display:"flex",justifyContent:"start",alignItems:"center",gap:100, marginTop:0}}>
+          <div className="t-examination_result_gpb_header_item" style={{minWidth:"220px"}}>
             <span>Nơi thực hiện:</span>
             <Typography content={data?.imaging?.execution_department?.name} />
           </div>
@@ -1518,23 +1536,23 @@ Có đang áp dụng BPTT:</span>
           </div>
           <div className="t-examination_result_gpb_header_item">
             <span>Ngày thực hiện:</span>
-            <Typography content={data?.imaging?.checkout_time ? moment(data?.imaging?.checkout_time).format('DD/MM/YYYY - HH:mm') : '--'} />
+            <Typography content={data?.imaging?.approved_date ? moment(data?.imaging?.approved_date).format('HH:mm DD-MM-YYYY') : '--'} />
           </div>
         </div>
       )}
           {['KHAMPK'].includes(type as any) && (
-        <div className="t-examination_result_gpb_header"style={{gridTemplateColumns:"repeat(3,1fr)",paddingLeft:"7px"}}>
-          <div className="t-examination_result_gpb_header_item">
+        <div className="t-examination_result_gpb_header" style={{display:"flex",justifyContent:"start",alignItems:"center",gap:100, marginTop:0}}>
+          <div className="t-examination_result_gpb_header_item"style={{minWidth:"220px"}}>
             <span>Ngày khám:</span>
             <Typography content={data?.in_datetime  ? moment(data?.in_datetime).format('DD/MM/YYYY - HH:mm') : '--'} />
           </div>
           <div className="t-examination_result_gpb_header_item">
             <span>Nơi khám:</span>
-            <Typography content={data?.doctor_department?.name} />
+            <Typography content={ data?.doctor_department?.name ? data?.doctor_department?.name : "--"} />
           </div>
           <div className="t-examination_result_gpb_header_item">
             <span>Bác sĩ khám:</span>
-            <Typography content={data?.doctor_employee?.name} />
+            <Typography content={data?.doctor_employee?.name ? data?.doctor_employee?.name : "--"} />
           </div>
           
         </div>
@@ -1622,7 +1640,1358 @@ Có đang áp dụng BPTT:</span>
           </div>
         </div>
       )}
-      {type !== 'EMR' && type !== 'XNHT' && type !== 'XN' && type !== 'XNSHPT' && type !== 'overview' &&  type !== 'KHAMPK' && type !== 'XNHPV' && type !== 'XNPAP' && type !== 'SLLX'&& type !== 'VACCINE' && (
+       {type === 'KHAMTM' && (
+          <div
+      id="anesthesiasCard"
+      style={{
+        fontSize: 13,
+        lineHeight: 1.4,paddingTop:10
+      }}
+    >
+      {/* Header */}
+      {/* <div style={{ ...rowStyle, ...formGroupStyle }}>
+        <div style={colStyle(9)}>
+          <div style={resultTitleStyle}>KẾT QUẢ KHÁM TIỀN MÊ TRƯỚC NỘI SOI</div>
+        </div>
+        <div style={{ ...colStyle(2), alignSelf: "center" }}>
+          Mã phiếu: {data?.master_id}
+        </div>
+        <div style={{ ...colStyle(1), ...printIconContainerStyle }}>
+          <i
+            className="fas fa-print"
+            style={printIconStyle}
+            onClick={() => onPrintForResultPage(resultItemDetail)}
+          />
+        </div>
+      </div> */}
+
+      {/* Phương pháp thủ thuật */}
+      <div style={{ ...rowStyle, ...formGroupStyle, ...marginTop4, }}>
+        <div style={colStyle(12)}>
+          <div style={rowStyle}>
+            <div style={{ ...colStyle(2), ...labelRightStyle, ...boldStyle }}>
+              Phương pháp thủ thuật:
+            </div>
+            <div style={colStyle(10)}>
+              <input
+                id="tb_surgical_method_text"
+                tabIndex={1}
+                type="text"
+                style={inputStyle}
+                defaultValue={data?.surgical_method_text || ""}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Bản thân & Dị ứng / Phẫu thuật */}
+      <div style={rowStyle}>
+        <div style={{...colStyle(6), display:"flex",justifyContent:"center",flexDirection:"column"}}>
+          {/* Bản thân - Hút thuốc */}
+          <div style={{ ...rowStyle, ...formGroupStyle,minHeight:"30px",maxHeight:"30px",alignItems:"center" }}>
+            {/* <div style={colStyle(2)}>
+              <span style={{ visibility: "hidden" }}>.</span>
+            </div> */}
+            <div
+              style={{
+                ...colStyle(2),
+                ...labelRightStyle,
+              }}
+            >
+              <b>Bản thân:</b>
+            </div>
+            <div
+              style={{
+                ...colStyle(2),
+                ...labelRightStyle,
+              }}
+            >
+              <b>Hút thuốc:</b>
+            </div>
+            <div style={colStyle(6)}>
+              <div style={inputGroupStyle}>
+                <label style={{ ...checkboxContainerStyle, ...marginRight12 }}>
+                  <input
+                    tabIndex={2}
+                    type="checkbox"
+                        checked={data?.self_smoking_yes}
+                        readOnly
+                      />
+                       {/* <input type="checkbox" checked={data?.squamous_cell_asc_h} readOnly  /> */}
+                  <span style={checkboxLabelStyle}>Có</span>
+                </label>
+                <label style={checkboxContainerStyle}>
+                  <input
+                    tabIndex={3}
+                    type="checkbox"
+                    checked={data?.self_smoking_no}
+                  />
+                  <span style={checkboxLabelStyle}>Không</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {/* Bản thân - Uống rượu */}
+          <div style={{ ...rowStyle, ...formGroupStyle,minHeight:"30px",maxHeight:"30px",alignItems:"center" }}>
+            <div style={colStyle(2)} />
+            <div
+              style={{
+                ...colStyle(2),
+                ...labelRightStyle,
+              }}
+            >
+              <b>Uống rượu:</b>
+            </div>
+            <div style={colStyle(8)}>
+              <div style={inputGroupStyle}>
+                <label style={{ ...checkboxContainerStyle, ...marginRight12 }}>
+                  <input
+                    tabIndex={4}
+                    type="checkbox"
+                    checked={data?.self_drink_yes}
+                  />
+                  <span style={checkboxLabelStyle}>Có</span>
+                </label>
+                <label style={checkboxContainerStyle}>
+                  <input
+                    tabIndex={5}
+                    type="checkbox"
+                    checked={data?.self_drink_no}
+                  />
+                  <span style={checkboxLabelStyle}>Không</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Dị ứng + Phẫu thuật */}
+       <div style={{...colStyle(6), display:"flex",justifyContent:"center",flexDirection:"column"}}>
+          {/* Dị ứng */}
+          <div style={{ ...rowStyle, ...formGroupStyle }}>
+            <div
+              style={{
+                ...colStyle(2),
+                ...labelRightStyle,
+              }}
+            >
+              <b>Dị ứng:</b>
+            </div>
+            <div style={colStyle(10)}>
+              <div style={inputGroupStyle}>
+                <label style={{ ...checkboxContainerStyle, ...marginRight12 }}>
+                  <input
+                    tabIndex={6}
+                    type="checkbox"
+                    checked={data?.self_allergy_medicine}
+                  />
+                  <span style={checkboxLabelStyle}>Thuốc</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginRight12 }}>
+                  <input
+                    tabIndex={7}
+                    type="checkbox"
+                    checked={data?.self_allergy_food}
+                  />
+                  <span style={checkboxLabelStyle}>Thức ăn</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginRight12 }}>
+                  <input
+                    tabIndex={8}
+                    type="checkbox"
+                    checked={data?.self_allergy_other}
+                  />
+                  <span style={checkboxLabelStyle}>Khác</span>
+                </label>
+                <input
+                  id="tb_self_allergy_other_text"
+                  tabIndex={9}
+                  type="text"
+                  style={{ ...inputStyle, flex: 1 }}
+                  defaultValue={data?.self_allergy_other_text || ""}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Phẫu thuật */}
+          <div style={{ ...rowStyle, ...formGroupStyle }}>
+            <div
+              style={{
+                ...colStyle(2),
+                ...labelRightStyle,
+              }}
+            >
+              <b>Phẫu thuật:</b>
+            </div>
+            <div style={colStyle(10)}>
+              <div style={inputGroupStyle}>
+                <input
+                  id="tb_self_surgery_text"
+                  tabIndex={9}
+                  type="text"
+                  style={{ ...inputStyle, flex: 1 }}
+                  defaultValue={data?.self_surgery_text || ""}
+                />
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={10}
+                    type="checkbox"
+                    checked={data?.self_surgery_anesthesia}
+                  />
+                  <span style={checkboxLabelStyle}>Mê</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={11}
+                    type="checkbox"
+                    checked={data?.self_surgery_anesthetize}
+                  />
+                  <span style={checkboxLabelStyle}>Tê</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={12}
+                    type="checkbox"
+                    checked={data?.self_surgery_catastrophe}
+                  />
+                  <span style={checkboxLabelStyle}>Tai biến về gây mê</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tim mạch (tiền sử) */}
+      <div style={rowStyle}>
+        <div style={colStyle(12)}>
+          <div style={{ ...rowStyle, ...formGroupStyle }}>
+            <div
+              style={{
+                ...colStyle(2),
+                    ...labelRightStyle,
+                
+              }}
+            >
+              <b>Tim mạch:</b>
+            </div>
+            <div style={colStyle(10)}>
+              <div style={{...inputGroupStyle,justifyContent:"space-between"}}>
+                <label style={checkboxContainerStyle}>
+                  <input
+                    tabIndex={13}
+                    type="checkbox"
+                    checked={data?.self_heart_normal}
+                  />
+                  <span style={checkboxLabelStyle}>Bình thường</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={14}
+                    type="checkbox"
+                    checked={data?.self_heart_high_pressure}
+                  />
+                  <span style={checkboxLabelStyle}>Cao huyết áp</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={15}
+                    type="checkbox"
+                    checked={data?.self_heart_chest_pain}
+                  />
+                  <span style={checkboxLabelStyle}>Đau thắt ngực</span>
+                </label>
+                <div style={{
+                  display:"flex",justifyContent:"center",alignItems:"center",
+                  width:"60%"
+                }}>
+                  <span style={{ ...inputAddonStyle, ...marginLeft12 ,fontSize:13}}>
+                  Khác:
+                </span>
+                <input
+                  id="tb_self_heart_other_text"
+                  tabIndex={16}
+                  type="text"
+                  style={{ ...inputStyle, marginLeft: 8 ,width:"100%"}}
+                  defaultValue={data?.self_heart_other_text || ""}
+                />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Hô hấp (tiền sử) */}
+      <div style={rowStyle}>
+        <div style={colStyle(12)}>
+          <div style={{ ...rowStyle, ...formGroupStyle }}>
+            <div
+              style={{
+                ...colStyle(2),
+                ...labelRightStyle,
+              }}
+            >
+              <b>Hô hấp:</b>
+            </div>
+            <div style={colStyle(10)}>
+              <div style={{...inputGroupStyle,justifyContent:"space-between"}}>
+                <label style={checkboxContainerStyle}>
+                  <input
+                    tabIndex={17}
+                    type="checkbox"
+                    checked={data?.self_respiratory_normal}
+                  />
+                  <span style={checkboxLabelStyle}>Bình thường</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={18}
+                    type="checkbox"
+                    checked={data?.self_respiratory_copd}
+                  />
+                  <span style={checkboxLabelStyle}>COPD</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={19}
+                    type="checkbox"
+                    checked={data?.self_respiratory_asthma}
+                  />
+                  <span style={checkboxLabelStyle}>Hen phế quản</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={20}
+                    type="checkbox"
+                    checked={data?.self_respiratory_tuberculosis}
+                  />
+                  <span style={checkboxLabelStyle}>Lao phổi</span>
+                </label>
+                  <div style={{
+                  display:"flex",justifyContent:"center",alignItems:"center",
+                  width:"55%"
+                }}>
+                  <span style={{ ...inputAddonStyle, ...marginLeft12 ,fontSize:14}}>
+                  Khác:
+                </span>
+                 <input
+                  id="tb_self_respiratory_other_text"
+                  tabIndex={21}
+                  type="text"
+                  style={{ ...inputStyle, marginLeft: 8 }}
+                  defaultValue={data?.self_respiratory_other_text || ""}
+                />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Nội tiết (tiền sử) */}
+      <div style={rowStyle}>
+        <div style={colStyle(12)}>
+          <div style={{ ...rowStyle, ...formGroupStyle }}>
+            <div
+              style={{
+                ...colStyle(2),
+                ...labelRightStyle,
+              }}
+            >
+              <b>Nội tiết:</b>
+            </div>
+            <div style={colStyle(10)}>
+               <div style={{...inputGroupStyle,justifyContent:"space-between"}}>
+                <label style={checkboxContainerStyle}>
+                  <input
+                    tabIndex={22}
+                    type="checkbox"
+                    checked={data?.self_endocrine_normal}
+                  />
+                  <span style={checkboxLabelStyle}>Bình thường</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={23}
+                    type="checkbox"
+                    checked={data?.self_endocrine_thyroid_goiter}
+                  />
+                  <span style={checkboxLabelStyle}>Bướu giáp</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={24}
+                    type="checkbox"
+                    checked={data?.self_endocrine_diabetes}
+                  />
+                  <span style={checkboxLabelStyle}>Đái tháo đường</span>
+                    </label>
+                     <div style={{
+                  display:"flex",justifyContent:"center",alignItems:"center",
+                  width:"61.3%"
+                }}>
+                  <span style={{ ...inputAddonStyle, ...marginLeft12 ,fontSize:14}}>
+                  Khác:
+                </span>
+                 <input
+                  id="tb_self_endocrine_other_text"
+                  tabIndex={25}
+                  type="text"
+                  style={{ ...inputStyle, marginLeft: 8 }}
+                  defaultValue={data?.self_endocrine_other_text || ""}
+                />
+                </div>
+             
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tiêu hoá (tiền sử) */}
+      <div style={rowStyle}>
+        <div style={colStyle(12)}>
+          <div style={{ ...rowStyle, ...formGroupStyle }}>
+            <div
+              style={{
+                ...colStyle(2),
+                ...labelRightStyle,
+              }}
+            >
+              <b>Tiêu hoá:</b>
+            </div>
+            <div style={colStyle(10)}>
+              <div style={{...inputGroupStyle,justifyContent:"space-between"}}>
+                <label style={checkboxContainerStyle}>
+                  <input
+                    tabIndex={26}
+                    type="checkbox"
+                    checked={data?.self_digestion_normal}
+                  />
+                  <span style={checkboxLabelStyle}>Bình thường</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={27}
+                    type="checkbox"
+                    checked={data?.self_digestion_stomach_pain}
+                  />
+                  <span style={checkboxLabelStyle}>Đau dạ dày</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={28}
+                    type="checkbox"
+                    checked={data?.self_digestion_stomach_bleeding}
+                  />
+                  <span style={checkboxLabelStyle}>Xuất huyết tiêu hoá</span>
+                    </label>
+                     <div style={{
+                  display:"flex",justifyContent:"center",alignItems:"center",
+                  width:"57.5%"
+                }}>
+                  <span style={{ ...inputAddonStyle, ...marginLeft12 ,fontSize:14}}>
+                  Khác:
+                </span>
+                 <input
+                  id="tb_self_digestion_other_text"
+                  tabIndex={29}
+                  type="text"
+                  style={{ ...inputStyle, marginLeft: 8 }}
+                  defaultValue={data?.self_digestion_other_text || ""}
+                />
+                </div>
+              
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Cơ quan khác (tiền sử) */}
+      <div style={rowStyle}>
+        <div style={colStyle(12)}>
+          <div style={{ ...rowStyle, ...formGroupStyle }}>
+            <div
+              style={{
+                ...colStyle(2),
+                ...labelRightStyle,
+              }}
+            >
+              <b>Cơ quan khác:</b>
+            </div>
+            <div style={{...colStyle(10),paddingLeft:"7px"}}>
+              <input
+                id="tb_self_part_other_text"
+                tabIndex={30}
+                type="text"
+                style={inputStyle}
+                defaultValue={data?.self_part_other_text || ""}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Gia đình */}
+      <div style={rowStyle}>
+        <div style={colStyle(12)}>
+          <div style={{ ...rowStyle, ...formGroupStyle }}>
+            <div
+              style={{
+                ...colStyle(1),
+                ...labelRightStyle,
+                ...boldStyle,
+              }}
+            >
+              Gia đình:
+            </div>
+            <div style={colStyle(11)}>
+             <div style={{...inputGroupStyle,justifyContent:"space-between"}}>
+                <label style={checkboxContainerStyle}>
+                  <input
+                    tabIndex={31}
+                    type="checkbox"
+                    checked={data?.family_normal}
+                  />
+                  <span style={checkboxLabelStyle}>Bình thường</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={32}
+                    type="checkbox"
+                    checked={data?.family_catastrophe}
+                  />
+                  <span style={checkboxLabelStyle}>Tai biến về gây mê</span>
+                </label>
+                  <div style={{
+                  display:"flex",justifyContent:"center",alignItems:"center",
+                  width:"73%"
+                }}>
+                <span style={{ ...inputAddonStyle, ...marginLeft12,fontSize:14 }}>
+                  Khác:
+                </span>
+                <input
+                  id="tb_family_other_text"
+                  tabIndex={33}
+                  type="text"
+                  style={{ ...inputStyle, marginLeft: 8 }}
+                  defaultValue={data?.family_other_text || ""}
+                />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Thuốc đang sử dụng */}
+      <div style={rowStyle}>
+        <div style={colStyle(12)}>
+          <div style={{ ...rowStyle, ...formGroupStyle,justifyContent:"space-between" }}>
+            <div
+              style={{
+                ...colStyle(1),
+                ...labelRightStyle,
+                    ...boldStyle,
+                    flex: "0 0 12.33333%",
+                maxWidth:"12.3333%"
+              }}
+            >
+              Thuốc đang sử dụng:
+            </div>
+            <div style={{...colStyle(11), flex:"0 0 87%"}}>
+              <input
+                id="tb_drugs_used_text"
+                tabIndex={34}
+                type="text"
+                style={{
+                  ...inputStyle,
+                 
+                }}
+                defaultValue={data?.drugs_used_text || ""}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Khám lâm sàng */}
+      {/* Khám lâm sàng */}
+<div style={rowStyle}>
+  <div style={colStyle(12)}>
+    <div style={{ ...rowStyle, ...formGroupStyle }}>
+      <div
+       style={{
+                ...colStyle(1),
+                ...labelRightStyle,
+                    ...boldStyle,
+                    flex: "0 0 12.33333%",
+                maxWidth:"12.3333%"
+              }}
+      >
+        Khám lâm sàng:
+      </div>
+      <div style={{...colStyle(11), flex:"0 0 87%"}}>
+        <div style={inputGroupStyle}>
+          <span style={{ ...inputAddonStyle, paddingRight: 4,fontSize:14 }}>
+            Mạch:
+          </span>
+          <input
+            id="tb_heart_rate"
+            tabIndex={35}
+            type="text"
+            style={smallInputStyle}
+            disabled
+            value={data?.vitalsign?.heart_rate || ""}
+          />
+          <span
+            style={{
+              ...inputAddonStyle,
+              marginLeft: 4,
+              paddingRight: 4,fontSize:14 
+            }}
+          >
+            l/phút; Huyết áp:
+          </span>
+          <input
+            id="tb_blood_pressure_min"
+            tabIndex={36}
+            type="text"
+            style={smallInputStyle}
+            disabled
+            value={data?.vitalsign?.blood_pressure_min || ""}
+          />
+          <span
+            style={{
+              ...inputAddonStyle,
+              marginLeft: 4,
+              paddingRight: 4,fontSize:14 
+            }}
+          >
+            /
+          </span>
+          <input
+            id="tb_blood_pressure_max"
+            tabIndex={37}
+            type="text"
+            style={smallInputStyle}
+            disabled
+            value={data?.vitalsign?.blood_pressure_max || ""}
+          />
+          <span
+            style={{
+              ...inputAddonStyle,
+              marginLeft: 4,
+              paddingRight: 4,fontSize:14 
+            }}
+          >
+            Nhiệt độ:
+          </span>
+          <input
+            id="tb_temperature"
+            tabIndex={38}
+            type="text"
+            style={smallInputStyle}
+            disabled
+            value={data?.vitalsign?.temperature || ""}
+          />
+          <span
+            style={{
+              ...inputAddonStyle,
+              marginLeft: 4,
+              paddingRight: 4,fontSize:14 
+            }}
+          >
+            ℃; Chiều cao:
+          </span>
+          <input
+            id="tb_height"
+            tabIndex={39}
+            type="text"
+            style={smallInputStyle}
+            disabled
+            value={data?.vitalsign?.height || ""}
+          />
+          <span
+            style={{
+              ...inputAddonStyle,
+              marginLeft: 4,
+              paddingRight: 4,fontSize:14 
+            }}
+          >
+            cm; Cân nặng:
+          </span>
+          <input
+            id="tb_weight"
+            tabIndex={40}
+            type="text"
+            style={smallInputStyle}
+            disabled
+            value={data?.vitalsign?.weight || ""}
+          />
+          <span
+            style={{
+              ...inputAddonStyle,
+              marginLeft: 4,
+              paddingRight: 4,fontSize:14 
+            }}
+          >
+            Kg; BMI:
+          </span>
+          <input
+            id="tb_bmi"
+            tabIndex={41}
+            type="text"
+            style={smallInputStyle}
+            disabled
+            value={data?.vitalsign?.bmi || ""}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+      {/* Đường thở + Mallampati */}
+      <div style={rowStyle}>
+        <div style={colStyle(12)}>
+          {/* Đường thở */}
+          <div style={{ ...rowStyle, ...formGroupStyle }}>
+            <div style={colStyle(1)} />
+            <div
+              style={{
+                ...colStyle(1),
+                ...labelLeftStyle,     padding:"0px"
+              }}
+            >
+              Đường thở:
+            </div>
+            <div style={colStyle(10)}>
+              <div style={inputGroupStyle}>
+                <label style={checkboxContainerStyle}>
+                  <input
+                    tabIndex={42}
+                    type="checkbox"
+                    checked={data?.exams_airway_small_mouth}
+                  />
+                  <span style={checkboxLabelStyle}>Miệng há nhỏ</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={43}
+                    type="checkbox"
+                    checked={data?.exams_airway_short_neck}
+                  />
+                  <span style={checkboxLabelStyle}>Cổ ngắn</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={44}
+                    type="checkbox"
+                    checked={data?.exams_airway_itchy_neck}
+                  />
+                  <span style={checkboxLabelStyle}>Ngửa cổ khó</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={45}
+                    type="checkbox"
+                    checked={data?.exams_airway_retreating_chin}
+                  />
+                  <span style={checkboxLabelStyle}>Cằm lẹm</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={46}
+                    type="checkbox"
+                    checked={data?.exams_airway_lost_many_teeth}
+                  />
+                  <span style={checkboxLabelStyle}>Mất nhiều răng</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={47}
+                    type="checkbox"
+                    checked={data?.exams_airway_dentures}
+                  />
+                  <span style={checkboxLabelStyle}>Răng giả</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={48}
+                    type="checkbox"
+                    checked={data?.exams_airway_loose_teeth}
+                  />
+                  <span style={checkboxLabelStyle}>Răng lung lay</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={49}
+                    type="checkbox"
+                    checked={data?.exams_airway_difficult_intubation}
+                  />
+                  <span style={checkboxLabelStyle}>Đặt nội khí quản khó</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {/* Mallampati */}
+          <div style={{ ...rowStyle, ...formGroupStyle }}>
+            <div style={colStyle(1)} />
+            <div style={colStyle(1)} />
+            <div style={{...colStyle(10)}}>
+              <div style={inputGroupStyle}>
+                <span style={inputAddonStyle}>Mallampati:</span>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={50}
+                    type="checkbox"
+                    checked={data?.exams_mallampati1}
+                  />
+                  <span style={checkboxLabelStyle}>I</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={51}
+                    type="checkbox"
+                    checked={data?.exams_mallampati2}
+                  />
+                  <span style={checkboxLabelStyle}>II</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={52}
+                    type="checkbox"
+                    checked={data?.exams_mallampati3}
+                  />
+                  <span style={checkboxLabelStyle}>III</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={53}
+                    type="checkbox"
+                    checked={data?.exams_mallampati4}
+                  />
+                  <span style={checkboxLabelStyle}>IV</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tim mạch (khám) */}
+      <div style={rowStyle}>
+        <div style={colStyle(12)}>
+          <div style={{ ...rowStyle, ...formGroupStyle }}>
+            <div style={colStyle(1)} />
+            <div
+              style={{
+                ...colStyle(1),
+                ...labelLeftStyle,     padding:"0px"
+              }}
+            >
+              Tim mạch:
+            </div>
+            <div style={{...colStyle(10),fontSize:12}}>
+             <div style={{...inputGroupStyle,justifyContent:"space-between"}}>
+                <label style={checkboxContainerStyle}>
+                  <input
+                    tabIndex={54}
+                    type="checkbox"
+                    checked={data?.exams_heart_normal}
+                  />
+                  <span style={checkboxLabelStyle}>Bình thường</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle,  }}>
+                  <input
+                    tabIndex={55}
+                    type="checkbox"
+                    checked={data?.exams_heart_high_pressure}
+                  />
+                  <span style={checkboxLabelStyle}>Cao huyết áp</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle,  }}>
+                  <input
+                    tabIndex={56}
+                    type="checkbox"
+                    checked={data?.exams_heart_chest_pain}
+                  />
+                  <span style={checkboxLabelStyle}>Đau thắt ngực</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle,  }}>
+                  <input
+                    tabIndex={57}
+                    type="checkbox"
+                    checked={data?.exams_heart_walk}
+                  />
+                  <span style={checkboxLabelStyle}>
+                    Đi bộ lên được 1 2 3 4 tầng lầu
+                  </span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, }}>
+                  <input
+                    tabIndex={58}
+                    type="checkbox"
+                    checked={data?.exams_heart_arrhythmia}
+                  />
+                  <span style={checkboxLabelStyle}>Loạn nhịp</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle,  }}>
+                  <input
+                    tabIndex={59}
+                    type="checkbox"
+                    checked={data?.exams_heart_section_more}
+                  />
+                  <span style={checkboxLabelStyle}>
+                    Xem thêm phần khám tim mạch
+                  </span>
+                    </label>
+                      <div style={{
+                  display:"flex",justifyContent:"center",alignItems:"center",
+                  width:"10.5%"
+                }}>
+                <span style={{ ...inputAddonStyle,fontSize:12  }}>Khác</span>
+                <input
+                  id="tb_exams_heart_other_text"
+                  tabIndex={60}
+                  type="text"
+                  style={{ ...inputStyle, marginLeft: 8 }}
+                  defaultValue={data?.exams_heart_other_text || ""}
+                />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Hô hấp (khám) */}
+      <div style={rowStyle}>
+        <div style={colStyle(12)}>
+          <div style={{ ...rowStyle, ...formGroupStyle }}>
+            <div style={colStyle(1)} />
+            <div
+              style={{
+                ...colStyle(1),
+                ...labelLeftStyle,     padding:"0px"
+              }}
+            >
+              Hô hấp:
+            </div>
+            <div style={colStyle(10)}>
+             <div style={{...inputGroupStyle,justifyContent:"space-between"}}>
+                <label style={checkboxContainerStyle}>
+                  <input
+                    tabIndex={61}
+                    type="checkbox"
+                    checked={data?.exams_respiratory_normal}
+                  />
+                  <span style={checkboxLabelStyle}>Bình thường</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={62}
+                    type="checkbox"
+                    checked={data?.exams_respiratory_copd}
+                  />
+                  <span style={checkboxLabelStyle}>COPD</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={63}
+                    type="checkbox"
+                    checked={data?.exams_respiratory_asthma}
+                  />
+                  <span style={checkboxLabelStyle}>Hen phế quản</span>
+                    </label>
+                    <div style={{
+                  display:"flex",justifyContent:"center",alignItems:"center",
+                  width:"67.5%"
+                }}>
+                <span style={{ ...inputAddonStyle, ...marginLeft12 ,fontSize:13}}>Khác</span>
+                <input
+                  id="tb_exams_respiratory_other_text"
+                  tabIndex={64}
+                  type="text"
+                  style={{ ...inputStyle, marginLeft: 8 }}
+                  defaultValue={data?.exams_respiratory_other_text || ""}
+                />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Nội tiết (khám) */}
+      <div style={rowStyle}>
+        <div style={colStyle(12)}>
+          <div style={{ ...rowStyle, ...formGroupStyle }}>
+            <div style={colStyle(1)} />
+            <div
+              style={{
+                ...colStyle(1),
+                ...labelLeftStyle,     padding:"0px"
+              }}
+            >
+              Nội tiết:
+            </div>
+            <div style={colStyle(10)}>
+              <div style={{...inputGroupStyle,justifyContent:"space-between"}}>
+                <label style={checkboxContainerStyle}>
+                  <input
+                    tabIndex={65}
+                    type="checkbox"
+                    checked={data?.exams_endocrine_normal}
+                  />
+                  <span style={checkboxLabelStyle}>Bình thường</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={66}
+                    type="checkbox"
+                    checked={data?.exams_endocrine_thyroid_goiter}
+                  />
+                  <span style={checkboxLabelStyle}>Bướu giáp</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={67}
+                    type="checkbox"
+                    checked={data?.exams_endocrine_diabetes}
+                  />
+                  <span style={checkboxLabelStyle}>Đái tháo đường</span>
+                    </label>
+                    <div style={{
+                  display:"flex",justifyContent:"center",alignItems:"center",
+                  width:"62.5%"
+                }}>
+                <span style={{ ...inputAddonStyle, ...marginLeft12 ,fontSize:13}}>Khác</span>
+                <input
+                  id="tb_exams_endocrine_other_text"
+                  tabIndex={68}
+                  type="text"
+                  style={{ ...inputStyle, marginLeft: 8 }}
+                  defaultValue={data?.exams_endocrine_other_text || ""}
+                />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Thần kinh */}
+      <div style={rowStyle}>
+        <div style={colStyle(12)}>
+          <div style={{ ...rowStyle, ...formGroupStyle }}>
+            <div style={colStyle(1)} />
+            <div
+              style={{
+                ...colStyle(1),
+                ...labelLeftStyle,     padding:"0px"
+              }}
+            >
+              Thần kinh:
+            </div>
+            <div style={colStyle(10)}>
+              <div style={{...inputGroupStyle,justifyContent:"space-between"}}>
+               <label style={checkboxContainerStyle}>
+  <input
+    tabIndex={69}
+    type="checkbox"
+    checked={data?.exams_nerve_normal}
+  />
+  <span style={checkboxLabelStyle}>Bình thường</span>
+</label>
+   <div style={{
+                  display:"flex",justifyContent:"center",alignItems:"center",
+                  
+                }}>
+  <span style={{ ...inputAddonStyle, ...marginLeft12 }}>Glasgow</span>
+<input
+  id="tb_exams_nerve_glasgow_point"
+  tabIndex={70}
+  type="text"
+  style={{ ...smallInputStyle, marginLeft: 4 }}
+  defaultValue={data?.exams_nerve_glasgow_point_text || ""}
+/>
+<span style={{ ...inputAddonStyle, marginLeft: 4 }}>điểm</span>
+</div>
+<label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+  <input
+    tabIndex={71}
+    type="checkbox"
+    checked={data?.exams_nerve_weak}
+  />
+  <span style={{...checkboxLabelStyle,fontSize:13}}>Yếu liệt nữa người</span>
+                    </label>
+                    <div style={{
+                  display:"flex",justifyContent:"center",alignItems:"center",
+                  width:"50.5%"
+                }}>
+<span style={{ ...inputAddonStyle, ...marginLeft12,fontSize:13 }}>Khác:</span>
+<input
+  id="tb_exams_nerve_other_text"
+  tabIndex={72}
+  type="text"
+  style={{ ...inputStyle, marginLeft: 8 }}
+  defaultValue={data?.exams_nerve_other_text || ""}
+/>
+</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Cơ xương khớp */}
+      <div style={rowStyle}>
+        <div style={colStyle(12)}>
+          <div style={{ ...rowStyle, ...formGroupStyle }}>
+            <div style={colStyle(1)} />
+            <div
+              style={{
+                ...colStyle(1),
+                    ...labelLeftStyle,
+                padding:"0px"
+              }}
+            >
+              Cơ xương khớp:
+            </div>
+            <div style={colStyle(10)}>
+               <div style={{...inputGroupStyle,justifyContent:"space-between"}}>
+                <label style={checkboxContainerStyle}>
+                  <input
+                    tabIndex={73}
+                    type="checkbox"
+                    checked={data?.exams_musculoskeletal_normal}
+                  />
+                  <span style={checkboxLabelStyle}>Bình thường</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={74}
+                    type="checkbox"
+                    checked={data?.exams_musculoskeletal_scoliosis}
+                  />
+                  <span style={checkboxLabelStyle}>Vẹo cột sống</span>
+                    </label>
+                    <div style={{
+                  display:"flex",justifyContent:"center",alignItems:"center",
+                  width:"73.5%"
+                }}>
+                <span style={{ ...inputAddonStyle, ...marginLeft12 ,fontSize:13}}>Khác:</span>
+                <input
+                  id="tb_exams_musculoskeletal_other_text"
+                  tabIndex={75}
+                  type="text"
+                  style={{ ...inputStyle, marginLeft: 8 }}
+                  defaultValue={data?.exams_musculoskeletal_other_text || ""}
+                /> </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Xét nghiệm bất thường */}
+      <div style={rowStyle}>
+        <div style={colStyle(12)}>
+          <div style={{ ...rowStyle, ...formGroupStyle }}>
+            <div style={colStyle(1)} />
+            <div style={colStyle(11)}>
+              <div style={inputGroupStyle}>
+                <span style={inputAddonStyle}>
+                  <b>Xét nghiệm bất thường cần lưu ý:</b>
+                </span>
+                <input
+                  id="tb_exams_abnormaltest_text"
+                  tabIndex={76}
+                  type="text"
+                  style={{ ...inputStyle, marginLeft: 8, flex: 1 }}
+                  defaultValue={data?.exams_abnormaltest_text || ""}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Đề nghị thêm */}
+      <div style={rowStyle}>
+        <div style={colStyle(12)}>
+          <div style={{ ...rowStyle, ...formGroupStyle }}>
+            <div
+              style={{
+                ...colStyle(1),
+                ...labelRightStyle,
+                ...boldStyle,
+              }}
+            >
+              Đề nghị thêm:
+            </div>
+            <div style={colStyle(11)}>
+              <input
+                id="tb_exams_suggestmore_text"
+                tabIndex={77}
+                type="text"
+                style={inputStyle}
+                defaultValue={data?.exams_suggestmore_text || ""}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ASA */}
+      <div style={rowStyle}>
+        <div style={colStyle(12)}>
+          {/* Xếp loại ASA */}
+          <div style={{ ...rowStyle, ...formGroupStyle }}>
+            <div style={colStyle(1)} />
+            <div style={colStyle(11)}>
+              <div style={inputGroupStyle}>
+                <span style={inputAddonStyle}>Xếp loại ASA:</span>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={78}
+                    type="checkbox"
+                    checked={data?.exams_asa_rate1}
+                  />
+                  <span style={checkboxLabelStyle}>I</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={79}
+                    type="checkbox"
+                    checked={data?.exams_asa_rate2}
+                  />
+                  <span style={checkboxLabelStyle}>II</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={80}
+                    type="checkbox"
+                    checked={data?.exams_asa_rate3}
+                  />
+                  <span style={checkboxLabelStyle}>III</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={81}
+                    type="checkbox"
+                    checked={data?.exams_asa_rate4}
+                  />
+                  <span style={checkboxLabelStyle}>IV</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={82}
+                    type="checkbox"
+                    checked={data?.exams_asa_rate5}
+                  />
+                  <span style={checkboxLabelStyle}>V</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {/* ASA chương trình / bán cấp / cấp cứu */}
+          <div style={{ ...rowStyle, ...formGroupStyle }}>
+            <div style={colStyle(1)} />
+            <div style={colStyle(11)}>
+              <div style={inputGroupStyle}>
+                <label style={checkboxContainerStyle}>
+                  <input
+                    tabIndex={84}
+                    type="checkbox"
+                    checked={data?.asa_program}
+                  />
+                  <span style={checkboxLabelStyle}>Chương trình</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={85}
+                    type="checkbox"
+                    checked={data?.asa_sub_level}
+                  />
+                  <span style={checkboxLabelStyle}>Bán cấp</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={86}
+                    type="checkbox"
+                    checked={data?.asa_emergency}
+                  />
+                  <span style={checkboxLabelStyle}>Cấp cứu</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {/* PP vô cảm */}
+          <div style={{ ...rowStyle, ...formGroupStyle }}>
+            <div
+              style={{
+                ...colStyle(1),
+                ...labelRightStyle,
+                ...boldStyle,
+              }}
+            >
+              PP vô cảm:
+            </div>
+            <div style={colStyle(11)}>
+              <div style={inputGroupStyle}>
+                <label style={checkboxContainerStyle}>
+                  <input
+                    tabIndex={87}
+                    type="checkbox"
+                    checked={data?.emotionless_method_pre_anesthetic}
+                  />
+                  <span style={checkboxLabelStyle}>Tiền mê</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={88}
+                    type="checkbox"
+                    checked={data?.emotionless_method_endotracheal}
+                  />
+                  <span style={checkboxLabelStyle}>Mê nội khí quản</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={89}
+                    type="checkbox"
+                    checked={data?.emotionless_method_venous}
+                  />
+                  <span style={checkboxLabelStyle}>Mê tĩnh mạch</span>
+                </label>
+                <label style={{ ...checkboxContainerStyle, ...marginLeft12 }}>
+                  <input
+                    tabIndex={90}
+                    type="checkbox"
+                    checked={data?.emotionless_method_local_anesthetic}
+                  />
+                  <span style={checkboxLabelStyle}>Tê tại chỗ</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      )}
+      {type !== 'EMR' && type !== 'XNHT' && type !== 'XN' && type !== 'XNSHPT' && type !== 'overview' &&  type !== 'KHAMPK' && type !== 'XNHPV' && type !== 'XNPAP' && type !== 'SLLX'&& type !== 'VACCINE' && type !== 'KHAMTM' && (
         <div className="t-examination_result_header_diagnose_note">
           <span>
             Chẩn đoán:
@@ -1638,6 +3007,7 @@ Có đang áp dụng BPTT:</span>
               || type === 'TDV' && data?.re_exams_card?.diagnose_icd10_text
               || type === 'DT' && data?.imaging?.diagnose_note
               || type === 'SA' && data?.imaging?.diagnose_note
+               || type === 'NS' && data?.imaging?.diagnose_note
               || type === 'PCD' && data?.diagnose_note
               || data?.diagnose_note}
           </span>
@@ -1645,7 +3015,7 @@ Có đang áp dụng BPTT:</span>
       )}
       {
         type === 'XNHPV' && (
-          <div className="t-examination_result_header_diagnose_note" style={{marginTop:"8px"}}>
+          <div className="t-examination_result_header_diagnose_note" >
           <span>
             Dịch vụ:
           </span>
@@ -1662,7 +3032,7 @@ Có đang áp dụng BPTT:</span>
       }
           {
         type === 'XNHPV' && (
-          <div className="t-examination_result_header_diagnose_note" style={{marginTop:"8px"}}>
+          <div className="t-examination_result_header_diagnose_note" >
           <span>
  Phương pháp:
           </span>
@@ -1926,9 +3296,9 @@ Genotype HPV 18/45
               </div>
                  <div style={{ display: 'flex', flexWrap: 'wrap', width: '100%' }}>
       {/* Cột 1 */}
-      <div style={{ width: '16.66%', display: 'flex', alignItems: 'center', marginBottom: 8 }}>
-       <span style={{ marginLeft: 4 ,fontWeight:600, minWidth:"160px",textAlign:"right" , marginRight:4}}>Biến đổi lành tính</span>
-        <input type="checkbox" checked={data?.benign_changes_detected} readOnly />:
+                <div style={{ width: '18.66%', display: 'flex', alignItems: 'center', marginBottom: 8 }}>
+                   <input type="checkbox" checked={data?.benign_changes_detected} readOnly />
+       <span style={{ marginLeft: 4 ,fontWeight:600, minWidth:"135px",textAlign:"right" , marginRight:4}}>Biến đổi lành tính:</span>
       </div>
 
       {/* Cột 2 */}
@@ -1937,11 +3307,11 @@ Genotype HPV 18/45
         <span style={{ marginLeft: 4 }}>Trichomonas vaginalis</span>
       </div>
 
-           <div style={{ width: '16.66%', display: 'flex', alignItems: 'center', marginBottom: 8 ,}}>
+           <div style={{ width: '14.66%', display: 'flex', alignItems: 'center', marginBottom: 8 ,}}>
         <input type="checkbox" checked={data?.benign_changes_candida_spp} readOnly  />
         <span style={{ marginLeft: 4 }}>Candida spp</span>
                 </div>
-                 <div style={{ width: '16.66%', display: 'flex', alignItems: 'center', marginBottom: 8 ,}}>
+                 <div style={{ width: '14.66%', display: 'flex', alignItems: 'center', marginBottom: 8 ,}}>
         <input type="checkbox" checked={data?.benign_changes_actinomyces_spp} readOnly  />
         <span style={{ marginLeft: 4 }}>Actinomyces spp</span>
                 </div>
@@ -1949,14 +3319,14 @@ Genotype HPV 18/45
         <input type="checkbox" checked={data?.benign_changes_herpes_simplex_virus} readOnly  />
         <span style={{ marginLeft: 4 }}>Herpes simplex virus</span>
                 </div>
-                 <div style={{ width: '16.66%', display: 'flex', alignItems: 'center', marginBottom: 8 ,}}>
+                 <div style={{ width: '14.66%', display: 'flex', alignItems: 'center', marginBottom: 8 ,}}>
         <input type="checkbox" checked={data?.benign_changes_others} readOnly  />
         <span style={{ marginLeft: 4 }}>Khác</span>
       </div>
               </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', width: '100%' }}>
       {/* Cột 1 */}
-      <div style={{ width: '16.66%', display: 'flex', alignItems: 'center', marginBottom: 8 }}>
+      <div style={{ width: '14.66%', display: 'flex', alignItems: 'center', marginBottom: 8 }}>
         <span style={{ marginLeft: 4 ,fontWeight:600,minWidth:"160px",textAlign:"right" , marginRight:4}}>Bất thường tế bào biểu mô</span>
         <input type="checkbox" checked={data?.epithelial_cell_abnormality} readOnly />
       
@@ -2223,5 +3593,112 @@ Genotype HPV 18/45
 
 // RenderExaminationResult.defaultProps = {
 // };
+const rowStyle: React.CSSProperties = {
+  display: "flex",
+  flexWrap: "wrap",
+};
 
+const formGroupStyle: React.CSSProperties = {
+  marginBottom: 8,
+};
+
+const colStyle = (span: number): React.CSSProperties => {
+  const width = `${(span / 12) * 100}%`;
+  return {
+    flex: `0 0 ${width}`,
+    maxWidth: width,
+    paddingLeft: 4,
+    paddingRight: 4,
+    boxSizing: "border-box",
+  };
+};
+const colStyleBT = (span: number): React.CSSProperties => {
+  const width = `${(span / 12) * 100}%`;
+  return {
+    flex: `0 0 ${width}`,
+    maxWidth: width,
+    paddingLeft: 4,
+    paddingRight: 4,
+    boxSizing: "border-box",
+  };
+};
+const labelRightStyle: React.CSSProperties = {
+  textAlign: "right",
+  alignSelf: "center",
+};
+
+const labelLeftStyle: React.CSSProperties = {
+  textAlign: "left",
+  alignSelf: "center",
+};
+
+const boldStyle: React.CSSProperties = {
+  fontWeight: 600,
+};
+
+const resultTitleStyle: React.CSSProperties = {
+  fontSize: 16,
+  fontWeight: 700,
+  padding: 8,
+  textTransform: "uppercase",
+};
+
+const printIconContainerStyle: React.CSSProperties = {
+  display: "flex",
+  justifyContent: "flex-end",
+  alignItems: "center",
+};
+
+const printIconStyle: React.CSSProperties = {
+  fontSize: 24,
+  cursor: "pointer",
+};
+
+const inputGroupStyle: React.CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+};
+
+const inputAddonStyle: React.CSSProperties = {
+  fontSize: 12,
+  whiteSpace: "nowrap",
+};
+
+const inputStyle: React.CSSProperties = {
+  height: 30,
+  padding: "2px 8px",
+  border: "1px solid #ced4da",
+  borderRadius: 4,
+  fontSize: 14,
+  lineHeight: 1.5,
+  width:"100%"
+};
+
+const smallInputStyle: React.CSSProperties = {
+  ...inputStyle,
+  width: 60,
+  textAlign: "center",
+};
+
+const checkboxContainerStyle: React.CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+};
+
+const checkboxLabelStyle: React.CSSProperties = {
+  cursor: "pointer",
+  marginLeft: 4,
+};
+
+const marginRight12: React.CSSProperties = {
+  marginRight: 12,
+};
+
+const marginLeft12: React.CSSProperties = {
+  marginLeft: 12,
+};
+
+const marginTop4: React.CSSProperties = {
+  marginTop: 4,
+};
 export default RenderExaminationResult;

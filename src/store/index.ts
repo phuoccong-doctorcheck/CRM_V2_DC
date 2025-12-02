@@ -10,6 +10,7 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
 import AddPriceQuoteReducer from "./AddPriceQuote";
+import LoadCustomerStatisticReducer from "./CustomerStaticstic";
 import afterExamsReducer from "./afterexams";
 import afterexamtaskReducer from "./afterexams_task"
 import appointmentMasterReducer from "./appointment_view";
@@ -67,6 +68,7 @@ const rootReducer = combineReducers({
   listSurvey: listSurveyReducer,
   callReExamming: callReExammingReducer,
   dashboardSales: dashboardSalesReducer,
+  LoadCustomerStatistic: LoadCustomerStatisticReducer,
 });
 
 // Apply Redux Persist to the root reducer

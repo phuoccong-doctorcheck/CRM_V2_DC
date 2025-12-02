@@ -35,6 +35,12 @@ export interface DCDMtaffs {
   job_title: string;
   is_show: boolean;
 }
+export interface MTypes {
+  m_type_id: string;
+  m_type_name: string;
+  m_type_group: string;
+  sequence: number;
+}
 export interface TaskTexts {
   task_text_id: any;
   task_type_id: string;
@@ -82,7 +88,8 @@ export interface Data {
   dc_dm_cschedules_status: ScheduleStatusC[]
   dm_time_doctor_schedules: DoctorScheduleTimeC[]
   dm_year_doctor_schedules: DMYearDoctorSchedules[]
-  dc_dm_staffs:DCDMtaffs[]
+  dc_dm_staffs: DCDMtaffs[]
+  mtypes:MTypes[]
 }
 export interface StepProcessLead {
   key_int: number,

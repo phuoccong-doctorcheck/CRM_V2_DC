@@ -11,11 +11,11 @@ export const getDataDBS = async (data: any,) => {
   const m = data.m;
   const y = data.y;
   const b = data.b;
-  const response = await api1.get(`/dashboardtaget/get-targets?page_id=${b}&month=${m}&year=${y}`);
+  const response = await api1.get(`/leaddashboard/get-targets?page_id=${b}&month=${m}&year=${y}`);
   return response.data;
 };
 // In báo giá
 export const postDataDBS = async (body: any) => {
-  const response = await api1.post("/dashboardtaget/save-targets", body);
+  const response = await api1.post("/leaddashboard/save-targets", body);
   return response.data;
 };

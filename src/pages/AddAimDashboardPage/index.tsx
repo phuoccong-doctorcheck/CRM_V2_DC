@@ -101,7 +101,7 @@ interface TableSection {
   rows: TableRow[]
 }
 const REPORT_URL =
-  "https://app.powerbi.com/view?r=eyJrIjoiOGIxNTRhYmYtMjIzZS00MmViLTllN2MtMjBmY2UxZmYyMTA3IiwidCI6ImRiNzNmYWY2LTViYzMtNDkwZC1iMGQ4LTZlZWE1ZTU4YTQ0NiIsImMiOjEwfQ%3D%3D";
+  "https://app.powerbi.com/view?r=eyJrIjoiNjUxYjg2YjUtODk1YS00MmMyLWI2MjgtN2Q3MTAwOGNlMDQ5IiwidCI6ImRiNzNmYWY2LTViYzMtNDkwZC1iMGQ4LTZlZWE1ZTU4YTQ0NiIsImMiOjEwfQ%3D%3D&pageName=e7454753d5ac9ac6daa9";
 const AddAimDashboardPage: React.FC = () => {
   const dispatch = useAppDispatch();
     const [filterType, setFilterType] = useState<"day" | "week" | "month" | "year">("day");
@@ -112,7 +112,6 @@ const AddAimDashboardPage: React.FC = () => {
   const storeDashBoard = useAppSelector((state) => state.dashboardSales.dashboardSalesMaster);
   const storeDashBoardLoading = useAppSelector((state) => state.dashboardSales.isLoadingDashboardSales);
   const storagelistPhares = localStorage.getItem("listPharesBeforeExams");
-  console.log("storeDashBoard",storeDashBoard.data.length === 0)
   const storageCategories = localStorage.getItem("categories");
   const storageCSKH = localStorage.getItem("listCSKH");
   const storageTouchPointLogType = localStorage.getItem("TouchPointLogType");

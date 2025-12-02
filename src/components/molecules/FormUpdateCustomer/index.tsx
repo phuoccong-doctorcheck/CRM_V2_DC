@@ -56,6 +56,8 @@ import {
   getCustomerWhenCallIn,
   getDistrictsAPIs,
   getDistrictsAPIsNew,
+  getListSourceCustomer,
+  getLS,
   getProvinceAPIs,
   getProvinceAPIsNew,
   getWardsAPIs,
@@ -104,6 +106,7 @@ interface FormAddCustomerProps {
   noOverLay?: boolean;
   isUsedDrawer?: boolean;
   isBooking?: boolean;
+  customerId?: string;
 }
 const Notification: React.FC<{
   message: string;
@@ -270,6 +273,7 @@ const FormUpdateCustomer: React.FC<FormAddCustomerProps> = ({
   positionDrawer,
   noOverLay,
   isBooking,
+  customerId
 }) => {
   moment.locale("vi");
   const dispatch = useAppDispatch();
@@ -279,7 +283,7 @@ const FormUpdateCustomer: React.FC<FormAddCustomerProps> = ({
   const dataSurveyPortrait = useAppSelector(
     (state) => state.infosCustomer.respSurveyPortrait
   );
-
+  console.log(valUpdate)
   const [totalService, setTotalService] = useState("Chưa chọn dịch vụ");
   const storageNation = localStorage.getItem("nations");
   const storageAffiliates = localStorage.getItem("affiliates");
@@ -409,6 +413,7 @@ const FormUpdateCustomer: React.FC<FormAddCustomerProps> = ({
     email: "",
     nation: undefined as unknown as DropdownData,
     voucher: undefined as unknown as DropdownData,
+      source:undefined as unknown as DropdownData,
     voucherName: "",
     voucherId: "",
     voucherValue: "",
@@ -599,6 +604,7 @@ const FormUpdateCustomer: React.FC<FormAddCustomerProps> = ({
       email: "",
       nation: undefined as unknown as DropdownData,
       voucher: undefined as unknown as DropdownData,
+        source:undefined as unknown as DropdownData,
       voucherName: "",
       voucherId: "",
       voucherValue: "",
@@ -802,7 +808,14 @@ const FormUpdateCustomer: React.FC<FormAddCustomerProps> = ({
     // );
 
     const request = {
-   
+      first_owner: {
+        customer_id:dataForm.id,
+         launch_source_group_id: dataForm?.originGroup?.value,
+            launch_source_id: dataForm?.origin?.value,
+            launch_source_type_id: dataForm?.originType?.value,
+        owner_id: isCompany ? ownerId : ([2, 3, 4, 5,12].includes(Number(dataForm?.origin?.value)) ? ownerId: null ),
+            owner_type: isCompany ? ownerType : ([2, 3, 4, 5,12].includes(Number(dataForm?.origin?.value)) ? ownerType: null ),  
+        },
         customer_id: dataForm.id,
         sales_employee_id: employeeId,
         customer_type: "customer",
@@ -924,6 +937,60 @@ const FormUpdateCustomer: React.FC<FormAddCustomerProps> = ({
   const [textMaleNotification, setTextMaleNotification] = useState("");
   const [textAgeNotification, setTextAgeNotification] = useState("");
   const [textIdNotification, setTextIdNotification] = useState("");
+    const [keysearch, setKeysearch] = useState("")
+      const [openModalKeysearch,setOpenModalKeysearch] = useState(false)
+    const [nameSource, setNameSource] = useState("")
+    const [isCompany, setIsCompany] = useState(false)
+     const [ownerType, setOwnerType] = useState("")
+  const [ownerId, setOwnerId] = useState("")
+   const [stateListS,setStateListS] = useState<any[]>([])
+       const { mutate: getSource } = useMutation(
+        "post-footer-form",
+        (id: any) => getLS(id),
+        {
+          onSuccess: (data) => {
+            const mappedData = data.data.map((item:any) => ({
+      ...item,
+      value: item.owner_id,
+      label: item.owner_name_display || item.owner_name,
+    }));
+          setStateListS(mappedData)
+          },
+          onError: (err) => {
+            console.error(err);
+          },
+        }
+      );
+    const handleGetSource = (data:any) => {
+      const body = {
+        launch_source_id: data,
+        keysearch: keysearch
+      }
+      getSource(body)
+  }
+  const [openModalSourceCustomer, setOpenModalSourceCustomer] = useState(false)
+  const [stateListSource,setStateListSource] = useState<any[]>([])
+     const { mutate: getListSource } = useMutation(
+        "post-footer-form",
+        (data: any) => getListSourceCustomer(data),
+        {
+          onSuccess: (data) => {
+            setStateListSource(data)
+            setOpenModalSourceCustomer(true)
+            setLoading(false)
+          },
+          onError: (err) => {
+            console.error("Error🚀 line 348 -> FormConvertCustomer:", err);
+          },
+        }
+      );
+      const [loading, setLoading] = useState(false)
+  const handleGetListSourceCustomer = async () => {
+     setLoading(true)
+    await getListSource({
+      customer_id: customerId,
+    });
+  };
   const { mutate: getCustomerByPhone } = useMutation(
     "post-footer-form",
     (data: any) => getCustomerWhenCallIn(data),
@@ -1351,14 +1418,15 @@ const FormUpdateCustomer: React.FC<FormAddCustomerProps> = ({
             ) as any) || undefined,
           origin:
             (stateLaunchSource.find(
-              (i) => i.value == valUpdate?.customer?.launch_source?.id
+              (i) => i.value == valueUpdateCustomer?.source_first?.launch_source_id
             ) as any) ||
             (stateLaunchSource.find(
               (i) => i.value == valUpdate?.launch_source_id
             ) as any),
           originGroup:
+            
             (stateLaunchSourceGroups.find(
-              (i) => i.value == valUpdate?.customer?.launch_source_group?.id
+              (i) => i.value == valueUpdateCustomer?.source_first?.launch_source_group_id
             ) as any) ||
             (stateLaunchSourceGroups.find(
               (i) => i.value == valUpdate?.launch_source_group_id
@@ -1368,7 +1436,7 @@ const FormUpdateCustomer: React.FC<FormAddCustomerProps> = ({
           ) as any,
           originType:
             (stateLaunchSourceTypes.find(
-              (i) => i.value == valUpdate?.customer?.launch_source_type?.id
+              (i) => i.value == valueUpdateCustomer?.source_first?.launch_source_type_id
             ) as any) ||
             (stateLaunchSourceTypes.find(
               (i) => i.value == valUpdate?.launch_source_type_id
@@ -1445,6 +1513,32 @@ const FormUpdateCustomer: React.FC<FormAddCustomerProps> = ({
           gclid: valUpdate?.customer?.gclid || valUpdate?.gclid,
           // numberDis
         });
+        if(valueUpdateCustomer?.source_first != undefined)
+       {
+          setKeysearch("")
+           handleGetSource(valueUpdateCustomer?.source_first?.launch_source_id);
+        
+          const v = Number(valueUpdateCustomer?.source_first?.launch_source_id);
+          setNameSource(valueUpdateCustomer?.source_first?.launch_source_id === 2 ? "Bác Sĩ Chỉ Định" : valueUpdateCustomer?.source_first?.launch_source_id === 3 ? "Đối Tác"
+            : valueUpdateCustomer?.source_first?.launch_source_id === 4 ? "KH Cũ Giới Thiệu"
+            : valueUpdateCustomer?.source_first?.launch_source_id === 12 ? "KOC"
+            : valueUpdateCustomer?.source_first?.launch_source_id === 5 ? "Nhân Viên" : "công ty")
+         
+                                              if ([2, 3, 4, 12, 5].includes(v))
+                                             {
+                                               setIsCompany(true)
+                                             }
+                                             else {
+                                                 setIsCompany(false)
+          }
+         setOwnerType(valueUpdateCustomer?.source_first?.owner_type)
+                                          setOwnerId(valueUpdateCustomer?.source_first?.owner_id)
+         
+       }
+        if(valueUpdateCustomer?.source_first?.owner_type === "company")
+       {
+         setIsCompany(true)
+       }
       }, 1000);
       setValueUpdateCustomer(valUpdate);
 
@@ -1526,93 +1620,328 @@ const FormUpdateCustomer: React.FC<FormAddCustomerProps> = ({
       title: (
         <Typography content="Họ tên" modifiers={["12x18", "500", "center"]} />
       ),
-      dataIndex: "customer_fullname",
+      dataIndex: "owner_name",
       key: "customer_fullname",
       align: "center",
       width: 200,
       render: (record: any, data: any) => (
-        <Typography content={record} modifiers={["12x18", "400", "center"]} />
+        <div
+          onClick={() => {
+            setDataForm(prev => ({ ...prev, source: data, }));
+            setOpenModalKeysearch(false)
+             setOwnerType(data?.owner_type)
+            setOwnerId(data?.owner_id)
+             setKeysearch("")
+          }}
+        >
+          {" "}
+          <Typography
+            content={record ?  record : data?.owner_name_display}
+            modifiers={["12x18", "400", "center"]}
+          />{" "}
+        </div>
       ),
     },
     {
       title: (
-        <Typography content="Năm sinh" modifiers={["12x18", "500", "center"]} />
+        <Typography content="Điện thoại" modifiers={["12x18", "500", "center"]} />
       ),
-      dataIndex: "year_of_birth",
+      dataIndex: "owner_phone",
       width: 90,
       align: "center",
       render: (record: any, data: any) => (
-        <Typography content={record} modifiers={["12x18", "400", "center"]} />
+        <div
+           onClick={() => {
+             setDataForm(prev => ({ ...prev, source: data, }));
+            setOpenModalKeysearch(false)
+             setOwnerType(data?.owner_type)
+            setOwnerId(data?.owner_id)
+             setKeysearch("")
+          }}
+        >
+          {" "}
+          <Typography
+            content={record?.replace(/^\s*0/, '+84-')}
+            modifiers={["12x18", "400", "center"]}
+          />{" "}
+        </div>
       ),
     },
     {
       title: (
         <Typography
-          content="Giới tính"
+          content="Nhóm"
           modifiers={["12x18", "500", "center"]}
         />
       ),
-      dataIndex: "gender_id",
+      dataIndex: "owner_type",
       align: "center",
       width: 90,
       render: (record: any, data: any) => (
-        <Typography
-          content={record === "M" ? "Nam" : "Nữ"}
-          modifiers={["12x18", "400", "center"]}
-        />
+        <div
+           onClick={() => {
+              setDataForm(prev => ({ ...prev, source: data, }));
+            setOpenModalKeysearch(false)
+             setOwnerType(data?.owner_type)
+            setOwnerId(data?.owner_id)
+             setKeysearch("")
+          }}
+        >
+          {" "}
+          <Typography
+            content={record}
+            modifiers={["12x18", "400", "center"]}
+          />{" "}
+        </div>
       ),
     },
     {
       title: (
         <Typography
-          content="Số điện thoại"
+          content="Ngày cập nhật
+"
           modifiers={["12x18", "500", "center"]}
         />
       ),
-      dataIndex: "customer_phone",
-      key: "customer_phone",
+      dataIndex: "update_datetime",
+      key: "update_datetime",
       align: "center",
       width: 120,
       render: (record: any, data: any) => (
-        <Typography
-          content={record ? record.replace(/^.{4}/, "0") : "---"}
-          modifiers={["12x18", "400", "center"]}
-        />
-      ),
-    },
-    {
-      title: (
-        <Typography content="Địa chỉ" modifiers={["12x18", "500", "center"]} />
-      ),
-      dataIndex: "customer_full_address",
-      key: "customer_full_address",
-      align: "center",
-      render: (record: any, data: any) => (
-        <Typography content={record} modifiers={["12x18", "400", "center"]} />
-      ),
-    },
-    {
-      title: (
-        <Typography content="Chọn" modifiers={["12x18", "500", "center"]} />
-      ),
-      dataIndex: "",
-      key: "",
-      align: "center",
-      width: 50,
-      render: (record: any, data: any) => (
-        <p
-          onClick={() => {
-            setIsUpdateWOM(false);
-            setSaveCustomerWoM(data);
-            setIsOpenFormGetCustomer(false);
+        <div
+           onClick={() => {
+             setDataForm(prev => ({ ...prev, source: data, }));
+            setOpenModalKeysearch(false)
+             setOwnerType(data?.owner_type)
+            setOwnerId(data?.owner_id)
+             setKeysearch("")
           }}
         >
-          <Icon iconName="check" isPointer />
-        </p>
+          {" "}
+          <Typography
+content={moment(record).format("DD-MM-YYYY HH:mm")}
+            modifiers={["12x18", "400", "center"]}
+          />{" "}
+        </div>
+      ),
+    },
+ 
+   
+  ];
+ const tableColumnListSource = [
+    {
+      title: (<Typography content="STT" modifiers={["12x18", "500", "center", "main"]} />),
+      align: "center",
+      dataIndex: "index",
+      width: 40,
+      className: "ant-table-column_wrap",
+      render: (record: any, data: any, index: any) => (
+        <div className="ant-table-column_item">
+          < Typography content={`${index + 1}`} modifiers={['13x18', '600', 'center']} />
+        </div>
+      ),
+    },
+    {
+      title: (
+        <Typography content="Nhóm nguồn" modifiers={["12x18", "500", "center"]} />
+      ),
+      dataIndex: "launch_source_group",
+      key: "customer_fullname",
+      align: "center",
+      width: 130,
+      render: (record: any, data: any) => (
+        <div
+          onClick={() => {
+            setDataForm({
+              ...dataForm,
+                origin:
+                (stateLaunchSource.find(
+                  (i) => i.id == data?.launch_source?.id
+                ) as any),
+              originGroup:
+                (stateLaunchSourceGroups.find(
+                  (i) => i.id ==data?.launch_source_group?.id
+                ) as any),
+               originType:
+                (stateLaunchSourceTypes.find(
+                  (i) => i.value == data?.launch_source_type?.id
+                ) as any) ||
+                (stateLaunchSourceTypes.find(
+                  (i) => i.value == data?.launch_source_type?.id
+                ) as any),
+                ctv: listAffiliates.find(
+                (i: any) => i?.affiliate_code === data?.owner?.owner_id
+              ) as unknown as DropdownData,
+              ctvBSCD: listAffiliates.find(
+                (i: any) => i?.affiliate_code ===data?.owner?.owner_id
+              ) as unknown as DropdownData,
+            })
+            setOpenModalSourceCustomer(false)
+          }}
+          
+        >
+          {" "}
+         <Typography
+            content={
+              record === null
+                ? "N/A"
+                : record?.name 
+            }
+            modifiers={["12x18", "400", "center"]}
+          />
+
+        </div>
+      ),
+    },
+    {
+      title: (
+        <Typography content="Nguồn" modifiers={["12x18", "500", "center"]} />
+      ),
+      dataIndex: "launch_source",
+       width: 110,
+      align: "center",
+      render: (record: any, data: any) => (
+        <div
+          onClick={() => {
+            setDataForm({
+              ...dataForm,
+                origin:
+                (stateLaunchSource.find(
+                  (i) => i.id == data?.launch_source?.id
+                ) as any),
+              originGroup:
+                (stateLaunchSourceGroups.find(
+                  (i) => i.id ==data?.launch_source_group?.id
+                ) as any),
+               originType:
+                (stateLaunchSourceTypes.find(
+                  (i) => i.value == data?.launch_source_type?.id
+                ) as any) ||
+                (stateLaunchSourceTypes.find(
+                  (i) => i.value == data?.launch_source_type?.id
+                ) as any),
+                ctv: listAffiliates.find(
+                (i: any) => i?.affiliate_code === data?.owner?.owner_id
+              ) as unknown as DropdownData,
+              ctvBSCD: listAffiliates.find(
+                (i: any) => i?.affiliate_code ===data?.owner?.owner_id
+              ) as unknown as DropdownData,
+            })
+            setOpenModalSourceCustomer(false)
+          }}
+        >
+          {" "}
+      <Typography
+  content={
+    record === null
+      ? "N/A"
+      : `${record?.name === "Bác Sĩ Chỉ Định" ? "BSCĐ" : record?.name}${
+          data?.owner ? ` (${(data?.owner as any)?.owner_name})` : ""
+        }`
+  }
+  modifiers={["12x18", "400", "center"]}
+/>
+
+        </div>
+      ),
+    },
+    {
+      title: (
+        <Typography
+          content="Chuyển đổi"
+          modifiers={["12x18", "500", "center"]}
+        />
+      ),
+      dataIndex: "launch_source_type",
+      align: "center",
+      width: 130,
+      render: (record: any, data: any) => (
+        <div
+          onClick={() => {
+            setDataForm({
+              ...dataForm,
+                origin:
+                (stateLaunchSource.find(
+                  (i) => i.id == data?.launch_source?.id
+                ) as any),
+              originGroup:
+                (stateLaunchSourceGroups.find(
+                  (i) => i.id ==data?.launch_source_group?.id
+                ) as any),
+               originType:
+                (stateLaunchSourceTypes.find(
+                  (i) => i.value == data?.launch_source_type?.id
+                ) as any) ||
+                (stateLaunchSourceTypes.find(
+                  (i) => i.value == data?.launch_source_type?.id
+                ) as any),
+                ctv: listAffiliates.find(
+                (i: any) => i?.affiliate_code === data?.owner?.owner_id
+              ) as unknown as DropdownData,
+              ctvBSCD: listAffiliates.find(
+                (i: any) => i?.affiliate_code ===data?.owner?.owner_id
+              ) as unknown as DropdownData,
+            })
+            setOpenModalSourceCustomer(false)
+          }}
+        >
+          {" "}
+          <Typography
+            content={record === null ? "N/A" :record?.name}
+            modifiers={["12x18", "400", "center"]}
+          />{" "}
+        </div>
+      ),
+    },
+    {
+      title: (
+        <Typography
+          content="Ghi chú"
+          modifiers={["12x18", "500", "center"]}
+        />
+      ),
+      dataIndex: "note",
+      align: "center",
+      width: 130,
+      render: (record: any, data: any) => (
+        <div
+          onClick={() => {
+            setDataForm({
+              ...dataForm,
+                origin:
+                (stateLaunchSource.find(
+                  (i) => i.id == data?.launch_source?.id
+                ) as any),
+              originGroup:
+                (stateLaunchSourceGroups.find(
+                  (i) => i.id ==data?.launch_source_group?.id
+                ) as any),
+               originType:
+                (stateLaunchSourceTypes.find(
+                  (i) => i.value == data?.launch_source_type?.id
+                ) as any) ||
+                (stateLaunchSourceTypes.find(
+                  (i) => i.value == data?.launch_source_type?.id
+                ) as any),
+                ctv: listAffiliates.find(
+                (i: any) => i?.affiliate_code === data?.owner?.owner_id
+              ) as unknown as DropdownData,
+              ctvBSCD: listAffiliates.find(
+                (i: any) => i?.affiliate_code ===data?.owner?.owner_id
+              ) as unknown as DropdownData,
+            })
+            setOpenModalSourceCustomer(false)
+          }}
+        >
+          {" "}
+          <Typography
+            content={(record === null || record === "") ? "N/A" :record}
+            modifiers={["12x18", "400", "center"]}
+          />{" "}
+        </div>
       ),
     },
   ];
-
   const handleValidateInsurance = () => {
     if (
       (!dataForm.customerId.trim() && !dataForm.idBHYT.trim()) ||
@@ -2744,8 +3073,8 @@ const FormUpdateCustomer: React.FC<FormAddCustomerProps> = ({
                   >
                     <div style={{ marginTop: "5px", width: "100%" }}>
                       <Input
-                        autoFocus
-                        id="customerFullName"
+                        // autoFocus
+                        // id="customerFullName"
                         label="Họ tên:"
                         placeholder="Nhập họ tên của khách hàng"
                         variant="simple"
@@ -2756,7 +3085,7 @@ const FormUpdateCustomer: React.FC<FormAddCustomerProps> = ({
                         onChange={(e) => {
                           setDataForm({
                             ...dataForm,
-                            name: e.target.value.toUpperCase(),
+                            name: e.target.value,
                           });
                           clearStateErrorForm("name");
                         }}
@@ -3088,7 +3417,7 @@ const FormUpdateCustomer: React.FC<FormAddCustomerProps> = ({
                                             />
                         </div>
                   <div>
-                    <div className="m-form_update_customer_row_diff grid_1_1_1">
+                    <div className="m-form_update_customer_row_diff grid_1_1_1" style={{gridTemplateColumns:"repeat(2, 1fr)"}}>
                       <Dropdown
                         dropdownOption={listNations as DropdownData[]}
                         placeholder="Kinh"
@@ -3126,9 +3455,9 @@ const FormUpdateCustomer: React.FC<FormAddCustomerProps> = ({
                           }}
                         />
                       </div> */}
-                        <div className="m-form_add_customer_type_purpose">
+                        {/* <div className="m-form_add_customer_type_purpose">
                                                
-                                                {/* Nếu props truyền vào là true thì có nghĩa là bác sĩ chỉ định nên sẽ k thể chọn loại dịch vụ */}
+                                             
                                                 <GroupRadio
                                                   options={
                                                     !isUpdate
@@ -3172,9 +3501,185 @@ const FormUpdateCustomer: React.FC<FormAddCustomerProps> = ({
                                                     "Bác Sĩ Chỉ Định"
                                                   }
                                                 />
-                                              </div>
+                                              </div> */}
                     </div>
-
+                     <div
+                                          className="m-form_add_customer_row gap_10 m-form_add_customer_row-origins"
+                                        style={{ marginBottom: "0px", maxHeight: "85px",gridTemplateColumns:"1fr 1fr 1fr 0.6fr" }}
+                                        >
+                                         <Dropdown
+                                                                 dropdownOption={stateLaunchSourceGroups}
+                                                                 isRequired
+                                                                 placeholder={stateLaunchSourceGroups[0]?.label}
+                                                                 defaultValue={valueUpdateCustomer?.source_first?.launch_source_group_id as DropdownData}
+                                                                 label="Nhóm nguồn:"
+                                                                 handleSelect={(item) => {
+                                                                   setDataForm({ ...dataForm, originGroup: item });
+                                                                   clearStateErrorForm("originGroup");
+                                                                 }}
+                                                                 variant="simple"
+                                                                 error={errorForm.originGroup}
+                                                                 className="form_origin"
+                                                                 values={(dataForm.originGroup as any) || undefined}
+                                                               />
+                                                              <Dropdown
+                                                                                                                             dropdownOption={stateLaunchSource}
+                                                                                                                             isRequired
+                                                                                                                             placeholder={stateLaunchSource[0]?.label}
+                                                                                                                              defaultValue={valueUpdateCustomer?.source_first?.launch_source_id as DropdownData}
+                                                                                                                             label="Nguồn:"
+                                                                                                                         handleSelect={(item) => {
+                                                                setKeysearch("")
+                                                                  setDataForm(prev => ({ ...prev, origin: item , source:  undefined as unknown as DropdownData,}));
+                                                                  handleGetSource(item?.value);
+                    
+                                                                  const v = Number(item?.value);
+                                                                setNameSource([2, 3, 4, 12].includes(v) ? (item?.label ?? "") : [5].includes(v) ? "Nhân Viên" : "công ty");
+                                                                if ([2, 3, 4, 12, 5].includes(v))
+                                                                {
+                                                                  setIsCompany(true)
+                                                                }
+                                                                else {
+                                                                    setIsCompany(false)
+                                                                }
+                                                                  
+                                                                clearStateErrorForm("origin");
+                                                                
+                                                                }}
+                                                                                                       
+                                                                                                                             variant="simple"
+                                                                                                                             error={errorForm.origin}
+                                                                                                                             className="form_origin"
+                                                                                                                             values={(dataForm.origin as any) || undefined}
+                                                                                                                           />
+                                                               <Dropdown
+                                                                 dropdownOption={stateLaunchSourceTypes}
+                                                                 placeholder={stateLaunchSourceTypes[0]?.label}
+                                                                 defaultValue={valueUpdateCustomer?.source_first?.launch_source_type_id as DropdownData}
+                                                                 label="Hình thức chuyển đổi:"
+                                                                 handleSelect={(item) => {
+                                                                   setDataForm({ ...dataForm, originType: item });
+                                                                   clearStateErrorForm("origin");
+                                                                 }}
+                                                                 variant="simple"
+                                                                 className="form_origin"
+                                                                 values={(dataForm.originType as any) || undefined}
+                                        />
+                                         <div style={{marginTop:"20px"}}>
+                                                               <Button
+                                                                    className="m-form_note"
+                                                                    onClick={() => {
+                                                                    handleGetListSourceCustomer()
+                                                              }}
+                                                              style={{marginTop:"10px"}}
+                                                                    modifiers={["foreign"]}
+                                                              >
+                                                                {
+                                                                  loading ? <span className="loaderB"></span> : <div style={{display:"flex",alignItems:"center",gap:"5px"}}>
+                                        <svg width="20px" height="20px" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12.9998 8L6 14L12.9998 21" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M6 14H28.9938C35.8768 14 41.7221 19.6204 41.9904 26.5C42.2739 33.7696 36.2671 40 28.9938 40H11.9984" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>                             <Typography
+                                                                      type="span"
+                                                                      modifiers={["400", "13x18"]}
+                                                                      content={
+                                                                        "Lấy lại nguồn"
+                                                                      }
+                                                                    /> 
+                                                                  </div>
+                                                                }
+                                                                 
+                                                               
+                                                                  </Button>
+                                                           </div>
+                                        </div>
+                                    
+                                         { (<div
+                                                            className={`m-form_add_customer_row grid_1_1_1_1 grid_customize ${Number(dataForm?.origin?.value) === 4 &&
+                                                              "m-form_add_customer_row_optional"
+                                                              }`}
+                                                            style={{ alignItems: "center", marginBottom: "8px", gridTemplateColumns:((isNaN(Number(dataForm?.origin?.value)) || Number(dataForm?.origin?.value) === 1)) ?"1fr":  "0.3fr 1fr 0.1fr" ,display:"grid"}}
+                                                        >
+                                                          {
+                                                            ( Number(dataForm?.origin?.value) === 6 || Number(dataForm?.origin?.value) === 9 || Number(dataForm?.origin?.value) === 11 || Number(dataForm?.origin?.value) === 7  || Number(dataForm?.origin?.value) === 10  || Number(dataForm?.origin?.value) === 8  ) && (
+                                                               <Checkbox
+                                                              label="Khám doanh nghiệp:"
+                                                              isChecked={isCompany}
+                                                              onChange={() => {
+                                                                setIsCompany(!isCompany)
+                                                              }}
+                                                            />
+                                                            )
+                                                          }
+                                                          {
+                                                            (Number(dataForm?.origin?.value) === 2 || Number(dataForm?.origin?.value) === 3 || Number(dataForm?.origin?.value) === 4 || Number(dataForm?.origin?.value) === 5 || Number(dataForm?.origin?.value) === 12) && (
+                                                               <span>Chọn {nameSource === "KH Cũ Giới Thiệu (WoM)" ? "KH Cũ Giới Thiệu" : nameSource}: </span>
+                                                              )
+                                                          }
+                                                           {/* { (isNaN(Number(dataForm?.origin?.value)) || Number(dataForm?.origin?.value) === 1) && (
+                        <Checkbox
+                          label="Khám doanh nghiệp:"
+                          isChecked={isCompany}
+                                            onChange={() => setIsCompany(!isCompany)}
+                                            disabled
+                        />
+                    )} */}
+                                                           <Dropdown
+                                                                  dropdownOption={
+                                                                    stateListS
+                                                                  }
+                           defaultValue={valueUpdateCustomer?.source_first?.owner_id as DropdownData}
+                                                                  values={dataForm.source}
+                                                                  isRequired={false}
+                    placeholder={
+                      !isCompany && (Number.isNaN(Number(dataForm?.origin?.value)) || [1,6,7,9,11,10].includes(Number(dataForm?.origin?.value)))
+                        ? ""
+                        : `Chọn ${nameSource || ""} tại đây ...`
+                    }
+                                                            // defaultValue={
+                                                                  //   valueUpdateCustomer?.origin as DropdownData
+                                                                  // }
+                                                                  // defaultValue={listAffiliates.find(
+                                                                  //   (affi: any) =>
+                                                                  //     affi.affiliate_code ===
+                                                                  //     valUpdate?.source_first?.owner_id
+                                          // )}
+                                          
+                                                                  label={
+                                                                    Number(dataForm?.origin?.value) === 2 ? "" : ""
+                                                                  }
+                                                            disabled={[2, 3,4,5,12].includes(Number(dataForm?.origin?.value)) ? false : !isCompany }
+                                                            handleSelect={(item) => {
+                                                        
+                                                             
+                                                              setOwnerType(item?.owner_type)
+                                                              setOwnerId(item?.owner_id)
+                                                              setDataForm({
+                                                                ...dataForm,
+                                                                source:item
+                                                                 })
+                                                                  }}
+                                                                  variant="simple"
+                                                                  className="form_origin"
+                                                                
+                                        />
+                                        {
+                                          ([2,3,4,5,6,7,8,9,10,11,12].includes(Number(dataForm?.origin?.value))) && (
+                                         <CTooltip
+                                                                                              placements="top"
+                                                                                              title="Tìm và chọn BSCĐ, WOM, Đối tác,..."
+                                                                         colorCustom="#04566e"
+                                                                         
+                                                                                            >
+                                                          <div
+                                              style={{display:"flex",justifyContent:"center",alignItems:"center",cursor:"pointer"}}
+                                                onClick={() => {
+                                                setOpenModalKeysearch(true)
+                                                }}
+                                              >
+                                              <svg fill="#000000" width="25px" height="25px" viewBox="0 0 24 24" id="add-user-3" data-name="Flat Color" xmlns="http://www.w3.org/2000/svg" className="icon flat-color"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path id="secondary" d="M19,8a1,1,0,0,1-1-1V6H17a1,1,0,0,1,0-2h1V3a1,1,0,0,1,2,0V4h1a1,1,0,0,1,0,2H20V7A1,1,0,0,1,19,8Z" style={{fill:"#2ca9bc"}}></path><path id="primary" d="M16.46,13.37a6.86,6.86,0,0,0,1.46-3.49,5,5,0,0,1-3.46-7A7,7,0,0,0,5.54,13.37,8,8,0,0,0,2,20a2,2,0,0,0,2,2H18a2,2,0,0,0,2-2A8,8,0,0,0,16.46,13.37Z" style={{fill:"#2ca9bc"}}></path></g></svg>
+                                              </div></CTooltip>)
+                                        }
+                                                        
+                                                          </div>
+                                                          )}
                     {/* <div className="m-form_update_customer_desc">
                         <TextArea
                           id=""
@@ -3250,606 +3755,13 @@ const FormUpdateCustomer: React.FC<FormAddCustomerProps> = ({
                   </div> */}
                   
                   {/* Đây là layout nhập ID google khi chọn nguồn Google */}
-                  {Number(dataForm?.origin?.value) === 8 && (
-                    <div
-                      className={`m-form_update_customer_row grid_customize `}
-                      style={{ marginBottom: "7px", alignItems: "start" }}
-                    >
-                      <p style={{ marginTop: "5px", marginRight: "3px" }}>
-                        Google ID:{" "}
-                      </p>
-                      <div style={{ width: "92%" }}>
-                        <Input
-                          id="customer_email"
-                          label=""
-                          type="text"
-                          placeholder="Vui lòng nhập Google ID từ mail đặt hẹn "
-                          variant="simple"
-                          isRequired={
-                            Number(dataForm.origin?.value) === 8 &&
-                            Number(dataForm.originType?.value) === 5
-                          }
-                          value={dataForm.gclid}
-                          onChange={(event) => {
-                            setDataForm({
-                              ...dataForm,
-                              gclid: event.target.value,
-                            });
-                          }}
-                          error={errorForm.gclid}
-                        />
-                      </div>
-                    </div>
-                  )}
-                  {/* Đây là layout search khách hàng cũ giới thiệu */}
-                  {Number(dataForm?.origin?.value) === 4 && (
-                    <div
-                      className={`m-form_update_customer_row grid_1_1_1_1 grid_customize ${
-                        Number(dataForm?.origin?.value) === 4 &&
-                        "m-form_update_customer_row_optional"
-                      }`}
-                      style={{ alignItems: "center", marginBottom: "8px" }}
-                    >
-                      <Input
-                        id="customer_email"
-                        label="Tìm kiếm khách hàng giới thiệu:"
-                        type="text"
-                        placeholder="Nhập họ tên, số điện thoại, địa chỉ,... để tìm kiếm"
-                        variant="simple"
-                        isRequired={_.isUndefined(saveCustomerWoM)}
-                        value={valueGetCustomerWoM}
-                        onChange={(event) => {
-                          setValueGetCustomerWoM(event.target.value);
-                          clearStateErrorForm("ctv");
-                        }}
-                        handleEnter={handleGetCustomer}
-                        error={errorForm.ctv}
-                      />
-                      {/* Ô input dưới là khi đã bấm chọn khách hàng cũ ở popup hiện lên, thì tên KH sẽ được hiện lên ở ô input dưới */}
-                      {saveCustomerWoM && (
-                        <Input
-                          id="customer_email"
-                          label="Khách hàng giới thiệu:"
-                          type="text"
-                          variant="simple"
-                          value={
-                            isUpdateWoM
-                              ? saveCustomerWoM?.affiliate_name
-                              : saveCustomerWoM?.customer_fullname
-                          }
-                        />
-                      )}
-                      <div
-                        className="m-form_update_customer_row_optional_btn"
-                        style={{ marginTop: "5px" }}
-                      >
-                        <CTooltip
-                          placements="top"
-                          title="Tìm kiếm khách hàng"
-                          colorCustom="#04566e"
-                        >
-                          <p onClick={handleGetCustomer}>
-                            <Icon iconName="search" isPointer />
-                          </p>
-                        </CTooltip>
-                        <CTooltip
-                          placements="top"
-                          title="Xóa"
-                          colorCustom="#04566e"
-                        >
-                          <p
-                            onClick={() => setSaveCustomerWoM(undefined as any)}
-                          >
-                            <Icon iconName="delete_crm" isPointer />
-                          </p>
-                        </CTooltip>
-                      </div>
-                    </div>
-                  )}
-                  {/* End */}
-                  {(Number(dataForm?.origin?.value) === 2 ||
-                    Number(dataForm?.origin?.value) === 3) && (
-                    <div
-                      className={`m-form_update_customer_row grid_1_1_1_1 grid_customize ${
-                        (Number(dataForm?.origin?.value) === 2 ||
-                          Number(dataForm?.origin?.value) === 3) &&
-                        "m-form_update_customer_row_partner"
-                      }`}
-                      style={{ marginBottom: "3px" }}
-                    >
-                      {Number(dataForm?.origin?.value) === 2 ? (
-                        <p style={{ marginTop: "5px", marginRight: "8px" }}>
-                          Đối tác Bác Sĩ Chỉ Định:
-                        </p>
-                      ) : (
-                        <p style={{ marginTop: "5px", marginRight: "8px" }}>
-                          Đối tác Cộng Tác Viên:
-                        </p>
-                      )}
-                      <div style={{ width: "83%" }}>
-                        <Dropdown
-                          dropdownOption={
-                            Number(dataForm?.origin?.value) === 2
-                              ? listAffiliates.filter(
-                                  (i: any) => i?.affiliate_type === "BSCD"
-                                )
-                              : listAffiliates.filter(
-                                  (i: any) => i?.affiliate_type === "CTV"
-                                )
-                          }
-                          isRequired={false}
-                          placeholder="Chọn đối tác"
-                          defaultValue={
-                            valueUpdateCustomer?.origin as DropdownData
-                          }
-                          label={
-                            Number(dataForm?.origin?.value) === 2 ? "" : ""
-                          }
-                          handleSelect={(item) => {
-                            setStateFormDataFunc(
-                              Number(dataForm?.origin?.value) === 2
-                                ? "ctvBSCD"
-                                : "ctv",
-                              item
-                            );
-                            clearStateErrorForm("ctv");
-                          }}
-                          variant="simple"
-                          className="form_origin"
-                          values={listAffiliates.find(
-                            (affi: any) =>
-                              affi.affiliate_code ===
-                              valUpdate?.customer?.owner_id
-                          )}
-                          error={errorForm.ctv}
-                        />
-                      </div>
-                    </div>
-                  )}
+                 
+               
+                
                 </div>
               )}
 
-              {/* <div
-                className="m-form_update_customer_check"
-                style={{ marginTop: "0px" }}
-              >
-                {!csPortrait && (
-                  <Checkbox
-                    label="Có đặt lịch hay không?"
-                    isChecked={isBooking}
-                    onChange={() => {
-                      setErrorForm({ ...errorForm, phone: "", dayOfBirth: "" });
-                      // setIsBooking(!isBooking);
-                    }}
-                  />
-                )}
-                {isBooking && !csPortrait && (
-                  <div
-                    className="m-form_update_customer_check_booking"
-                    style={{ marginBottom: "0px" }}
-                  >
-                    <div
-                      className="m-form_update_customer_check_booking_flex2"
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <div style={{ width: "50%" }}>
-                       
-                        <div style={{ width: "70%", marginTop: "5px" }}>
-                          <Button
-                            className="m-form_note"
-                            onClick={() => {
-                              setIsSelectService(true);
-                              setTimeout(() => {
-                                setOpenSelect(true);
-                              }, 300);
-                            }}
-                            modifiers={["foreign"]}
-                          >
-                            <Typography
-                              type="span"
-                              modifiers={["400", "14x20"]}
-                              content={
-                                "Chọn dịch vụ" +
-                                (serviceSelected.length === 0
-                                  ? ""
-                                  : ` (đã chọn: ${serviceSelected.length})`)
-                              }
-                            />
-                          </Button>
-                        </div>
-
-
-                        <div className="m-form_update_customer_type_purpose">
-                          <div
-                            className={mapModifiers(
-                              "m-form_update_customer_type_purpose_label",
-                              !!errorForm.groupCs.trim() && "error"
-                            )}
-                            style={{ width: "16%" }}
-                          >
-                            <Typography
-                              content="Nhóm:"
-                              modifiers={[
-                                "16x24",
-                                !errorForm.groupCs.trim()
-                                  ? "blueNavy"
-                                  : "cg-red",
-                                "500",
-                              ]}
-                            />
-                          </div>
-                        
-                          <GroupRadio
-                            options={
-                              !isUpdate
-                                ? OptionCustomerPortraitAddNew
-                                : valUpdate?.lead_source_display ===
-                                    "Bác Sĩ Chỉ Định" ||
-                                  dataForm?.origin?.value == "2"
-                                ? OptionCustomerPortrait1
-                                : OptionCustomerPortraitAddNew
-                            }
-                            value={(!isUpdate
-                              ? OptionCustomerPortraitAddNew
-                              : OptionCustomerPortrait1
-                            ).find(
-                              (i) =>
-                                i.value ===
-                                (valUpdate?.lead_source_display ===
-                                "Bác Sĩ Chỉ Định"
-                                  ? "CSBSCD"
-                                  : dataForm?.portraitSurveyType)
-                            )}
-                            handleOnchangeRadio={(data) => {
-                              setPurposoerPackage(data);
-                              setDataForm({
-                                ...dataForm,
-                                portraitSurveyType: data?.value,
-                              });
-                              clearStateErrorForm("groupCs");
-                              if (isUpdate) {
-                                dispatch(
-                                  getGroupSurveyPortrait({
-                                    customerId: dataForm.id,
-                                    servey_type: data?.value,
-                                  })
-                                );
-                              }
-                            }}
-                            isDisable={
-                              isUpdate &&
-                              valUpdate?.lead_source_display ===
-                                "Bác Sĩ Chỉ Định"
-                            }
-                          />
-                        </div>
-                      </div>
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "start",
-                          width: "50%",
-                        }}
-                      >
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "start",
-                            justifyContent: "center",
-                            width: "auto",
-                            marginBottom: "5px",
-                          }}
-                        >
-                          <p style={{ marginTop: "5px", marginRight: "4px" }}>
-                            Tổng giá trị dịch vụ đã chọn:{" "}
-                          </p>
-                          <p
-                            style={{
-                              marginTop: "5px",
-                              marginRight: "4px",
-                              color: "#ff0000",
-                            }}
-                          >
-                            {totalService}
-                          </p>
-                        </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "start",
-                            width: "100%",
-                          }}
-                        >
-                          <p style={{ marginTop: "5px", marginRight: "3px" }}>
-                            Chọn mã chiết khấu (nếu có):{" "}
-                          </p>
-
-                          <div style={{ width: "60%" }}>
-                            <Dropdown
-                              dropdownOption={
-                                stateVoucherTypes as DropdownData[]
-                              }
-                              placeholder="Mã chiết khấu"
-                              label=""
-                              handleSelect={(item) => {
-                                setDataForm({ ...dataForm, voucher: item });
-                              }}
-                              variant="simple"
-                              values={(dataForm.voucher as any) || undefined}
-                            />
-                          </div>
-                        </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "start",
-                            justifyContent: "center",
-                            width: "auto",
-                            marginBottom: "5px",
-                          }}
-                        >
-                          <p style={{ marginTop: "5px", marginRight: "4px" }}>
-                            Mã giảm giá:{" "}
-                          </p>
-                          <p
-                            style={{
-                              marginTop: "5px",
-                              marginRight: "4px",
-                              color: "#ff0000",
-                            }}
-                          >
-                            {dataForm.voucher?.id !== undefined &&
-                            dataForm.voucher?.id !== null
-                              ? `[${dataForm.voucher?.id}] - ${Number(
-                                  dataForm.voucher?.valueV
-                                ).toLocaleString("vn-VN")}đ`
-                              : "Chưa chọn mã giảm giá"}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      className="m-form_update_customer_check_booking_flex"
-                      style={{ marginTop: "5px" }}
-                    >
-                      <div>
-                        <CDatePickers
-                          label="Ngày đặt hẹn:"
-                          handleOnChange={(date: any) => {
-                            setDataForm({ ...dataForm, dateBooking: date?.$d });
-                            setErrorForm({ ...errorForm, dateBooking: "" });
-                          }}
-                          variant="simple"
-                          format={"DD-MM-YYYY HH:mm"}
-                          isShowTime
-                          placeholder="08:00 - 12/01/2023"
-                          ValDefault={dataForm.dateBooking}
-                          value={dataForm.dateBooking as Date}
-                          error={errorForm.dateBooking}
-                        />
-                      </div>
-                      <Input
-                        id="note_booking"
-                        label="Ghi chú"
-                        type="text"
-                        variant="simple"
-                        placeholder="Ghi chú lịch đặt hẹn khám ..."
-                        value={dataForm.noteBooking}
-                        onChange={(e) => {
-                          setDataForm({
-                            ...dataForm,
-                            noteBooking: e.target.value,
-                          });
-                          setErrorForm({ ...errorForm, noteBooking: "" });
-                        }}
-                        error={errorForm.noteBooking}
-                      />
-                    </div>
-                    {dataForm.typeBooking?.value === "telemedicine" && (
-                      <div className="flex-item">
-                        <Dropdown
-                          dropdownOption={listDoctoronline || []}
-                          defaultValue={valUpdate?.origin as DropdownData}
-                          label="Bác sĩ online"
-                          placeholder="Chọn 1 bác sĩ"
-                          handleSelect={(item) => {
-                            setDataForm({
-                              ...dataForm,
-                              serviceAllowTypeBooking1: item,
-                            });
-                            setErrorForm({ ...errorForm, bookingService1: "" });
-                          }}
-                          variant="simple"
-                          values={dataForm.serviceAllowTypeBooking1}
-                          error={errorForm.bookingService1}
-                          isRequired
-                        />
-                      </div>
-                    )}
-
-                    {dataForm.typeBooking?.value === "endoscopics" && (
-                      <Dropdown
-                        dropdownOption={stateEndoscopics}
-                        label="Dịch vụ nội soi"
-                        placeholder="Chọn dịch vụ để đặt lịch"
-                        handleSelect={(item) => {
-                          setDataForm({
-                            ...dataForm,
-                            endoscopics: item,
-                            noteBooking: item.label,
-                          });
-                          setErrorForm({ ...errorForm, noteBooking: "" });
-                        }}
-                        variant="simple"
-                        values={dataForm.endoscopics}
-                        error={errorForm.endoscopics}
-                        isRequired
-                      />
-                    )}
-                  </div>
-                )}
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <div style={{ display: "flex" }}>
-                    {!csPortrait && (
-                      <Checkbox
-                        label="Chăm sóc trước khám"
-                        isChecked={customerPortrait}
-                        onChange={() => {
-                          if (_.isEmpty(dataForm.portraitSurveyType)) {
-                            toast.warning("Vui lòng chọn nhóm khách hàng");
-                          } else {
-                            setCustomerPortrait(!customerPortrait);
-                          }
-                        }}
-                      />
-                    )}
-                    {!csPortrait && (
-                      <div style={{ marginLeft: "30px" }}>
-                        <Checkbox
-                          label="Kiểm tra BHYT?"
-                          isChecked={isCheckInsurance}
-                          onChange={(check: any) => {
-                            setIsCheckInsurance(!isCheckInsurance);
-                          }}
-                        />
-                      </div>
-                    )}
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "end",
-                    }}
-                  >
-                    {dataForm?.typeBooking?.value === "package" &&
-                    notePackage !== "" ? (
-                      <p
-                        style={{
-                          marginRight: "4px",
-                          color: "#ff0000",
-                        }}
-                      >
-                        Bạn đã chọn: {removeParenthesesContent(notePackage)}
-                      </p>
-                    ) : (
-                      <p
-                        style={{
-                          marginRight: "4px",
-                          color: "#ff0000",
-                        }}
-                      >
-                        Hiện tại bạn chưa chọn gói tầm soát nào!
-                      </p>
-                    )}
-                  </div>
-                </div>
-                {isCheckInsurance && (
-                  <div className="m-form_update_customer_check_insurance">
-                    <div className="m-form_update_customer_check_insurance_wrap_form">
-                      <div style={{ marginBottom: "17px", width: "150%" }}>
-                        <Input2
-                          id="note_booking"
-                          label="Họ tên:"
-                          type="text"
-                          isRequired
-                          variant="simple"
-                          placeholder="Nguyễn Văn A ..."
-                          value={dataForm.name}
-                          onChange={(e) => {
-                            setDataForm({
-                              ...dataForm,
-                              name: e.target.value,
-                            });
-                            setInsuranceErr({
-                              ...insuranceErrr,
-                              fullName: "",
-                            });
-                          }}
-                          error={insuranceErrr.fullName}
-                        />{" "}
-                      </div>
-                      <div style={{ marginBottom: "17px", width: "150%" }}>
-                        <Input2
-                          id="note_booking"
-                          label="CCCD/ Mã thẻ BHYT:"
-                          type="text"
-                          variant="simple"
-                          placeholder="024E834..."
-                          value={dataForm.customerId}
-                          onChange={(e) => {
-                            setDataForm({
-                              ...dataForm,
-                              customerId: e.target.value,
-                            });
-                            setInsuranceErr({
-                              ...insuranceErrr,
-                              idcard: "",
-                            });
-                          }}
-                          error={insuranceErrr.idcard}
-                        />
-                      </div>
-                      <div style={{ marginBottom: "17px", width: "150%" }}>
-                        <Input2
-                          id="date"
-                          isRequired
-                          label="Ngày sinh:"
-                          type="text"
-                          variant="simple"
-                          placeholder="19/10/2020"
-                          onChange={(e) => {
-                            setDataForm({
-                              ...dataForm,
-                              dayOfBirthBHYT: e.target.value,
-                            });
-                            setInsuranceErr({
-                              ...insuranceErrr,
-                              dayOfBirth: "",
-                            });
-                          }}
-                          error={insuranceErrr.dayOfBirth}
-                          ValDefault={dataForm.dayOfBirthBHYT}
-                        />
-                      </div>
-                      <div className="m-form_update_customer_check_insurance_btn_wrap">
-                        <div
-                          className={mapModifiers(
-                            "m-form_update_customer_check_insurance_btn",
-                            isCheckInsuranceSuccess && "pendding"
-                          )}
-                          onClick={handleCheckInsurance}
-                          style={{ marginTop: "4px", marginLeft: "20px" }}
-                        >
-                          {isCheckInsuranceSuccess ? (
-                            <Icon iconName={"loading_crm"} isPointer />
-                          ) : (
-                            <Typography content="Kiểm tra ngay" />
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    {insuranceData.content && (
-                      <div
-                        className={mapModifiers(
-                          "m-form_update_customer_check_insurance_wrap_result",
-                          insuranceData ? "green" : "red"
-                        )}
-                      >
-                        {insuranceData.content}
-                      </div>
-                    )}
-                  </div>
-                )}
-              
-              </div>
-              {stateBreakPoint <= 1450 ? renderPortrait : null} */}
+            
               <div className="m-form_update_customer_button">
                 <div
                   className="m-form_note"
@@ -4836,6 +4748,63 @@ const FormUpdateCustomer: React.FC<FormAddCustomerProps> = ({
       >
         <p>Bạn xác nhận xóa hết tất cả dịch vụ?</p>
       </CModal>
+           <CModal
+              isOpen={openModalKeysearch}
+              onCancel={() => { setOpenModalKeysearch(false), setKeysearch("") }}
+        title={`Tìm và chọn ${nameSource || ""}`}
+              widths={800}
+              isHideFooter
+      
+            >
+              <div>
+                 <Input
+                              variant="borderRadius"
+                              type="text"
+                              id=""
+                              isSearch
+                              value={keysearch}
+                              placeholder='Nhập tên, địa chỉ, số điện thoại,.. để tìm kiếm khách hàng'
+                              onChange={(e) => { setKeysearch(e.target.value); }}
+                              handleEnter={async () => {
+                                if (keysearch.trim()) {
+                                  await handleGetSource(dataForm.origin.value);
+                                  // setIsLoading(true);
+                                }
+                                else {
+                                  toast.error('Không thể tìm kiếm với một giá trị rỗng');
+                                }
+                              }}
+                              iconName='search'
+                              // isLoading={isLoading}
+                            />
+              </div>
+              <PublicTable
+                listData={stateListS}
+                column={tableColumnForSearch}
+                handleOnClick={(event: any, record: any, rowIndex: any) => { }}
+                pageSizes={100}
+                isHideRowSelect
+                 scroll={{
+                  x: '100%',
+                  y: '300px',
+                }}
+              />
+      </CModal>
+              <CModal
+              isOpen={openModalSourceCustomer}
+              onCancel={() => setOpenModalSourceCustomer(false)}
+              title="Danh sách nhóm nguồn, nguồn, hình thức chuyển đổi cũ của khách hàng"
+              widths={800}
+              isHideFooter
+            >
+              <PublicTable
+                listData={stateListSource}
+                column={tableColumnListSource}
+                handleOnClick={(event: any, record: any, rowIndex: any) => { }}
+                pageSizes={100}
+                isHideRowSelect
+        />
+        </CModal>
       {showNotification && (
         <Notification
           message="Số điện thoại đã được đăng ký"

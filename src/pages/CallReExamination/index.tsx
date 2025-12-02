@@ -68,6 +68,7 @@ import {
 } from "services/api/customerInfo";
 import { getCustomerByKey } from "services/api/dashboard";
 import { postAddTaskOfOneCustomer } from "services/api/tasks";
+import { loadFormZNSAPI } from "services/api/zns";
 import {
   getListToStoreAfterExams,
   getStatisticAllowRangeDate,
@@ -90,6 +91,8 @@ import {
   optionStateStatusAfterTask2,
 } from "utils/staticState";
 
+import { ZnsSingleTemplateEditor } from "./ZnsTemplateEditor";
+
 import iconUTG from "assets/iconButton/icon-calendar-g.png";
 import iconUT from "assets/iconButton/icon-calendar-gr.png";
 import iconRSG from "assets/iconButton/icon-reschedule-gray.png";
@@ -97,7 +100,7 @@ import iconRSR from "assets/iconButton/icon-reschedule-red.png";
 import iconAddNote from "assets/iconButton/icons-write-2.png";
 import iconAddTask from "assets/iconButton/icons8-add-note-50.png";
 import iconChangeU from "assets/icons/iconChangeUser.png";
-
+import logo from 'assets/images/short_logo.svg';
 export type StateCustomerType = "Lần đầu" | "Tái khám";
 export type StateExaminationType = "Đã có toa thuốc" | "";
 
@@ -115,6 +118,48 @@ interface Note {
   employee_name: string;
   cs_notes: string;
 }
+type TemplateValues = {
+  template_title:string,
+  form_type: string;
+  c_gender_prefix: string;
+  c_lastname: string;
+  examming_date: string;
+  diagnose_note: string;
+  treatment_days: string;
+  reexamming_date: string;
+  reexamming_note: string;
+  reexamming_cost: string;
+  c_id: string;
+};
+// Các field có thể dùng trong tất cả template
+
+const TEMPLATE  = `<div>Xin chào <b>[[c_gender_prefix]]</b> <b>[[c_lastname]]</b>,</div><div>Ngày <b>[[examming_date]]</b> <b>[[c_gender_prefix]]</b> <b>[[c_lastname]]</b> đã khám với bác sĩ Doctor Check và được chẩn đoán <b>[[diagnose_note]]</b>. Bác sĩ đã kê đơn điều trị cho <b>[[c_gender_prefix]]</b> trong <b>[[treatment_days]]</b>. Hôm nay <b>[[c_gender_prefix]]</b> đã hết thuốc, Bác sĩ lên lịch tái khám như sau:</div><ul><li>Ngày tái khám: <b>[[reexamming_date]]</b></li><li>Nội dung tái khám: <b>[[reexamming_note]]</b></li><li>Mã khách hàng: <b>[[c_id]]</b></li></ul><div>Bệnh tiêu hóa thường khó điều trị dứt điểm và dễ tái phát nên việc tái khám đúng hẹn giúp <b>[[c_gender_prefix]]</b> <b>[[c_lastname]]</b> tăng khả năng điều trị khỏi và ngăn ngừa bệnh tái phát. <b>[[c_gender_prefix]]</b> vui lòng xác nhận lịch tái khám hoặc dời thời gian phù hợp bằng cách phản hồi thông báo này.</div><div><b>[[c_gender_prefix]]</b> <b>[[c_lastname]]</b> cũng có thể gọi Trợ lý bác sĩ để được hỗ trợ.</div>`;
+// utils/renderTemplate.ts
+export function renderTemplate(
+  template: string,
+  data: Record<string, string | number>
+) {
+  return template.replace(/\[\[([^\]]+)\]\]/g, (_, key) => {
+    const value = data[key.trim()];
+    return value !== undefined && value !== null ? String(value) : "";
+  });
+}
+// utils/renderHtmlTemplate.ts
+// utils/renderHtmlTemplate.ts
+export function renderHtmlTemplate(
+  template?: string,
+  data: Record<string, string | number> = {}
+) {
+  if (!template || typeof template !== "string") return ""; // <--- FIX HERE
+
+  return template.replace(/\[\[([^\]]+)\]\]/g, (_, key) => {
+    const value = data[key.trim()];
+    return value !== undefined && value !== null ? String(value) : "";
+  });
+}
+
+
+
 const listF = [
   {
     id: 1,
@@ -171,11 +216,20 @@ const CallReExamination: React.FC = () => {
   const CType = params.get("type")
   const parser = new DOMParser();
   const fullName = parser.parseFromString(fullName1, "text/html").documentElement.textContent;
-  console.log("fullName",CType)
+  
   const { makeCall } = useSip();
   const storageGroupTask = localStorage.getItem("groupTask");
   const storageEmployeeTeams = localStorage.getItem("employeeTeams");
-
+  const [stateZnsData, setStateZnsData] = useState<any>()
+  const [infoZns, setInfoZns] = useState<any>()
+   const employeeId1 = localStorage.getItem("employee_id");
+          const [employeeId2, setStateEmployeeId] =useState<any>(() => {
+                try {
+                  return employeeId1 ? JSON.parse(employeeId1) : "";
+                } catch {
+                  return employeeId1 || "";
+                }
+              });
   const [listTask, setListTask] = useState<DropdownData[]>(
     storageGroupTask ? JSON.parse(storageGroupTask || "") : (undefined as any)
   );
@@ -312,15 +366,16 @@ const CallReExamination: React.FC = () => {
     page_number: 1,
     page_size: 10000,
    c_schedule_type_id:
-  dataFilter.c_schedule_type_id ||
-  (
-    CType === "HDVK" ? 
-      "HDVK"
-    :
-    CType === "HKSK" ? "HKSK" :
-    CType === "HTK" ? "HTK" :
-    CType === "HNS" ? "HNS" : "all"
-  )
+     dataFilter.c_schedule_type_id || "all"
+  //    ||
+  // (
+  //   CType === "HDVK" ? 
+  //     "HDVK"
+  //   :
+  //   CType === "HKSK" ? "HKSK" :
+  //   CType === "HTK" ? "HTK" :
+  //   CType === "HNS" ? "HNS" : "all"
+  // )
     ,
     from_date: dataFilter.from_date,
     to_date: dataFilter.to_date,
@@ -350,6 +405,70 @@ const CallReExamination: React.FC = () => {
     end_drug_date: moment(new Date()).format("YYYY-MM-DD"),
     reexamming_date: moment(new Date()).format("YYYY-MM-DD"),
   });
+   const [isSuccess, setIsSuccess] = useState(false);
+    const [isSuccessText, setIsSuccessText] = useState("");
+      const [isError, setIsError] = useState(false);
+    const [isErrorText, setIsErrorText] = useState("");
+     const [stateZNS, setStateZNS] = useState({
+       openZNS: false,
+       loadingFormZNS: false,
+        c_schedule_id: 0,
+        c_schedule_type_id: "",
+        customer_id: "",
+        master_id: "",
+     });
+   const [stateInfoZNS, setStateInfoZNS] = useState({
+     
+        is_use: false,
+        key: "",
+        name: "",
+        zns_url: "",
+     });
+    const [stateZNS2, setStateZNS2] = useState({
+       openZNS: false,
+       loadingFormZNS: false,
+        c_schedule_id: 0,
+        c_schedule_type_id: "",
+        customer_id: "",
+        master_id: "",
+     });
+   const [dataZNS, setDataZNS] =  useState<TemplateValues>({
+    template_title:"Thông báo lịch hẹn tái khám với bác sĩ Doctor Check",
+    form_type: "NS",
+     c_gender_prefix: "Chú",
+    c_lastname: "Hòa",
+    examming_date: "01/12/2025",
+    diagnose_note: "Viêm dạ dày mãn tính",
+    treatment_days: "14",
+    reexamming_date: "15/12/2025",
+    reexamming_note: "Tái khám sau khi dùng hết thuốc 14 ngày",
+    reexamming_cost: "500.000₫",
+    c_id: "DC123456",
+ 
+   });
+    const handleChange =
+    (field: keyof TemplateValues) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setDataZNS((prev) => ({
+        ...prev,
+        [field]: e.target.value,
+      }));
+    };
+
+ const htmlResult = useMemo(
+  () => renderTemplate(TEMPLATE, dataZNS),
+  [dataZNS]
+);
+
+  const handleSend = () => {
+    // TODO: call API gửi thông báo ở đây
+    console.log("Send payload:", {
+   
+      dataZNS,
+  
+    });
+    alert("Đã giả lập gửi thông báo, xem console.log để debug.");
+  };
   const [errorNote, setErrorNote] = useState(false);
   const handleValidateForm = () => {
     if (!dataAddNote.cs_node_content.trim()) {
@@ -454,12 +573,12 @@ const CallReExamination: React.FC = () => {
       setSelectedDays(-1000)
        dispatch(
         getListCallReExammingMaster({
-               c_schedule_type_id :
-  CType === "HDVK" ? "HDVK" :
-  CType === "HNS"  ? "HNS"  :
-  CType === "HTK"  ? "HTK"  :
-  CType === "HKSK" ? "HKSK" :
-  "all",
+  //              c_schedule_type_id :
+  // CType === "HDVK" ? "HDVK" :
+  // CType === "HNS"  ? "HNS"  :
+  // CType === "HTK"  ? "HTK"  :
+  // CType === "HKSK" ? "HKSK" :
+  // "all",
           from_date: moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss"), // 00:00:00
           to_date: moment().add(1, "day").endOf("day").format("YYYY-MM-DDTHH:mm:ss"),     // 23:59:59
           status: dataFilter?.status || "new",
@@ -511,6 +630,38 @@ const CallReExamination: React.FC = () => {
           toast.error(data.message);
           setIsClosePopup(true);
           setIsUpdateInfo(false);
+        }
+      },
+      onError: (e) => {
+        toast.error("Đã có lỗi xảy ra ...!");
+      },
+    }
+  );
+  const { mutate: loadFormZNS } = useMutation(
+    "post-footer-form",
+    (data: any) => loadFormZNSAPI(data),
+    {
+      onSuccess: (data) => {
+        if (data.status) {
+          console.log("data ZNS",data.data.data,data.data.data?.zns_data?.template_data)
+          setStateZNS({
+            ...stateZNS,
+            openZNS: true,
+            loadingFormZNS: false,})
+          setStateZnsData(data.data.data);
+          setInfoZns(data.data.data?.zns_data?.template_data);
+          setStateInfoZNS(
+            {
+              is_use: data.data.data?.is_use,
+            key: data.data.data?.key,
+            name: data.data.data?.name,
+            zns_url: data.data.data?.zns_url,
+           }
+          )
+            
+          
+        } else {
+          toast.error(data.message);
         }
       },
       onError: (e) => {
@@ -1521,7 +1672,7 @@ const CallReExamination: React.FC = () => {
         <div
           className="ant-table-column_item"
         onClick={() => {
-  if (position === "BOD") {
+  if (position === "BOD" || employeeId2 === "NV4825133856") {
     setDataDelay({
       ...dataDelay,
       openDelay: true,
@@ -1879,6 +2030,46 @@ const CallReExamination: React.FC = () => {
     //     </div>
     //   ),
     // },
+     {
+      title: (
+        <Typography
+          content="ZNS"
+          modifiers={["12x18", "500", "center", "uppercase"]}
+        />
+      ),
+      dataIndex: "zns_send_date",
+      align: "center",
+      width: 100,
+      className: "ant-table-column_wrap",
+      render: (record: any, data: any) => (
+        <div
+          className="ant-table-column_item"
+        onClick={() => {
+  if (position === "BOD" || employeeId2 === "NV4825133856") {
+    setDataDelay({
+      ...dataDelay,
+      openDelay: true,
+      id: data.c_schedule_id,
+      c_schedule_datetime: moment(data.c_schedule_datetime).format(
+        "YYYY-MM-DD 00:00:00"
+      ),
+    });
+  }
+}}
+
+        >
+          <Typography
+            content={record ? moment(record).format("DD/MM/YYYY") + " (" +data?.zns_send_count +")" : ""}
+            modifiers={[
+              "13x18",
+              "500",
+              "center",
+             "main",
+            ]}
+          />
+        </div>
+      ),
+    },
     {
       title: (
         <Typography
@@ -1958,7 +2149,162 @@ const CallReExamination: React.FC = () => {
         </div>
       ),
     },
+{
+      title: "",
+      dataIndex: "",
+      align: "center",
+      width: 40,
 
+      className: "p-after_examination_column_center",
+      render: (data: any, record: any) => (
+        <CTooltip placements="top" title="Gửi ZNS">
+          {" "}
+          <p
+            onClick={() => {
+              if (data.show_icon_zalo === 1) {
+                    const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+                 const todayVN = new Date().toLocaleDateString("en-CA", {
+        timeZone: "Asia/Ho_Chi_Minh",
+    });
+
+    // Convert zns_send_date về ngày theo giờ Việt Nam
+    const sendDateVN = new Date(data.zns_send_date).toLocaleDateString("en-CA", {
+        timeZone: "Asia/Ho_Chi_Minh",
+    });
+            if (sendDateVN === todayVN) {
+                  toast.info("Bạn đã gửi ZNS cho khách trong ngày trước đó rồi!");
+                }
+                else {
+                   setStateZNS({
+            ...stateZNS,
+            openZNS:true,
+                     loadingFormZNS: true,
+             c_schedule_id: data.c_schedule_id,
+                    customer_id: data.customer_id,
+                    master_id: data.master_id,
+                   })
+                  setStateZNS2({
+            ...stateZNS,
+             c_schedule_id: data.c_schedule_id,
+                    customer_id: data.customer_id,
+                    master_id: data.master_id,
+                   })
+                  loadFormZNS({
+                    c_schedule_id: data.c_schedule_id,
+                    customer_id: data.customer_id,
+                    master_id: data.master_id,
+                  })
+                }
+                   
+              } else {
+                toast.error("Không thể gửi ZNS vì lượt khám trước đó không có toa thuốc hoặc không có lượt hẹn tái khám!");
+               }
+              
+            
+            }}
+            className="click_event"
+          >
+            {
+              data.show_icon_zalo === 1 ? 
+                (
+                   <svg
+      width="22px"
+      height="22px"
+      viewBox="0 0 48 48"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="#000000"
+      stroke="#000000"
+      strokeWidth={2.376}
+    >
+      <style>{`
+        .b {
+          fill: none;
+          stroke: #00556e;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+      `}</style>
+
+      <polyline
+        className="b"
+        points="12.466 19.2658 19.182 19.2658 12.466 29.4028 19.182 29.4028"
+      />
+
+      <path
+        className="b"
+        d="m41.517,4.5018l-29.011.0354C3.882,11.9372,1.282,21.9552,8.976,36.4482c.4875,1.7082-.359,3.42-1.9992,5.1283,2.3642.3218,4.7693-.1218,6.863-1.266,13.983,6.27,21.919,2.1805,29.644-2.7323l.0355-31.074c.0013-1.1046-.8931-2.001-1.9977-2.0023-.0015,0-.003,0-.0045,0h0Z"
+      />
+
+      <path
+        className="b"
+        d="m25.63,26.791c0,1.4425-1.2196,2.6118-2.724,2.6118s-2.724-1.1694-2.724-2.6118v-1.6978c0-1.4425,1.2196-2.6118,2.724-2.6118s2.724,1.1694,2.724,2.6118"
+      />
+
+      <path
+        className="b"
+        d="m34.7606,22.483c1.4987,0,2.7136,1.2149,2.7136,2.7136v1.4948c0,1.4987-1.2149,2.7136-2.7136,2.7136-1.4987,0-2.7136-1.2149-2.7136-2.7136v-1.4948c0-1.4987,1.2149-2.7136,2.7136-2.7136Z"
+      />
+
+      <line className="b" x1="25.63" y1="29.403" x2="25.63" y2="22.482" />
+
+      <path
+        className="b"
+        d="m28.311,18.955v9.1434c0,.7214.5848,1.3062,1.3062,1.3062h.3918"
+      />
+    </svg>
+                ) : (
+                   <svg
+      width="22px"
+      height="22px"
+      viewBox="0 0 48 48"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="#000000"
+      stroke="#000000"
+      strokeWidth={2.376}
+    >
+      <style>{`
+        .b {
+          fill: none;
+          stroke: #878787;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+      `}</style>
+
+      <polyline
+        className="b"
+        points="12.466 19.2658 19.182 19.2658 12.466 29.4028 19.182 29.4028"
+      />
+
+      <path
+        className="b"
+        d="m41.517,4.5018l-29.011.0354C3.882,11.9372,1.282,21.9552,8.976,36.4482c.4875,1.7082-.359,3.42-1.9992,5.1283,2.3642.3218,4.7693-.1218,6.863-1.266,13.983,6.27,21.919,2.1805,29.644-2.7323l.0355-31.074c.0013-1.1046-.8931-2.001-1.9977-2.0023-.0015,0-.003,0-.0045,0h0Z"
+      />
+
+      <path
+        className="b"
+        d="m25.63,26.791c0,1.4425-1.2196,2.6118-2.724,2.6118s-2.724-1.1694-2.724-2.6118v-1.6978c0-1.4425,1.2196-2.6118,2.724-2.6118s2.724,1.1694,2.724,2.6118"
+      />
+
+      <path
+        className="b"
+        d="m34.7606,22.483c1.4987,0,2.7136,1.2149,2.7136,2.7136v1.4948c0,1.4987-1.2149,2.7136-2.7136,2.7136-1.4987,0-2.7136-1.2149-2.7136-2.7136v-1.4948c0-1.4987,1.2149-2.7136,2.7136-2.7136Z"
+      />
+
+      <line className="b" x1="25.63" y1="29.403" x2="25.63" y2="22.482" />
+
+      <path
+        className="b"
+        d="m28.311,18.955v9.1434c0,.7214.5848,1.3062,1.3062,1.3062h.3918"
+      />
+    </svg>
+                )
+            }
+           
+          </p>{" "}
+        </CTooltip>
+      ),
+    },
     {
       title: "",
       dataIndex: "",
@@ -1980,30 +2326,7 @@ const CallReExamination: React.FC = () => {
             }}
             className="click_event"
           >
-            <svg
-              width="22px"
-              height="22px"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              stroke="#04566e"
-            >
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g
-                id="SVGRepo_tracerCarrier"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              ></g>
-              <g id="SVGRepo_iconCarrier">
-                {" "}
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M17.3545 22.2323C15.3344 21.7262 11.1989 20.2993 7.44976 16.5502C3.70065 12.8011 2.2738 8.66559 1.76767 6.6455C1.47681 5.48459 2.00058 4.36434 2.88869 3.72997L5.21694 2.06693C6.57922 1.09388 8.47432 1.42407 9.42724 2.80051L10.893 4.91776C11.5152 5.8165 11.3006 7.0483 10.4111 7.68365L9.24234 8.51849C9.41923 9.1951 9.96939 10.5846 11.6924 12.3076C13.4154 14.0306 14.8049 14.5807 15.4815 14.7576L16.3163 13.5888C16.9517 12.6994 18.1835 12.4847 19.0822 13.1069L21.1995 14.5727C22.5759 15.5257 22.9061 17.4207 21.933 18.783L20.27 21.1113C19.6356 21.9994 18.5154 22.5232 17.3545 22.2323ZM8.86397 15.136C12.2734 18.5454 16.0358 19.8401 17.8405 20.2923C18.1043 20.3583 18.4232 20.2558 18.6425 19.9488L20.3056 17.6205C20.6299 17.1665 20.5199 16.5348 20.061 16.2171L17.9438 14.7513L17.0479 16.0056C16.6818 16.5182 16.0047 16.9202 15.2163 16.7501C14.2323 16.5378 12.4133 15.8569 10.2782 13.7218C8.1431 11.5867 7.46219 9.7677 7.24987 8.7837C7.07977 7.9953 7.48181 7.31821 7.99439 6.95208L9.24864 6.05618L7.78285 3.93893C7.46521 3.48011 6.83351 3.37005 6.37942 3.6944L4.05117 5.35744C3.74413 5.57675 3.64162 5.89565 3.70771 6.15943C4.15989 7.96418 5.45459 11.7266 8.86397 15.136Z"
-                  fill="#04566e"
-                ></path>{" "}
-              </g>
-            </svg>
+            <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10.0376 5.31617L10.6866 6.4791C11.2723 7.52858 11.0372 8.90532 10.1147 9.8278C10.1147 9.8278 10.1147 9.8278 10.1147 9.8278C10.1146 9.82792 8.99588 10.9468 11.0245 12.9755C13.0525 15.0035 14.1714 13.8861 14.1722 13.8853C14.1722 13.8853 14.1722 13.8853 14.1722 13.8853C15.0947 12.9628 16.4714 12.7277 17.5209 13.3134L18.6838 13.9624C20.2686 14.8468 20.4557 17.0692 19.0628 18.4622C18.2258 19.2992 17.2004 19.9505 16.0669 19.9934C14.1588 20.0658 10.9183 19.5829 7.6677 16.3323C4.41713 13.0817 3.93421 9.84122 4.00655 7.93309C4.04952 6.7996 4.7008 5.77423 5.53781 4.93723C6.93076 3.54428 9.15317 3.73144 10.0376 5.31617Z" stroke="#00556e" stroke-width="0.9120000000000001" stroke-linecap="round"></path> </g></svg>
           </p>{" "}
         </CTooltip>
       ),
@@ -4106,7 +4429,85 @@ from_date: moment().startOf("day").format("YYYY-MM-DDTHH:mm:ss"), // 00:00:00
           </div>
         </>
       </CModal>
+              <CModal
+        isOpen={stateZNS.openZNS}
+        widths={1200}
+        title={stateZnsData?.zns_data.template_title + " - " +infoZns?.c_gender_prefix + " " + infoZns?.c_lastname}
+        onCancel={() => {
+          setIsSuccessText("");
+          setIsSuccess(false);
+          setIsErrorText("");
+          setIsError(false);
+         setStateZNS({
+            ...stateZNS,
+            openZNS:false
+         })
+          
+        }}
+        textCancel="Hủy"
+        textOK="Cập nhật"
+        isHideCancel
+        isHideOk
+        
+        onOk={() => {
+          setStateZNS({
+            ...stateZNS,
+            openZNS:false
+          })
+        }}
 
+      >
+        <>
+        
+          
+            
+                
+                <Spin
+              spinning={stateZNS.loadingFormZNS}
+              size="large"
+              indicator={
+                <img
+                  className="loader"
+                  style={{
+                    width: 70,
+                    height: 70,
+                    objectFit: 'cover',
+                    backgroundColor: 'transparent',
+                  }}
+                  src={logo}
+                />
+              } >
+            <ZnsSingleTemplateEditor
+              getListCallReExammingMaster={getListCallReExammingMaster}
+              propsData={propsData}
+              setStateZNS={setStateZNS}
+              stateZNS={stateZNS}
+      template={stateZnsData}
+              initialData={infoZns}
+              stateInfoZNS={stateInfoZNS}
+              setIsSuccess={setIsSuccess}
+              setIsSuccessText={setIsSuccessText}
+              setIsError={setIsError}
+              setIsErrorText={setIsErrorText}
+              isErrorText={isErrorText}
+              isError={isError}
+              isSuccessText={isSuccessText}
+              isSuccess={isSuccess}
+              schedule={
+                {
+                  c_schedule_id: stateZNS2.c_schedule_id,
+                  customer_id: stateZNS2.customer_id,
+                  master_id: stateZNS2.master_id,
+                }
+              }
+    />
+            </Spin>
+              
+           
+         
+       
+        </>
+      </CModal>
       {isOpenPopup && (
         <FormAddCustomer
           isOpenPopup={isOpenPopup}
@@ -4131,6 +4532,39 @@ from_date: moment().startOf("day").format("YYYY-MM-DDTHH:mm:ss"), // 00:00:00
       )}
     </PublicLayout>
   );
+};
+  const tableStyle: React.CSSProperties = {
+    borderCollapse: "collapse",
+    width: "100%",
+    tableLayout: "fixed",
+  };
+
+  const cellStyle: React.CSSProperties = {
+    border: "1px solid #9bbad1",
+    padding: 6,
+    verticalAlign: "top",
+    fontSize: 13,
+  };
+
+  const headerCellStyle: React.CSSProperties = {
+    ...cellStyle,
+    backgroundColor: "#cfe7ff",
+    fontWeight: "bold",
+    textAlign: "left",
+};
+  const rowStyle: React.CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  fontWeight: "bold",
+  marginTop: 4,
+  gap: 8,
+};
+
+const inputStyle: React.CSSProperties = {
+  flex: 1,
+  padding: 4,
+  border: "1px solid #d9d9d9",
+  outline: "none",
 };
 
 export default CallReExamination;

@@ -9,7 +9,7 @@
 /* eslint-disable import/no-named-as-default */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { notification } from "antd";
+import { Modal, notification } from "antd";
 import { NotificationPlacement } from "antd/es/notification/interface";
 import {
   OptionBH,
@@ -279,7 +279,6 @@ const FormAddCustomerNew: React.FC<FormAddCustomerProps> = ({
   const dataSurveyPortrait = useAppSelector(
     (state) => state.infosCustomer.respSurveyPortrait
   );
-  console.log(idC_Schedule)
   const [totalService, setTotalService] = useState("Chưa chọn dịch vụ");
   const storageNation = localStorage.getItem("nations");
   const storageAffiliates = localStorage.getItem("affiliates");
@@ -464,7 +463,6 @@ const FormAddCustomerNew: React.FC<FormAddCustomerProps> = ({
     allow_update_profile: true,
     source:  undefined as unknown as DropdownData,
   });
-  console.log(Number(dataForm?.origin?.value))
   const [dataGastrointestinal, setDataGastrointestinal] = useState({
     customerIllness: [],
     symptoms: "",
@@ -703,7 +701,6 @@ const FormAddCustomerNew: React.FC<FormAddCustomerProps> = ({
       (id: any) => getLS(id),
       {
         onSuccess: (data) => {
-          console.log(data)
           const mappedData = data.data.map((item:any) => ({
     ...item,
     value: item.owner_id,
@@ -721,7 +718,6 @@ const FormAddCustomerNew: React.FC<FormAddCustomerProps> = ({
       (id: any) => postConvertAddress(id),
       {
         onSuccess: (data) => {
-          console.log(data)
            setDataForm({
                               ...dataForm,
                               cityNew: {
@@ -1769,7 +1765,6 @@ const FormAddCustomerNew: React.FC<FormAddCustomerProps> = ({
         valUpdate?.master?.appointment_type === "package" ||
         valUpdate?.master?.appointment_type === "endoscopics"
       ) {
-        console.log(listServices,valUpdate?.master?.ids)
         const currentListService = handleUpdateListService(
           listServices,
           valUpdate?.master?.ids
@@ -3020,17 +3015,35 @@ content={moment(record).format("DD-MM-YYYY HH:mm")}
     setTotalService(match?.[0] || "");
     return match?.[0]; // Xóa các dấu chấm và trả về số
   };
+  const [isDirty, setIsDirty] = useState(false);
   return (
     <div className="m-form_add_customer_wrapper">
       {contextHolder}
       <CModal
         isOpen={isOpenPopup || false}
         onCancel={() => {
+           if (isDirty) {
+      Modal.confirm({
+        title: "Bạn có chắc muốn đóng?",
+        content: "Nội dung bạn đã nhập sẽ bị mất.",
+        okText: "Đóng",
+        cancelText: "Tiếp tục nhập",
+        onOk: () => {
           if (handleClosePopup) {
             handleClosePopup();
           }
           setServiceSelected([]);
           setPackageSelected(undefined);
+        },
+      });
+    } else {
+       if (handleClosePopup) {
+            handleClosePopup();
+          }
+          setServiceSelected([]);
+          setPackageSelected(undefined);
+    }
+         
         }}
         widths={
           (!!isOpenPopup &&
@@ -3094,8 +3107,8 @@ content={moment(record).format("DD-MM-YYYY HH:mm")}
                   >
                     <div style={{ marginTop: "5px", width: "100%" }}>
                       <Input
-                        autoFocus
-                        id="customerFullName"
+                        // autoFocus
+                        // id="customerFullName"
                         label="Họ tên:"
                         placeholder="Nhập họ tên của khách hàng"
                         variant="simple"
@@ -3106,8 +3119,9 @@ content={moment(record).format("DD-MM-YYYY HH:mm")}
                         onChange={(e) => {
                           setDataForm({
                             ...dataForm,
-                            name: e.target.value.toUpperCase(),
+                            name: e.target.value,
                           });
+                          setIsDirty(true);
                           clearStateErrorForm("name");
                         }}
                       />
@@ -4316,10 +4330,26 @@ placeholder={
                 <div
                   className="m-form_note"
                   onClick={() => {
-                    if (handleClose) handleClose();
+                   
+                       if (isDirty) {
+      Modal.confirm({
+        title: "Bạn có chắc muốn đóng?",
+        content: "Nội dung bạn đã nhập sẽ bị mất.",
+        okText: "Đóng",
+        cancelText: "Tiếp tục nhập",
+        onOk: () => {
+         if (handleClose) handleClose();
                     clearStateForm();
                     setServiceSelected([]);
                     setPackageSelected(undefined);
+        },
+      });
+    } else {
+      if (handleClose) handleClose();
+                    clearStateForm();
+                    setServiceSelected([]);
+                    setPackageSelected(undefined);
+    }
                   }}
                   style={{
                     width: "80px",

@@ -73,6 +73,7 @@ import CallReExamination from 'pages/CallReExamination';
 import UserGuids from 'pages/UserGuids';
 import DashboardSalesPage from 'pages/DashboardSalesPage';
 import AddAimDashboardPage from 'pages/AddAimDashboardPage';
+import CustomerOnDayView from 'pages/CustomerOnDayView';
 
 
 const routes = [
@@ -293,7 +294,11 @@ const routes = [
     path: '/add-dashboard-sales',
     element: <AddAimDashboardPage />, // đang phát triển
   },
-];
+
+            {
+    path: '/customer-on-day-view',
+    element: <CustomerOnDayView />, // đang phát triển
+  },];
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: DEFAULT_QUERY_OPTION,

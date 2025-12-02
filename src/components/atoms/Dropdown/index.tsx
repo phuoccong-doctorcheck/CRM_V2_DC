@@ -11,7 +11,7 @@ import Typography from '../Typography';
 const { Option } = Select;
 
 export type DropdownData = {
-  id: number | string, label: string, value: string, [x: string]: any,
+  id: number | string | any, label: string, value: string | any, [x: string]: any,
 };
 type Variant = 'style' | 'normal' | 'simple';
 type StatusDropdown = 'error' | 'warning' | undefined;

@@ -391,35 +391,35 @@ const [dataFilter, setDataFilter] = useState({
         </div>
       ),
     },
-    {
-      title: (<Typography content="Lịch hẹn đến" modifiers={["12x18", "500", "center"]} />),
-      align: "center",
-      dataIndex: "appointment_date",
-      width: 100,
-      // showSorterTooltip: false,
-      // sorter: (a: any, b: any) => new Date(a?.appointment_date).valueOf() - new Date(b?.appointment_date).valueOf(),
-      className: "ant-table-column_wrap",
-      render: (record: any, data: any) => (
-        <div className="ant-table-column_item" onClick={() => {
-          const { customer_id, customer_fullname, ...prevData } = data;
-          if (customer_id) {
-            Cookies.set("id_customer", customer_id);
-            dispatch(getInfosCustomerById({ customer_id: customer_id }));
-            window.open(
-              `/customer-info/id/${customer_id}/history-interaction`,
-              "_blank"
-            );
-          } else {
-            toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
-          }
-        }}>
-          <Typography content={record ? moment(record).format("DD-MM-YYYY HH:mm") : ""} modifiers={["13x18", "jetSub", "500", "center"]} />
-        </div>
-      ),
-    },
+    // {
+    //   title: (<Typography content="Lịch hẹn đến" modifiers={["12x18", "500", "center"]} />),
+    //   align: "center",
+    //   dataIndex: "appointment_date",
+    //   width: 100,
+    //   // showSorterTooltip: false,
+    //   // sorter: (a: any, b: any) => new Date(a?.appointment_date).valueOf() - new Date(b?.appointment_date).valueOf(),
+    //   className: "ant-table-column_wrap",
+    //   render: (record: any, data: any) => (
+    //     <div className="ant-table-column_item" onClick={() => {
+    //       const { customer_id, customer_fullname, ...prevData } = data;
+    //       if (customer_id) {
+    //         Cookies.set("id_customer", customer_id);
+    //         dispatch(getInfosCustomerById({ customer_id: customer_id }));
+    //         window.open(
+    //           `/customer-info/id/${customer_id}/history-interaction`,
+    //           "_blank"
+    //         );
+    //       } else {
+    //         toast.error(`Không tìm thấy khách hàng: ${customer_fullname}`);
+    //       }
+    //     }}>
+    //       <Typography content={record ? moment(record).format("DD-MM-YYYY HH:mm") : ""} modifiers={["13x18", "jetSub", "500", "center"]} />
+    //     </div>
+    //   ),
+    // },
     
      {
-      title: (<Typography content="Ngày checkin" modifiers={["12x18", "500", "center"]} />),
+      title: (<Typography content="Checkin" modifiers={["12x18", "500", "center"]} />),
       align: "center",
       dataIndex: "register_date",
       width: 110,
@@ -546,106 +546,7 @@ content={
         </div>
       ),
     },
-    {
-      title: (<Typography content="Hẹn tái khám" modifiers={["12x18", "500", "center"]} />),
-      align: "center",
-      dataIndex: "next_reexamming_date",
-      width: 110,
-      // showSorterTooltip: false,
-      // sorter: (a: any, b: any) => new Date(a?.register_date).valueOf() - new Date(b?.register_date).valueOf(),
-      className: "ant-table-column_wrap",
-      render: (record: any, data: any) => (
-        <div className="ant-table-column_item" onClick={() => {
-          const { customer_id, customer_fullname, ...prevData } = data;
-           if (record) {
-              Cookies.set("id_customer", customer_id);
-              dispatch(getInfosCustomerById({ customer_id: customer_id }));
-               const fullName = customer_id.trim();
-              const encoded = encodeURIComponent(fullName);
-              window.open(`/call-re-examination?keyword=${encoded}&type=HTK`, "_blank");
-            } 
-        }}>
-          <Typography content={record ? moment(record).format("DD-MM-YYYY") : ""} modifiers={["13x18", "jetSub", "500", "center"]} styles={{
-            color:"#0317fc"
-          }}/>
-        </div>
-      ),
-    },
-     {
-      title: (<Typography content="Hẹn NS định kỳ" modifiers={["12x18", "500", "center"]} />),
-      align: "center",
-      dataIndex: "next_endoscopic_date",
-      width: 110,
-      // showSorterTooltip: false,
-      // sorter: (a: any, b: any) => new Date(a?.register_date).valueOf() - new Date(b?.register_date).valueOf(),
-      className: "ant-table-column_wrap",
-      render: (record: any, data: any) => (
-        <div className="ant-table-column_item" onClick={() => {
-          const { customer_id, customer_fullname, ...prevData } = data;
-           if (record) {
-              Cookies.set("id_customer", customer_id);
-              dispatch(getInfosCustomerById({ customer_id: customer_id }));
-             const fullName = customer_id.trim();
-              const encoded = encodeURIComponent(fullName);
-              window.open(`/call-re-examination?keyword=${encoded}&type=HNS`, "_blank");
-            } 
-        }}>
-          <Typography content={record ? moment(record).format("DD-MM-YYYY") : ""} modifiers={["13x18", "jetSub", "500", "center"]} styles={{
-            color:"#0317fc"
-          }}/>
-        </div>
-      ),
-    },
-     {
-      title: (<Typography content="Hẹn KSK định kỳ" modifiers={["12x18", "500", "center"]} />),
-      align: "center",
-      dataIndex: "next_health_date",
-      width: 110,
-      // showSorterTooltip: false,
-      // sorter: (a: any, b: any) => new Date(a?.register_date).valueOf() - new Date(b?.register_date).valueOf(),
-      className: "ant-table-column_wrap",
-      render: (record: any, data: any) => (
-        <div className="ant-table-column_item" onClick={() => {
-          const { customer_id, customer_fullname, ...prevData } = data;
-          if (record) {
-              Cookies.set("id_customer", customer_id);
-              dispatch(getInfosCustomerById({ customer_id: customer_id }));
-               const fullName = customer_id.trim();
-              const encoded = encodeURIComponent(fullName);
-              window.open(`/call-re-examination?keyword=${encoded}&type=HKSK`, "_blank");
-            }
-        }}>
-           <Typography content={record ? moment(record).format("DD-MM-YYYY") : ""} modifiers={["13x18", "jetSub", "500", "center"]} styles={{
-            color:"#0317fc"
-          }}/>
-        </div>
-      ),
-    },
-     {
-      title: (<Typography content="Hẹn làm DV khác" modifiers={["12x18", "500", "center"]} />),
-      align: "center",
-      dataIndex: "next_service_date",
-      width: 110,
-      // showSorterTooltip: false,
-      // sorter: (a: any, b: any) => new Date(a?.register_date).valueOf() - new Date(b?.register_date).valueOf(),
-      className: "ant-table-column_wrap",
-      render: (record: any, data: any) => (
-        <div className="ant-table-column_item" onClick={() => {
-          const { customer_id, customer_fullname, ...prevData } = data;
-            if (record) {
-              Cookies.set("id_customer", customer_id);
-              dispatch(getInfosCustomerById({ customer_id: customer_id }));
-            const fullName = customer_id.trim();
-              const encoded = encodeURIComponent(fullName);
-              window.open(`/call-re-examination?keyword=${encoded}&type=HDVK`, "_blank");
-            }
-        }}>
-          <Typography content={record ? moment(record).format("DD-MM-YYYY") : ""} modifiers={["13x18", "jetSub", "500", "center"]} styles={{
-            color:"#0317fc"
-          }}/>
-        </div> 
-      ),
-    },
+   
    
    
     // {
@@ -840,6 +741,106 @@ content={
         </div>
       ),
     },
+     {
+      title: (<Typography content="Hẹn tái khám" modifiers={["12x18", "500", "center"]} />),
+      align: "center",
+      dataIndex: "next_reexamming_date",
+      width: 110,
+      // showSorterTooltip: false,
+      // sorter: (a: any, b: any) => new Date(a?.register_date).valueOf() - new Date(b?.register_date).valueOf(),
+      className: "ant-table-column_wrap",
+      render: (record: any, data: any) => (
+        <div className="ant-table-column_item" onClick={() => {
+          const { customer_id, customer_fullname, ...prevData } = data;
+           if (record) {
+              Cookies.set("id_customer", customer_id);
+              dispatch(getInfosCustomerById({ customer_id: customer_id }));
+               const fullName = customer_id.trim();
+              const encoded = encodeURIComponent(fullName);
+              window.open(`/call-re-examination?keyword=${encoded}`, "_blank");
+            } 
+        }}>
+          <Typography content={record ? moment(record).format("DD-MM-YYYY") : ""} modifiers={["13x18", "jetSub", "500", "center"]} styles={{
+            color:"#0317fc"
+          }}/>
+        </div>
+      ),
+    },
+     {
+      title: (<Typography content="Hẹn NS định kỳ" modifiers={["12x18", "500", "center"]} />),
+      align: "center",
+      dataIndex: "next_endoscopic_date",
+      width: 110,
+      // showSorterTooltip: false,
+      // sorter: (a: any, b: any) => new Date(a?.register_date).valueOf() - new Date(b?.register_date).valueOf(),
+      className: "ant-table-column_wrap",
+      render: (record: any, data: any) => (
+        <div className="ant-table-column_item" onClick={() => {
+          const { customer_id, customer_fullname, ...prevData } = data;
+           if (record) {
+              Cookies.set("id_customer", customer_id);
+              dispatch(getInfosCustomerById({ customer_id: customer_id }));
+             const fullName = customer_id.trim();
+              const encoded = encodeURIComponent(fullName);
+              window.open(`/call-re-examination?keyword=${encoded}`, "_blank");
+            } 
+        }}>
+          <Typography content={record ? moment(record).format("DD-MM-YYYY") : ""} modifiers={["13x18", "jetSub", "500", "center"]} styles={{
+            color:"#0317fc"
+          }}/>
+        </div>
+      ),
+    },
+     {
+      title: (<Typography content="Hẹn KSK định kỳ" modifiers={["12x18", "500", "center"]} />),
+      align: "center",
+      dataIndex: "next_health_date",
+      width: 110,
+      // showSorterTooltip: false,
+      // sorter: (a: any, b: any) => new Date(a?.register_date).valueOf() - new Date(b?.register_date).valueOf(),
+      className: "ant-table-column_wrap",
+      render: (record: any, data: any) => (
+        <div className="ant-table-column_item" onClick={() => {
+          const { customer_id, customer_fullname, ...prevData } = data;
+          if (record) {
+              Cookies.set("id_customer", customer_id);
+              dispatch(getInfosCustomerById({ customer_id: customer_id }));
+               const fullName = customer_id.trim();
+              const encoded = encodeURIComponent(fullName);
+              window.open(`/call-re-examination?keyword=${encoded}`, "_blank");
+            }
+        }}>
+           <Typography content={record ? moment(record).format("DD-MM-YYYY") : ""} modifiers={["13x18", "jetSub", "500", "center"]} styles={{
+            color:"#0317fc"
+          }}/>
+        </div>
+      ),
+    },
+     {
+      title: (<Typography content="Hẹn làm DV khác" modifiers={["12x18", "500", "center"]} />),
+      align: "center",
+      dataIndex: "next_service_date",
+      width: 110,
+      // showSorterTooltip: false,
+      // sorter: (a: any, b: any) => new Date(a?.register_date).valueOf() - new Date(b?.register_date).valueOf(),
+      className: "ant-table-column_wrap",
+      render: (record: any, data: any) => (
+        <div className="ant-table-column_item" onClick={() => {
+          const { customer_id, customer_fullname, ...prevData } = data;
+            if (record) {
+              Cookies.set("id_customer", customer_id);
+              dispatch(getInfosCustomerById({ customer_id: customer_id }));
+            const fullName = customer_id.trim();
+              const encoded = encodeURIComponent(fullName);
+              window.open(`/call-re-examination?keyword=${encoded}`, "_blank");
+            }
+        }}>
+          <Typography content={record ? moment(record).format("DD-MM-YYYY") : ""} modifiers={["13x18", "jetSub", "500", "center"]} styles={{
+            color:"#0317fc"
+          }}/>
+        </div> 
+      ),
+    },
 //  {
 //       title: (<Typography content="Lịch hẹn tiếp" modifiers={["12x18", "500", "center"]} />),
 //       align: "center",
@@ -966,7 +967,7 @@ content={
       className: "",
       width: 40,
       ellipsis: true,
-      // fixed: 'right',
+       fixed: 'right',
       render: (record: any, data: any) => (
           <CTooltip placements="top" title="Xem chỉ định"><div className={mapModifiers("p-appointment_view_column_pdf")}>
         

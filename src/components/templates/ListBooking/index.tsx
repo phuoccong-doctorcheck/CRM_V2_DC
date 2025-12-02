@@ -35,6 +35,42 @@ const tabs = [
 
 
 
+const getTimeDistanceText = (datetime:any) => {
+  const now = moment();
+  const target = moment(datetime);
+
+  if (target.isBefore(now)) {
+    // Thời gian trong quá khứ
+    const diffSeconds = now.diff(target, "seconds");
+    const diffMinutes = now.diff(target, "minutes");
+    const diffHours   = now.diff(target, "hours");
+    const diffDays    = now.diff(target, "days");
+    const diffMonths  = now.diff(target, "months");
+    const diffYears   = now.diff(target, "years");
+
+    if (diffSeconds < 60) return `${diffSeconds} giây trước`;
+    if (diffMinutes < 60) return `${diffMinutes} phút trước`;
+    if (diffHours < 24) return `${diffHours} giờ trước`;
+    if (diffDays < 30) return `${diffDays} ngày trước`;
+    if (diffMonths < 12) return `${diffMonths} tháng trước`;
+    return `${diffYears} năm trước`;
+  } else {
+    // Thời gian trong tương lai
+    const diffSeconds = target.diff(now, "seconds");
+    const diffMinutes = target.diff(now, "minutes");
+    const diffHours   = target.diff(now, "hours");
+    const diffDays    = target.diff(now, "days");
+    const diffMonths  = target.diff(now, "months");
+    const diffYears   = target.diff(now, "years");
+
+    if (diffSeconds < 60) return `còn ${diffSeconds} giây`;
+    if (diffMinutes < 60) return `còn ${diffMinutes} phút`;
+    if (diffHours < 24) return `còn ${diffHours} giờ`;
+    if (diffDays < 30) return `còn ${diffDays} ngày`;
+    if (diffMonths < 12) return `còn ${diffMonths} tháng`;
+    return `còn ${diffYears} năm`;
+  }
+};
 
 
 const formatCurrency = (amount: number): string => {
@@ -62,13 +98,13 @@ const formatDateTime = (dateString: string): string => {
 //   }
 // }
 export default function ListBooking(data: any) {
-  console.log(data.data[0])
+
   const [selectedAppointment, setSelectedAppointment] = useState(data.data[0]);
   const storeVisit = useAppSelector((state) => state.listVisit.listVisitItemMaster);
   const [stateDetallVisit, setStateDetailVisit] = useState(storeVisit);
   const [stateMaster, setStateMaster] = useState("");
   const [stateCustomer, setStateCustomer] = useState("");
-  console.log(data.data[0],data.data.length)
+  
   useEffect(() => {
     setStateDetailVisit(storeVisit);
   }, [storeVisit])
@@ -78,7 +114,6 @@ export default function ListBooking(data: any) {
       master_id: stateMaster,
     }));
     }, [stateDetallVisit])
-  console.log(stateDetallVisit)
   useEffect(() => { 
 
      setSelectedAppointment(selectedAppointment);
@@ -685,7 +720,6 @@ export default function ListBooking(data: any) {
             <div
               key={item.master_id}
               onClick={() => {
-                console.log(item)
                 setSelectedAppointment(item);
                 const body = {
                   master_id: item.master_id,
@@ -724,7 +758,7 @@ export default function ListBooking(data: any) {
               </div>
               <div style={{ fontSize: 14, color: "#4b5563" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                  <Clock size={16} /> {item.time_ago_text} ( {moment(item.datetime).format("HH:mm DD/MM/YYYY")})
+                  <Clock size={16} /> {getTimeDistanceText(item.datetime)}  ( {moment(item.datetime).format("HH:mm DD/MM/YYYY")})
                 </div>
                 {/* <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                   <User size={16} /> {item.doctor}
