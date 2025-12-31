@@ -1204,7 +1204,7 @@ const HeaderNav: React.FC<HeaderNavProps> = ({
                 </Button>
                 {
                   (!dataMerge.from.trim() || !dataMerge.to.trim() || !dataMerge.note.trim()) ?
-                    <Button isLoading={isMergeSuccess} modifiers={['foreign']} onClick={handleMergeCustomer}>
+                    <Button isLoading={isMergeSuccess} modifiers={['foreign']}  >
                       <Typography>Gộp khách hàng</Typography>
                     </Button>
                     :

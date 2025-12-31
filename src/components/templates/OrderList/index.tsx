@@ -552,7 +552,7 @@ const OrderList = ({setIsSelectService,ordersList,setDataRemove,setIsUpdateInfo,
           </div>
 
           {/* Table Body */}
-          <div style={{ borderTop: "1px solid #e2e8f0", maxHeight:"35vh", overflowY:"scroll" }}>
+          <div style={{ borderTop: "1px solid #e2e8f0", maxHeight:"35vh", minHeight:"35vh",overflowY:"scroll" }}>
             {orders.map((order) => {
               const config = getStatusConfig(order.status)
 

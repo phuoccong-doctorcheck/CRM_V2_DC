@@ -31,6 +31,13 @@ type DataZns = {
   endoscopic_name?: string;
 
   phone?: string;
+  vaccination_note?: string;
+  vaccine_purpose?: string;
+
+  vaccination_cost?: string;
+  dose_number?: string;
+  vaccination_date?: string;
+  vaccine_name?: string;
 };
 const MAXLEN_200_KEYS: (keyof DataZns)[] = [
   "reexamming_note",
@@ -39,6 +46,11 @@ const MAXLEN_200_KEYS: (keyof DataZns)[] = [
   "endoscopic_conclude",
   "biopsy_conclude",
   "recommended",
+  "vaccine_name",
+  "dose_number",
+  "vaccination_note",
+  "vaccine_purpose",
+  
 ];
 
 type ZnsTemplate = {
@@ -115,6 +127,12 @@ const FIELD_ORDER: (keyof DataZns)[] = [
   "reexamming_note",
   "recommended",
   "reexamming_cost",
+    "vaccine_name",
+  "dose_number",
+  "vaccination_note",
+  "vaccine_purpose",
+  "vaccination_date",
+  "vaccination_cost",
 ];
 
 const LABELS: Partial<Record<keyof DataZns, string>> = {
@@ -134,6 +152,13 @@ const LABELS: Partial<Record<keyof DataZns, string>> = {
   recommended: "Bác sĩ đề nghị",
   examming_conclude: "KQ khám sức khỏe",
   endoscopic_name: "Tên nội soi",
+
+  vaccination_cost: "Phí dự kiến",
+  vaccination_date: "Ngày hẹn tiêm tiếp theo",
+  vaccination_note: "Ghi chú",
+  vaccine_name: "Loại vắc xin",
+  vaccine_purpose: "Mục đích tiêm",
+  dose_number:"Số mũi tiêm",
 };
 
 export const ZnsSingleTemplateEditor: React.FC<Props> = ({
@@ -324,7 +349,7 @@ const validateRequiredFieldsInline = (): boolean => {
   const rowStyle: React.CSSProperties = {
     display: "flex",
     alignItems: "center",
-    fontWeight: "bold",
+    fontWeight: "500",
     marginTop: 4,
     gap: 8,
   };
@@ -362,7 +387,7 @@ const validateRequiredFieldsInline = (): boolean => {
           <thead>
             <tr>
               <th style={{ ...headerCellStyle, width: "40%" }}>Thông tin</th>
-              <th style={{ ...headerCellStyle, width: "60%" }}>Nội dung</th>
+              <th style={{ ...headerCellStyle, width: "60%" }}>Nội dung ZNS xem trước khi gửi</th>
             </tr>
           </thead>
           <tbody>
@@ -382,7 +407,7 @@ const validateRequiredFieldsInline = (): boolean => {
 
                     return (
                       <div style={rowStyle} key="kh-row">
-                        <span style={{ minWidth: 105, maxWidth: 105 }}>
+                        <span style={{ minWidth: 140, maxWidth: 140 , textAlign:"end"}}>
                           Khách hàng:
                         </span>
 
@@ -439,7 +464,7 @@ const validateRequiredFieldsInline = (): boolean => {
 
                   return (
                     <div style={rowStyle} key={key}>
-                      <span style={{ minWidth: 105, maxWidth: 105 }}>
+                      <span style={{ minWidth: 140, maxWidth: 140, textAlign:"end" }}>
                         {label}:
                       </span>
                         <div style={{display:"flex",flexDirection:"column",flex:"1 1 0%"}}>
@@ -491,9 +516,9 @@ const validateRequiredFieldsInline = (): boolean => {
 
               {/* Cột preview */}
               <td style={cellStyle}>
-                <div style={{ fontWeight: "bold", marginBottom: 4 }}>
+                {/* <div style={{ fontWeight: "bold", marginBottom: 4 }}>
                   {template?.zns_data.template_title}
-                </div>
+                </div> */}
                 <div
                   style={{ whiteSpace: "normal" }}
                   dangerouslySetInnerHTML={{ __html: htmlResult }}
@@ -531,7 +556,7 @@ const validateRequiredFieldsInline = (): boolean => {
                       sendZNS(payload);
                     }}
                   >
-                    Gửi
+                    Gửi thông báo ZNS
                   </div>
                 </div>
               </td>

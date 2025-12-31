@@ -1,6 +1,6 @@
 "use client"
 import { Select } from "antd" // Yêu cầu cài đặt antd: npm install antd
-
+import "./index.scss" // Giả sử bạn có file CSS để định nghĩa kiểu dáng
 interface Option {
   value: string
   label: string
@@ -37,6 +37,7 @@ export function AntdMultiSelect({
         value={selectedValues}
         onChange={handleChange}
         options={options}
+         className="one-line-multi-select"
       />
     </div>
   )

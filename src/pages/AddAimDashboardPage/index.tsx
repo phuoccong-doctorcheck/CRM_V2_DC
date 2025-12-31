@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-undef */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-prototype-builtins */
 /* eslint-disable @typescript-eslint/no-use-before-define */
@@ -43,7 +44,7 @@ import moment from "moment";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useMutation } from 'react-query';
 import { toast } from 'react-toastify';
-import { postDataDBS } from 'services/api/dashboardSales';
+import { getConfigAPI, postDataDBS, postSaveConfig } from 'services/api/dashboardSales';
 import { TargetResponseDB } from 'services/api/dashboardSales/types';
 import { DashboardResponse, RevenueEntry } from 'services/api/dashboardnew/types';
 import { postDashBoardMaster } from 'store/dashboard';
@@ -51,6 +52,8 @@ import { postDashBoardSalesMaster } from 'store/dashboardSales';
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { getListTask } from "store/tasks";
 import mapModifiers, { downloadBlobPDF, downloadBlobPDFOpenLink, hanldeConvertListCustomer2, previewBlobPDFOpenLink } from "utils/functions";
+
+import TogglePasswordInput from './TogglePasswordInputProps';
 
 import logo from 'assets/images/short_logo.svg';
 const { RangePicker } = DatePicker;
@@ -73,8 +76,8 @@ const month = [
   { id: 11, label: 'Tháng 12', value: '12' },
 ]
 const brand = [
-  { id: 0, label: 'Doctor Check', value: '131869073337682' },
-  { id: 1, label: 'Trung Tâm Nội Soi', value: '556113784260055' },
+  { id: 0, label: 'Facebook - Tầm Soát Bệnh', value: '131869073337682' },
+  { id: 1, label: 'Facebook - Trung Tâm Nội Soi', value: '556113784260055' },
 ]
 interface ApiTarget {
   id: number
@@ -101,7 +104,7 @@ interface TableSection {
   rows: TableRow[]
 }
 const REPORT_URL =
-  "https://app.powerbi.com/view?r=eyJrIjoiNjUxYjg2YjUtODk1YS00MmMyLWI2MjgtN2Q3MTAwOGNlMDQ5IiwidCI6ImRiNzNmYWY2LTViYzMtNDkwZC1iMGQ4LTZlZWE1ZTU4YTQ0NiIsImMiOjEwfQ%3D%3D&pageName=e7454753d5ac9ac6daa9";
+  "https://statistics.doctorcheck.online/leadreport/desktop";
 const AddAimDashboardPage: React.FC = () => {
   const dispatch = useAppDispatch();
     const [filterType, setFilterType] = useState<"day" | "week" | "month" | "year">("day");
@@ -142,7 +145,6 @@ const AddAimDashboardPage: React.FC = () => {
   const [listCategories, setListCategories] = useState<any[]>(
     storageCategories ? JSON.parse(storageCategories) : []
   );
-  console.log(listCategories)
   const listNotesCustomer = useAppSelector(
     (state) => state.infosCustomer.noteLog
   );
@@ -172,7 +174,6 @@ const [stateEmployeeId, setStateEmployeeId] = useState<any>(() => {
   month:  undefined as unknown as DropdownData,
   year:  "2025",
 });
-  console.log(data.data)
  
     const [tableLoading, setTableLoading] = useState(false);
 
@@ -208,7 +209,6 @@ const [stateEmployeeId, setStateEmployeeId] = useState<any>(() => {
   }, [storeDashBoard]);
 
 
-  console.log(data)
 const inputRef = useRef<HTMLInputElement | null>(null);
 
 
@@ -226,10 +226,7 @@ const inputRef = useRef<HTMLInputElement | null>(null);
     
   }, [editingCell]); // <- không có editValue trong dependency để tránh re-select khi nhập
   const handleUpdate = () => {
-  console.log("sections", sections)
    setLoadingPage(true);
-    // setFilterData({ date_from: from, date_to: to });
-    console.log(filterData)
     dispatch(
       postDashBoardSalesMaster({
         b:filterData.brand?.value,
@@ -512,7 +509,51 @@ const commitEdit = () => {
               console.error('🚀: error --> getCustomerByCustomerId:', error);
             },
           },
-        );
+  );
+  const [statePIN,setStatePIN]= useState<string>('');
+  const { mutate: getConfig } = useMutation(
+          'post-footer-form',
+          () => getConfigAPI(),
+          {
+            onSuccess: (data) => {
+              if (data.status === true) {
+                setStatePIN(data.data.pin_view_dashboard)
+              } else {
+                toast.error(data.message || "Lưu mục tiêu thất bại, vui lòng thử lại sau");
+              }
+          
+            },
+            onError: (error:any) => {
+              console.error('🚀: error --> getCustomerByCustomerId:', error);
+            },
+          },
+  );
+    const { mutate: saveConfig } = useMutation(
+          'post-footer-form',
+          (data:any) => postSaveConfig(data),
+          {
+            onSuccess: (data) => {
+              if (data.status === true) {
+                setStatePIN(data)
+                toast.success(data.message);
+                setIsCKLoading(false)
+                
+              } else {
+                 setIsCKLoading(false)
+                toast.error(data.message || "Lưu mục tiêu thất bại, vui lòng thử lại sau");
+              }
+          
+            },
+            onError: (error: any) => {
+               setIsCKLoading(false)
+              console.error('🚀: error --> getCustomerByCustomerId:', error);
+            },
+          },
+  );
+  const [isCKLoading,setIsCKLoading]= useState<boolean>(false);
+  useEffect(() => {
+    getConfig();
+  }, []);
 const handleSave = React.useCallback(() => {
   if (!data?.data?.length) return;
 
@@ -576,8 +617,6 @@ const handleSave = React.useCallback(() => {
     });
   });
 
-  // (Tuỳ backend cần payload nào)
-  console.log("UPDATED_TARGETS_FULL:", updatedTargets);
 
   postHideShow({
     page_id: filterData.brand?.value,
@@ -869,7 +908,7 @@ const statisticContent = useMemo(
             items={[
               {
                 key: "report",
-                label: "Xem báo cáo",
+                label: "Xem Dashboard",
                 children: (
                   <Card bordered style={{ background: "transparent" }}>
                     {/* Nhúng Power BI */}
@@ -985,6 +1024,20 @@ const statisticContent = useMemo(
                       // ✅ Giữ nguyên nội dung bảng/sections của bạn
                       statisticContent
                     )}
+                  </>
+                ),
+              },
+                {
+                key: "pin",
+                label: "Mã PIN",
+                children: (
+                  <>
+                    <div style={{ display:"flex", justifyContent:"start", alignItems:"start",gap:10}}>
+                      <span style={{marginTop:8}}> Mã PIN xem Dashboard </span> 
+                      <div >
+                        <TogglePasswordInput placeholder="Nhập mật khẩu..." text={statePIN} onUpdatePin={ saveConfig} isCKLoading={isCKLoading} setIsCKLoading={setIsCKLoading} />
+                      </div>
+                    </div> 
                   </>
                 ),
               },

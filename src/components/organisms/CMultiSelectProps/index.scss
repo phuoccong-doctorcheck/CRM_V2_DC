@@ -1,0 +1,20 @@
+/* Chỉ áp dụng cho Select có class one-line-multi-select */
+.one-line-multi-select .ant-select-selector {
+    overflow-x: auto;
+    /* cho scroll ngang */
+    overflow-y: hidden;
+    white-space: nowrap;
+    /* không cho xuống dòng */
+}
+
+/* container chứa các tag */
+.one-line-multi-select .ant-select-selection-overflow {
+    flex-wrap: nowrap !important;
+    /* không cho wrap */
+}
+
+/* từng item/từng tag */
+.one-line-multi-select .ant-select-selection-overflow-item {
+    flex: 0 0 auto;
+    /* giữ kích thước theo nội dung, không co giãn */
+}

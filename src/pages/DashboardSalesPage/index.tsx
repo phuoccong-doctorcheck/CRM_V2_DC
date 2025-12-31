@@ -654,7 +654,6 @@ ads_account_id: "1397809990832418",
   ad_ids: null as string[] | null, // 👈 cách ngắn gọn
 });
 
-  console.log(data?.data?.data_reports?.length === 0)
 const [expandedWeek, setExpandedWeek] = useState<number | null>(null)
   const [hiddenKpis, setHiddenKpis] = useState<Set<keyof DataReport>>(new Set())
  
@@ -862,7 +861,6 @@ const [expandedWeek, setExpandedWeek] = useState<number | null>(null)
                                                   <WeekSelector
                                                onChange={(from: any, to: any, weekNumber: any) => {
                               setFilterData({ ...filterData, from_date:  moment(from).format('YYYY-MM-DDT00:00:00'), to_date: moment(to).format('YYYY-MM-DDT23:59:59'), });
-    console.log(`Tuần ${weekNumber}:`, moment(from).format("YYYY-MM-DD"), '->', moment(to).format("YYYY-MM-DD"))
     // Ví dụ gửi API:
     // dispatch(fetchReport({ from_date: from, to_date: to }))
   }}
@@ -872,7 +870,6 @@ const [expandedWeek, setExpandedWeek] = useState<number | null>(null)
                                                 {filterType === "month" && (
                                                 <MonthSelector
   onChange={(from, to, month, year) => { 
-    console.log(`Từ ${ moment(from).format("YYYY-MM-DD")} đến ${to.toLocaleDateString()}`)
         setFilterData({ ...filterData, from_date:  moment(from).format('YYYY-MM-DDT00:00:00'), to_date: moment(to).format('YYYY-MM-DDT23:59:59'), });
     // Gọi API hoặc cập nhật dashboard
   }}

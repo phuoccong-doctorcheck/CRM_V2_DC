@@ -402,9 +402,9 @@ export const homeSlice = createSlice({
         !!dc_dm_cschedules_status?.length &&
           dc_dm_cschedules_status?.map((item) => {
           const convertStages = {
-            label: item.value_text,
-            value: item.key,
-
+            label: item.display_name,
+            value: item.value,
+            sequence: item.sequence,
           };
           newdc_dm_cschedules_status.push(convertStages as unknown as DropdownData);
           });

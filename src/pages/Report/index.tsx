@@ -189,7 +189,7 @@ const CReport: React.FC = () => {
   useLayoutEffect(() => {
     setStateStatistic(storeStatistic.data);
     setDataFinish(storeStatistic.data);
-  }, [storeStatistic.data]);
+  }, [storeStatistic]);
 
   useEffect(() => {
     dispatch(getCustomerStatiscal({
@@ -205,7 +205,8 @@ const CReport: React.FC = () => {
     package: [],
     status: [],
   });
-
+  console.log("filterColumn", filterColumn);
+  console.log("storeStatistic",stateStatistic,storeStatistic);
   const optionStateCS = [
     { id: 2, label: "Chưa đến", value: "new" },
     { id: 3, label: "Đã xong", value: "done" },
@@ -220,7 +221,7 @@ const CReport: React.FC = () => {
   useLayoutEffect(() => {
     setStateStatistic(storeStatistic.data);
     setDataFinish(storeStatistic.data);
-  }, [storeStatistic.data]);
+  }, [storeStatistic]);
 
   const handleConvertData = (data: StatisticCustomerItem[], value: string, key: string) => {
     try {
@@ -266,13 +267,13 @@ const CReport: React.FC = () => {
     let uniqueValues: any = [];
     switch (key) {
       case 'affiliate_name':
-        uniqueValues = Array.from(new Set((stateStatistic || [])?.map((item: any) => item?.affiliate_name).filter(Boolean)));
+        uniqueValues = Array.from(new Set((storeStatistic.data || [])?.map((item: any) => item?.affiliate_name).filter(Boolean)));
         break;
       case 'package_name':
-        uniqueValues = Array.from(new Set((stateStatistic || [])?.map((item: any) => item?.package_name).filter(Boolean)));
+        uniqueValues = Array.from(new Set((storeStatistic.data  || [])?.map((item: any) => item?.package_name).filter(Boolean)));
         break;
       case 'status_display':
-        uniqueValues = Array.from(new Set((stateStatistic || [])?.map((item: any) => item?.status_display).filter(Boolean)));
+        uniqueValues = Array.from(new Set((storeStatistic.data  || [])?.map((item: any) => item?.status_display).filter(Boolean)));
         break;
       default: break;
     }
@@ -281,13 +282,15 @@ const CReport: React.FC = () => {
   }
 
   useLayoutEffect(() => {
+    console.log("1");
+    console.log("storeStatistic",stateStatistic,storeStatistic);
     setFilterColumn({
       ...filterColumn,
       partner: handleGetOptionFilterColumn('affiliate_name'),
       package: handleGetOptionFilterColumn('package_name'),
       status: handleGetOptionFilterColumn('status'),
     });
-  }, [storeStatistic.data, isLoadingStatistic]);
+  }, [storeStatistic, isLoadingStatistic]);
 
   const handleCountCustomerAllowPackage = (type: string) => {
     let count = 0;

@@ -29,6 +29,7 @@ import PublicTable from "components/molecules/PublicTable";
 import PublicTableCR from "components/molecules/PublicTableCR";
 import CCollapse from "components/organisms/CCollapse";
 import CModal from "components/organisms/CModal";
+import { AntdMultiSelect } from "components/organisms/CMultiSelectProps";
 import InteractionHistoryCV from "components/organisms/InteractionHistoryCV";
 import InteractionHistoryRC from "components/organisms/InteractionHistoryRC";
 import PublicHeader from "components/templates/PublicHeader";
@@ -145,7 +146,9 @@ const CustomerOnDayView: React.FC = () => {
     reason: '',
     item: undefined as unknown as GroupRadioType,
   });
-const [dataFilter, setDataFilter] = useState({
+  const [dataFilter, setDataFilter] = useState({
+    fTypeMulti: [] as string[],
+     launchMulti: [] as string[],
   fromDate: moment().startOf("day").toDate(),   // Từ ngày
   toDate: moment().endOf("day").toDate(),       // Đến ngày
 
@@ -173,9 +176,9 @@ const [dataFilter, setDataFilter] = useState({
     .format("YYYY-MM-DDTHH:mm:ss"),
 
   launch_source_group_id: dataFilter.launchSourceGroup?.value || 0,
-  launch_source_id: dataFilter.launchSource?.value || 0,
+  launch_source_ids: dataFilter.launchMulti?.join(",") || "",
 
-  ftype: dataFilter.fType?.value || "",
+  ftypes: dataFilter.fTypeMulti?.join(",") || "",
   m_service_type: dataFilter.mServiceType?.value || "",
   m_examming_type: dataFilter.mExammingType?.value || "",
   m_endoscopic_type: dataFilter.mEndoscopicType?.value || "",
@@ -278,7 +281,6 @@ const isCustomerTypeLocked = customerTypeValue === "BSCD";
     useEffect(() => {
       setListNode(listNotesCustomer);
     }, [listNotesCustomer]);
-    console.log(listNode)
    const [errorNote, setErrorNote] = useState(false);
     const handleValidateForm = () => {
     if (!dataAddNote.cs_node_content.trim()) {
@@ -532,7 +534,6 @@ const isCustomerTypeLocked = customerTypeValue === "BSCD";
   };
 
  const handleChangePagination = (pages: number, size: number) => {
-   console.log({ page: pages, pageSize: size })
      dispatch(
                                            getLoadCustomerStatisticStateMaster(
                                              {
@@ -1167,7 +1168,6 @@ content={
       render: (record: any, data: any) => (
         <CTooltip placements="top" title="Chỉnh sửa"><div className={mapModifiers("p-appointment_view_column_pdf")}
           onClick={() => {
-            console.log("data master id",  stateMTypes.find(x => x.label.trim().toLowerCase() === data.m_servicetype_name.trim().toLowerCase())?.value );
             setFTpyeS(data.f_type);
             setGS(stateMTypes.find(x => x.label.trim().toLowerCase() === data.m_servicetype_name.trim().toLowerCase())?.value)
             setStateName(data?.customer_fullname)
@@ -1681,14 +1681,6 @@ const statisticHeader = useMemo(() => {
     to = Math.min(currentPage * DISPLAY_PAGE_SIZE, total);
   }
 
-  console.log({
-    total,
-    currentPage,
-    DISPLAY_PAGE_SIZE,
-    from,
-    to,
-  });
-
   return (
     <PublicHeaderStatistic
       handleClick={() => {}}
@@ -1831,8 +1823,30 @@ const statisticHeader = useMemo(() => {
                  
                 }}
                   /></div>
-                   <div style={{ width: "120px" }}>
-              <Dropdown4
+                <div style={{ width: "120px" }}>
+                    <AntdMultiSelect
+  options={[
+                  // { id: 99, label: "Tất cả", value: null as any },
+  ...listLaunchSources.map(item => ({
+    ...item,
+    label:
+      item.label === "Bác Sĩ Chỉ Định"
+        ? "BSCD"
+        : item.label === "KH Cũ Giới Thiệu (WoM)"
+        ? "WOM"
+        : item.label,
+  })),
+                ]}
+  selectedValues={dataFilter.launchMulti}
+                    onValueChange={(values: string[]) => {
+    setDataFilter((prev) => ({
+      ...prev,
+      launchMulti: values,   // ⬅️ cập nhật đúng giá trị vào state
+    }))
+  }}
+    placeholder="Chọn nguồn"
+/>
+              {/* <Dropdown4
                 dropdownOption={[
                   { id: 99, label: "Tất cả", value: null as any },
   ...listLaunchSources.map(item => ({
@@ -1857,11 +1871,30 @@ const statisticHeader = useMemo(() => {
     "label": "BSCD - Khách hàng BS chỉ định"
 } :   { id: 99, label: "Tất cả", value: null as any },
                    });
-                  console.log(e)
                 }}
-                  /></div>
-                   <div style={{ width: "180px" }}>
-              <Dropdown4
+                  /> */}
+                </div>
+                <div style={{ width: "180px" }}>
+              <AntdMultiSelect
+                    options={[...groupFTpye,
+      {
+                        id: 1000,
+                        label: "F3TC - Tầm soát có triệu chứng",
+                        value: "F3TC",
+                   }
+  ]}
+  selectedValues={dataFilter.fTypeMulti}
+                    onValueChange={(values: string[]) => {
+    console.log("Selected values string:", values.join(",")); // ⬅️ Log dạng chuỗi
+    setDataFilter((prev) => ({
+      ...prev,
+      fTypeMulti: values,   // ⬅️ cập nhật đúng giá trị vào state
+    }))
+  }}
+  placeholder="Nhóm khách hàng"
+/>
+
+            {/* <Dropdown4
                 dropdownOption={[
                   { id: 99, label: "Tất cả", value: null as any },
                   ...groupFTpye,
@@ -1876,12 +1909,13 @@ const statisticHeader = useMemo(() => {
                   console.log(e)
                   setDataFilter({
                     ...dataFilter, fType: e,
-                    // mReexammingType: (e.value !== "TK" || e?.value !== "F3TK")  ?  { id: 99, label: "Tất cả", value: null as any }
+                
                     
                   });
                   
                 }}
-                  /></div>
+                  /> */}
+                </div>
                    <div style={{ width: "140px" }}>
               <Dropdown4
                 dropdownOption={[
@@ -1918,6 +1952,11 @@ const statisticHeader = useMemo(() => {
                 dropdownOption={[
                   { id: 99, label: "Tất cả", value: null as any },
                    ...stateMTypes.filter(item => item.m_type_group === "NS"),
+                      // {
+                      //   id: 1000,
+                      //   label: "Tầm soát định kỳ",
+                      //   value: "TSDK",
+                      // }
                 ]}
                 variant="simple"
                 placeholder="Lý do nội soi"
@@ -1931,18 +1970,30 @@ const statisticHeader = useMemo(() => {
                  
                 }}
                   /></div>
-                   <div style={{ width: "220px" }}>
+                   <div style={{ width: "300px" }}>
               <Dropdown4
                 dropdownOption={[
                   { id: 99, label: "Tất cả", value: null as any },
-                  ...stateMTypes.filter(item => item.m_type_group === "TK"),
+                      ...stateMTypes.filter(item => item.m_type_group === "TK"),
+                  //  {
+                      
+                  //       id: 1000,
+                  //       label: "Tái khám khi còn triệu chứng bệnh trùng lắp",
+                  //       value: "TKTCTL",
+                  //   },
+                  //   {
+                      
+                  //       id: 1001,
+                  //       label: "Tái khám khi hết thuốc bệnh trùng lắp",
+                  //       value: "TKHTTL",
+                  //  }
                 ]}
                     variant="simple"
                       disabled={
-                    ((dataFilter.fType?.value === "F3TK" || dataFilter.fType?.value === "TK")  ) ? false : true
+                    ((dataFilter.fTypeMulti.includes( "F3TK") || dataFilter.fTypeMulti.includes( "TK"))  ) ? false : true
                   }
                 placeholder="Lý do tái khám"
-                values={(dataFilter.fType?.value === "F3TK" || dataFilter.fType?.value === "TK")  ? dataFilter.mReexammingType : undefined}
+                values={ ((dataFilter.fTypeMulti.includes( "F3TK") || dataFilter.fTypeMulti.includes( "TK"))  ) ? dataFilter.mReexammingType : undefined}
                 handleSelect={(e: any) => {
                   setDataFilter({
                     ...dataFilter, mReexammingType: e,
@@ -1951,7 +2002,7 @@ const statisticHeader = useMemo(() => {
                
                 }}
                   /></div>
-                 <div style={{ width: "220px" }}>
+                 <div style={{ width: "150px" }}>
               <Dropdown4
                 dropdownOption={[
                   { id: 99, label: "Tất cả", value: null as any },
@@ -2195,7 +2246,6 @@ const statisticHeader = useMemo(() => {
               m_endoscopic_type: stateEditField?.endoscopy?.value || stateEditField?.endoscopy,
                  m_reexamming_type: stateEditField?.reExamination?.value || stateEditField?.reExamination,
             }
-                  console.log("stateEditField",body ,groupFTpye,stateEditField );
                 updateType(body)
                 }}
                 textCancel="Hủy"
@@ -2209,7 +2259,12 @@ const statisticHeader = useMemo(() => {
               <Dropdown4
                  dropdownOption={[
                
-                  ...groupFTpye,
+                    ...groupFTpye,
+                    {
+                        id: 1000,
+                        label: "Tầm soát có triệu chứng",
+                        value: "F3TC",
+                   }
                 ]}
                 variant="simple"
                 placeholder="Nhóm khách hàng"
@@ -2273,7 +2328,19 @@ const statisticHeader = useMemo(() => {
               <Dropdown4
                  dropdownOption={[
                 
-                  ...stateMTypes.filter(item => item.m_type_group === "TK"),
+                    ...stateMTypes.filter(item => item.m_type_group === "TK"),
+                    {
+                      
+                        id: 1000,
+                        label: "Tái khám khi còn triệu chứng bệnh trùng lắp",
+                        value: "TKTCTL",
+                    },
+                    {
+                      
+                        id: 1001,
+                        label: "Tái khám khi hết thuốc bệnh trùng lắp",
+                        value: "TKHTTL",
+                   }
                 ]}
                   variant="simple"
                   disabled={

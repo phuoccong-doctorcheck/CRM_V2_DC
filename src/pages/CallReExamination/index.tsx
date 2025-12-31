@@ -132,7 +132,39 @@ type TemplateValues = {
   c_id: string;
 };
 // Các field có thể dùng trong tất cả template
+const STATUS_MAP = {
+  new: "Chưa liên hệ",
+  TB: "Không liên hệ được → Thuê bao",
+  KBM: "Không liên hệ được → Không bắt máy 2 lần",
+  DH: "Đã liên hệ được → Đặt hẹn đến",
+  DL: "Đã liên hệ được → Dời lịch",
+  HTC: "Đã liên hệ được → Từ chối → Hết triệu chứng",
+  CUHT: "Đã liên hệ được → Từ chối → Chưa uống hết thuốc",
+  KRLD: "Đã liên hệ được → Từ chối → Không rõ lý do",
+}
+const statusWidthMap: Record<string, number> = {
+  new: 190,
+  TB: 300,
+  KBM: 340,
+  DH: 310,
+  DL: 190,
+  HTC: 300,
+  CUHT: 340,
+  KRLD: 310,
+};
+const statusColorMap: Record<string, string> = {
+  new: "#FF7F27",
 
+  TB: "#007AAE",
+  KBM: "#007AAE",
+
+  DH: "#138535",
+  DL: "#138535",
+
+  HTC: "#B21016",
+  CUHT: "#B21016",
+  KRLD: "#B21016",
+};
 const TEMPLATE  = `<div>Xin chào <b>[[c_gender_prefix]]</b> <b>[[c_lastname]]</b>,</div><div>Ngày <b>[[examming_date]]</b> <b>[[c_gender_prefix]]</b> <b>[[c_lastname]]</b> đã khám với bác sĩ Doctor Check và được chẩn đoán <b>[[diagnose_note]]</b>. Bác sĩ đã kê đơn điều trị cho <b>[[c_gender_prefix]]</b> trong <b>[[treatment_days]]</b>. Hôm nay <b>[[c_gender_prefix]]</b> đã hết thuốc, Bác sĩ lên lịch tái khám như sau:</div><ul><li>Ngày tái khám: <b>[[reexamming_date]]</b></li><li>Nội dung tái khám: <b>[[reexamming_note]]</b></li><li>Mã khách hàng: <b>[[c_id]]</b></li></ul><div>Bệnh tiêu hóa thường khó điều trị dứt điểm và dễ tái phát nên việc tái khám đúng hẹn giúp <b>[[c_gender_prefix]]</b> <b>[[c_lastname]]</b> tăng khả năng điều trị khỏi và ngăn ngừa bệnh tái phát. <b>[[c_gender_prefix]]</b> vui lòng xác nhận lịch tái khám hoặc dời thời gian phù hợp bằng cách phản hồi thông báo này.</div><div><b>[[c_gender_prefix]]</b> <b>[[c_lastname]]</b> cũng có thể gọi Trợ lý bác sĩ để được hỗ trợ.</div>`;
 // utils/renderTemplate.ts
 export function renderTemplate(
@@ -323,9 +355,10 @@ const CallReExamination: React.FC = () => {
         (item: DropdownData) => item.value !== "all"
       )
     : []
-);
+  );
+  console.log("dcdmcschedulesstatus1",dcdmcschedulesstatus1)
   const [selectedStatus, setSelectedStatus] = useState<string>("new");
-  const [selectedDays, setSelectedDays] = useState<number>(3);
+  const [selectedDays, setSelectedDays] = useState<number>(-2);
     const [selectedDays2, setSelectedDays2] = useState<number>(2);
   /*  */
   const [openNote, setOpenNote] = useState(false);
@@ -343,10 +376,10 @@ const CallReExamination: React.FC = () => {
     status: undefined as unknown as DropdownData,
     keyWord: "",
     c_schedule_type_id: undefined as unknown as DropdownData,
-     from_date: moment().format("YYYY-MM-DD 00:00:00") as string | null,
-    to_date: moment().format("YYYY-MM-DD 23:59:59") as string | null,
-  from_date1: moment().format("YYYY-MM-DD 00:00:00") as string ,
-  to_date1: moment().format("YYYY-MM-DD 23:59:59") as string,
+     from_date: moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss") as string | null,
+    to_date:  moment().add(1, "day").endOf("day").format("YYYY-MM-DDTHH:mm:ss") as string | null,
+  from_date1:  moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss") as string ,
+  to_date1:  moment().add(1, "day").endOf("day").format("YYYY-MM-DDTHH:mm:ss") as string,
     year: undefined as unknown as DropdownData,
     source: undefined as unknown as DropdownData,
     sourceGroup: undefined as unknown as DropdownData,
@@ -559,7 +592,7 @@ const CallReExamination: React.FC = () => {
   c_schedule_type_id: dataFilter?.c_schedule_type_id || "all",
           from_date: moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss"), // 00:00:00
           to_date: moment().add(1, "day").endOf("day").format("YYYY-MM-DDTHH:mm:ss"),     // 23:59:59
-          status: dataFilter?.status || "new",
+          status: dataFilter?.status || "all",
           page_number: 1,
           page_size: 10000,
           keyWord: dataFilter.keyWord,
@@ -581,7 +614,7 @@ const CallReExamination: React.FC = () => {
   // "all",
           from_date: moment().add(1, "day").startOf("day").format("YYYY-MM-DDTHH:mm:ss"), // 00:00:00
           to_date: moment().add(1, "day").endOf("day").format("YYYY-MM-DDTHH:mm:ss"),     // 23:59:59
-          status: dataFilter?.status || "new",
+          status: dataFilter?.status || "all",
           page_number: 1,
           page_size: 10000,
           keyWord: fullName,
@@ -760,6 +793,24 @@ const CallReExamination: React.FC = () => {
     }
   );
   const [customerUpdate, setCustomerUpdate] = useState<any>();
+  const scheduleValues = ["all", "HTK", "HNS", "HKSK", "HDVK"];
+
+const dcdmcschedulesForDropdown = [
+  // chỉ lấy những option cần
+  ...dcdmcschedules.filter(x => scheduleValues.includes(x.value)),
+
+  // thêm option HTC
+  {
+    c_schedule_type_id: "HTC",
+    c_schedule_title: "Hẹn tiêm Vacxin theo phác đồ",
+    c_schedule_note: "Hẹn tiêm Vacxin theo phác đồ",
+    sequence: 5,
+    label: "Hẹn tiêm Vacxin theo phác đồ",
+    value: "HTC",
+    id:5
+  },
+];
+
   const { mutate: postBooking } = useMutation(
     "post-footer-form",
     (data: any) => getCustomerById(data),
@@ -1672,7 +1723,7 @@ const CallReExamination: React.FC = () => {
         <div
           className="ant-table-column_item"
         onClick={() => {
-  if (position === "BOD" || employeeId2 === "NV4825133856") {
+  if (position === "BOD" || employeeId2 === "NV4825133856" || employeeId2 === "NV27112595125") {
     setDataDelay({
       ...dataDelay,
       openDelay: true,
@@ -1715,7 +1766,7 @@ const CallReExamination: React.FC = () => {
 
         >
           <Typography
-            content={record ? moment(record).format("DD/MM/YYYY hh:mm") : "Chưa thực hiện"}
+            content={record ? moment(record).format("DD/MM/YYYY hh:mm") : " Chưa thực hiện "}
             modifiers={[
               "13x18",
               "500",
@@ -1723,7 +1774,7 @@ const CallReExamination: React.FC = () => {
              record ? "green" : "cg-red",
             ]}
           />
-           {!_.isNull(data?.cs_employee_name) && (
+           {(!_.isNull(data?.cs_employee_name) &&record ) && (
                         <p style={{ fontSize: 12, color: "#04566e" }}>
                           Bởi:&nbsp;{data?.cs_employee_name}
                         </p>
@@ -1875,7 +1926,7 @@ const CallReExamination: React.FC = () => {
           }}
         >
           <Typography
-            content={toTitleCase(record)}
+            content={record}
             modifiers={["13x18", "500", "center", "main"]}
             styles={{
               display: "block", // Đảm bảo hiển thị như block
@@ -2080,7 +2131,7 @@ const CallReExamination: React.FC = () => {
       ),
       dataIndex: "status",
       align: "center",
-      width: 100,
+      width: 200,
       className: "ant-table-column_wrap",
       render: (record: any, data: any) => (
         <div
@@ -2101,32 +2152,29 @@ const CallReExamination: React.FC = () => {
                  id: 0,
                  value: data.status,
                  label:
-                   data.status === "new"
-                     ? "Chưa liên hệ"
-                     : data.status === "contact"
-                     ? "Đã liên hệ"
-                     : data.status === "appointment"
-                     ? "Đã đặt lịch"
-                     : data.status === "checkin"
-                     ? "Đã đến"
-                     : "Đã hủy",
+                   data.status ===  "new" ? "Chưa liên hệ" :
+    data.status === "TB" ? "Không liên hệ được → Thuê bao" :
+  data.status === "KBM" ? "Không liên hệ được → Không bắt máy 2 lần" :
+ data.status === "DH" ? "Đã liên hệ được → Đặt hẹn đến" :
+  data.status === "DL" ? "Đã liên hệ được → Dời lịch" :
+  data.status === "HTC" ? "Đã liên hệ được → Từ chối → Hết triệu chứng" :
+ data.status === "CUHT" ? "Đã liên hệ được → Từ chối → Chưa uống hết thuốc" :
+  data.status === "KRLD" ? "Đã liên hệ được → Từ chối → Không rõ lý do" :""
+ 
                },
              });
            }}
         >
           <Typography
             content={
-              record === "new"
-                ? "Chưa liên hệ"
-                : record === "contact"
-                ? "Đã liên hệ"
-                : record === "appointment"
-                ? "Đã đặt lịch"
-                : record === "checkin"
-                ? "Đã đến"
-                : record === "canceled"
-                ? "Đã hủy"
-                : "Đã đến"
+              record ===  "new" ? "Chưa liên hệ" :
+    record === "TB" ? "Không liên hệ được → Thuê bao" :
+  record === "KBM" ? "Không liên hệ được → Không bắt máy 2 lần" :
+ record === "DH" ? "Đã liên hệ được → Đặt hẹn đến" :
+  record=== "DL" ? "Đã liên hệ được → Dời lịch" :
+  record === "HTC" ? "Đã liên hệ được → Từ chối → Hết triệu chứng" :
+record === "CUHT" ? "Đã liên hệ được → Từ chối → Chưa uống hết thuốc" :
+  record === "KRLD" ? "Đã liên hệ được → Từ chối → Không rõ lý do" :""
             }
             modifiers={["13x18", "500", "left", "main"]}
             styles={{
@@ -2134,16 +2182,7 @@ const CallReExamination: React.FC = () => {
               wordWrap: "break-word",
               whiteSpace: "normal",
               textAlign: "left",
-              color:
-                record === "new"
-                  ? "#B21016"
-                  : record === "contact"
-                  ? "#007AAE"
-                  : record === "appointment"
-                  ? "#138535"
-                  : record === "checkin"
-                  ? "#085820"
-                  : "#085820",
+               color: statusColorMap[record] || "inherit"
             }}
           />
         </div>
@@ -2197,7 +2236,14 @@ const CallReExamination: React.FC = () => {
                 }
                    
               } else {
-                toast.error("Không thể gửi ZNS vì lượt khám trước đó không có toa thuốc hoặc không có lượt hẹn tái khám!");
+                if (data.c_schedule_type_id === "HTC") {
+                  toast.error("Không thể gửi ZNS vì lượt khám trước đó không có lượt hẹn tái khám!");
+                }
+                else {
+                  toast.error("Không thể gửi ZNS vì lượt khám trước đó không có toa thuốc hoặc không có lượt hẹn tái khám!");
+                }
+                
+                
                }
               
             
@@ -2351,20 +2397,20 @@ const CallReExamination: React.FC = () => {
                       ...dataUpdateStatus,
                       openUpdateStatus: false,
                       id_pk_long: data.c_schedule_id,
-                      value_text: {
-                        id: 0,
-                        value: data.status,
-                        label:
-                          data.status === "new"
-                            ? "Chưa liên hệ"
-                            : data.status === "contact"
-                            ? "Đã liên hệ"
-                            : data.status === "appointment"
-                            ? "Đã đặt lịch"
-                            : data.status === "checkin"
-                            ? "Đã đến"
-                            : "Đã hủy",
-                      },
+                       value_text: {
+                 id: 0,
+                 value: data.status,
+                 label:
+                   data.status ===  "new" ? "Chưa liên hệ" :
+    data.status === "TB" ? "Không liên hệ được → Thuê bao" :
+  data.status === "KBM" ? "Không liên hệ được → Không bắt máy 2 lần" :
+ data.status === "DH" ? "Đã liên hệ được → Đặt hẹn đến" :
+  data.status === "DL" ? "Đã liên hệ được → Dời lịch" :
+  data.status === "HTC" ? "Đã liên hệ được → Từ chối → Hết triệu chứng" :
+ data.status === "CUHT" ? "Đã liên hệ được → Từ chối → Chưa uống hết thuốc" :
+  data.status === "KRLD" ? "Đã liên hệ được → Từ chối → Không rõ lý do" :""
+ 
+               },
                     });
                     setStateCscheduleId(data.c_schedule_id)
                     dispatch(
@@ -2814,7 +2860,7 @@ const statisticHeader = useMemo(() => {
             //   handleGetStatistic();
           }}
           tabBottomRight={
-            <div style={{ width: "180px", marginTop:"5px" }}>
+            <div style={{ width: "350px", marginTop:"5px" }}>
               <Input2
                 id="customer_id"
                 type="text"
@@ -2829,7 +2875,7 @@ const statisticHeader = useMemo(() => {
                   });
                 }}
                 handleEnter={() => {
-                  setSelectedDays(3)
+                  setSelectedDays(-2)
                   setListCallReExamming([]);
                   dispatch(
                     getListCallReExammingMaster({
@@ -2840,7 +2886,7 @@ const statisticHeader = useMemo(() => {
                   );
                 }}
                 handleClickIcon={() => {
-                   setSelectedDays(3)
+                   setSelectedDays(-2)
                   setListCallReExamming([]);
                   dispatch(
                     getListCallReExammingMaster({
@@ -2859,171 +2905,6 @@ const statisticHeader = useMemo(() => {
               className="p-after_examination_filter_bottom p-after_examination_filter p-appointment_view_filter"
               style={{ gap: "5px" }}
             >
-              <div style={{ width: "200px" }}>
-                <Dropdown4
-                  dropdownOption={dcdmcschedules}
-                  values={dataFilter.c_schedule_type_id}
-                   defaultValue={propsData.c_schedule_type_id}
-                  handleSelect={(item: any) => {
-                    setDataFilter({
-                      ...dataFilter,
-                      c_schedule_type_id: item?.value,
-                    });
-                    setListCallReExamming([]);
-
-                    dispatch(
-                      getListCallReExammingMaster({
-                        ...propsData,
-                        c_schedule_type_id: item?.value,
-                      } as any)
-                    );
-                    // dispatch(getStatisticAllowRangeDate({
-                    //   fromdate: moment(dataFilter?.fromDays).format('YYYY-MM-DDT00:00:00'),
-                    //   todate: moment(dataFilter?.toDays).format('YYYY-MM-DDTHH:mm:ss'),
-                    // }));
-                  }}
-                  variant="simple"
-                  placeholder="-- Lý do quay lại --"
-                />
-              </div>
-
-              <div style={{ width: "130px" }}>
-                <Dropdown4
-                  dropdownOption={dcdmcschedulesstatus}
-                  values={dataFilter.status}
-                  defaultValue={propsData.status}
-                  handleSelect={(item: any) => {
-                    setDataFilter({ ...dataFilter, status: item?.value });
-                    setListCallReExamming([]);
-                    dispatch(
-                      getListCallReExammingMaster({
-                        ...propsData,
-                        status: item?.value,
-                      } as any)
-                    );
-                  }}
-                  variant="simple"
-                  placeholder="-- Trạng thái --"
-                />
-              </div>
-               <div style={{ width: "200px" }}>
-                <Dropdown4
-                  dropdownOption={[
-                    {
-                    id:1,
-                    label: "Tất cả",
-                    value: 0
-                  }, ...stateLaunchSourceGroups
-                  ]}
-                  values={dataFilter.sourceGroup}
-                  // defaultValue={{
-                  //   id:1,
-                  //   label: "Tất cả",
-                  //   value: 0
-                  // }}
-                  handleSelect={(item: any) => {
-                    setDataFilter({ ...dataFilter, sourceGroup: item?.value });
-                    setListCallReExamming([]);
-                    dispatch(
-                      getListCallReExammingMaster({
-                        ...propsData,
-                        launch_source_group_id: item?.value,
-                      } as any)
-                    );
-                  }}
-                  variant="simple"
-                  placeholder="-- Brand --"
-                />
-              </div>
-                <div style={{ width: "120px" }}>
-                <Dropdown4
-                  dropdownOption={[
-                    {
-                    id:1,
-                    label: "Tất cả",
-                    value: 0
-                  }, ...stateLaunchSource
-                  ]}
-                  values={dataFilter.source}
-                  // defaultValue={{
-                  //   id:1,
-                  //   label: "Tất cả",
-                  //   value: 0
-                  // }}
-                  handleSelect={(item: any) => {
-                    setDataFilter({ ...dataFilter, source: item?.value });
-                    setListCallReExamming([]);
-                    dispatch(
-                      getListCallReExammingMaster({
-                        ...propsData,
-                        launch_source_id: item?.value,
-                      } as any)
-                    );
-                  }}
-                  variant="simple"
-                  placeholder="-- Nguồn --"
-                />
-              </div>
-               <div style={{ width: "100px" }}>
-                <Dropdown4
-                   dropdownOption={[
-                    {
-                    id:1,
-                    label: "Tất cả",
-                    value: "all"
-                  }, ...listF
-                  ]}
-                  values={dataFilter.stateF}
-                //  defaultValue={{
-                //     id:1,
-                //     label: "Tất cả",
-                //     value: "all"
-                //   }}
-                  handleSelect={(item: any) => {
-                    setDataFilter({ ...dataFilter, stateF: item?.value });
-                    setListCallReExamming([]);
-                    dispatch(
-                      getListCallReExammingMaster({
-                        ...propsData,
-                        f_type: item?.value,
-                      } as any)
-                    );
-                  }}
-                  variant="simple"
-                  placeholder="Phân loại"
-                />
-              </div>
-
-               <div style={{ width: "80px" }}>
-                <Dropdown4
-                  dropdownOption={dmYearDoctorSchedules}
-                  values={dataFilter.year}
-                  handleSelect={(item: any) => {
-                    const year = item?.value;
-                    const from_date =  `${year}-01-01 00:00:00` ;
-                    const to_date =  `${year}-12-31 23:59:59`;
-
-                    setDataFilter({
-                      ...dataFilter, from_date: from_date, to_date: to_date,
-                        from_date1: from_date,
-                      to_date1: to_date,
-
-                     });
-                     setSelectedDays(-2);
-                    setListCallReExamming([]);
-                    dispatch(
-                      getListCallReExammingMaster({
-                        ...propsData,
-                        from_date,
-                        to_date,
-                      } as any)
-                    );
-                  }}
-
-                  variant="simple"
-                  placeholder="Năm"
-                />
-              </div>
                <div style={{ width: "180px" }}>
                 <Dropdown4
                   dropdownOption={listTypeDay}
@@ -3034,7 +2915,7 @@ const statisticHeader = useMemo(() => {
                     setListCallReExamming([]);
                     if (item.value === "bs") {
                       
-                      setSelectedDays(3);
+                      setSelectedDays(-2);
                         setDataFilter({
                           ...dataFilter,
                              typeDate: item,
@@ -3086,13 +2967,13 @@ from_date: moment().startOf("day").format("YYYY-MM-DDTHH:mm:ss"), // 00:00:00
                   placeholder=""
                 />
               </div>
-              {
+              {/* {
                  propsData?.date_type === "bs" && <div style={{fontSize:"12px", marginTop:"10px"}}>
                 Trước:
               </div> 
-              }
+              } */}
              
-              {
+              {/* {
               propsData?.date_type === "bs" ? 
                   <Radio.Group
                     
@@ -3316,46 +3197,7 @@ from_date: moment().startOf("day").format("YYYY-MM-DDTHH:mm:ss"), // 00:00:00
                   const yesterday = moment()
                     .subtract(1, "days")
                     .format("YYYY-MM-DD");
-                  // const tomorrow = moment().add(1, "days").format("YYYY-MM-DD");
-                  // const next7To = moment().add(7, "days").format("YYYY-MM-DD");
-                  // const next14To = moment().add(14, "days").format("YYYY-MM-DD");
-                  // const next1MTo = moment().add(14, "days").format("YYYY-MM-DD");
-                  // if (selectedValue === 9999) {
-                  //   // Tất cả
-                  //   setListCallReExamming([]);
-                  //  setDataFilter({
-                  //     ...dataFilter,
-                  //     from_date: null,
-                  //     to_date: null,
-                  //   });
-                  //   dispatch(
-                  //     getListCallReExammingMaster({
-                  //       ...propsData,
-                  //       from_date: null,
-                  //       to_date: null,
-                  //         from_date1:  moment().format("YYYY-MM-DD 00:00:00"),
-                  //     to_date1:  moment().format("YYYY-MM-DD 00:00:00"),
-                  //     } as any)
-                  //   );
-                  // } else if (selectedValue === -9999) {
-                  //   // Quá khứ
-                  //   const to = `${yesterday} 23:59:59`;
-                  //   setListCallReExamming([]);
-                  //  setDataFilter({
-                  //     ...dataFilter,
-                  //     from_date: null,
-                  //    to_date: to,
-                  //     from_date1: to,
-                  //     to_date1: to,
-                  //   });
-                  //   dispatch(
-                  //     getListCallReExammingMaster({
-                  //       ...propsData,
-                  //       from_date: null,
-                  //       to_date: to,
-                  //     } as any)
-                  //   );
-                  // } else
+                 
                     if (selectedValue === 1) {
                     // Hôm qua
                     const from = `${yesterday} 00:00:00`;
@@ -3433,8 +3275,96 @@ from_date: moment().startOf("day").format("YYYY-MM-DDTHH:mm:ss"), // 00:00:00
               ))}
 
               </Radio.Group>
-              }
-             
+              } */}
+              {
+                  propsData?.date_type === "cs" &&  <Radio.Group
+                onChange={(e) => {
+                  const selectedValue = e.target.value;
+                  setSelectedDays2(selectedValue);
+
+                  const today = moment().format("YYYY-MM-DD");
+                  const yesterday = moment()
+                    .subtract(1, "days")
+                    .format("YYYY-MM-DD");
+                 
+                    if (selectedValue === 1) {
+                    // Hôm qua
+                    const from = `${yesterday} 00:00:00`;
+                    const to = `${yesterday} 23:59:59`;
+                    setListCallReExamming([]);
+                    setDataFilter({
+                      ...dataFilter,
+                      from_date: from,
+                      to_date: to,
+                      from_date1: from,
+                      to_date1: to,
+                    });
+                    dispatch(
+                      getListCallReExammingMaster({
+                        ...propsData,
+                        from_date: from,
+                        to_date: to,
+                      } as any)
+                    );
+                  } else if (selectedValue === 2) {
+                    // Hôm nay
+                    const from = `${today} 00:00:00`;
+                    const to = `${today} 23:59:59`;
+                    setListCallReExamming([]);
+                    setDataFilter({
+                      ...dataFilter,
+                      from_date: from,
+                      to_date: to,
+                      from_date1: from,
+                      to_date1: to,
+                    });
+                    dispatch(
+                      getListCallReExammingMaster({
+                        ...propsData,
+                        from_date: from,
+                        to_date: to,
+                      } as any)
+                    );
+                  }                   else if (selectedValue === 0) {
+                    // Tùy chọn
+                    setDataFilter({ ...dataFilter });
+                  }
+                }}
+                value={selectedDays2}
+                style={{
+                  display: "flex",
+                  justifyContent: "start",
+                  marginTop: "10px",
+                  gap: "5px",
+                }}
+              >
+               {[
+
+  // Thêm 4 option mới
+  {
+    label: 'Hôm qua',
+    value: 1,
+  },
+  {
+    label: 'Hôm nay',
+    value: 2,
+  },
+  {
+    label: 'Tùy chọn',
+    value: 0,
+  },
+
+
+
+]
+                .map(option => (
+                  <Radio key={option.value} value={option.value} style={{fontSize:12}}>
+                    {option.label}
+                  </Radio>
+              ))}
+
+              </Radio.Group>
+             }
               {
                ( selectedDays === -2 && propsData?.date_type === "bs" ) && (<div style={{ marginTop: "10px" }}>
                 <RangeDate
@@ -3561,6 +3491,175 @@ from_date: moment().startOf("day").format("YYYY-MM-DDTHH:mm:ss"), // 00:00:00
                 />
               </div>)
               }
+              <div style={{ width: "230px" ,marginLeft:"5px" }}>
+                <Dropdown4
+  dropdownOption={dcdmcschedulesForDropdown}
+  values={dataFilter.c_schedule_type_id}
+  defaultValue={propsData.c_schedule_type_id}
+  handleSelect={(item: any) => {
+    setDataFilter({
+      ...dataFilter,
+      c_schedule_type_id: item?.value,
+    });
+    setListCallReExamming([]);
+
+    dispatch(
+      getListCallReExammingMaster({
+        ...propsData,
+        c_schedule_type_id: item?.value,
+      } as any)
+    );
+  }}
+  variant="simple"
+  placeholder="-- Lý do quay lại --"
+/>
+
+              </div>
+
+              <div style={{ width: "340px" }}>
+                <Dropdown4
+                  dropdownOption={[
+                     {
+                    id:1,
+                    label: "Tất cả",
+                    value: "all"
+                  },...dcdmcschedulesstatus
+                  ]}
+                  values={dataFilter.status}
+                  defaultValue={propsData.status}
+                  handleSelect={(item: any) => {
+                    setDataFilter({ ...dataFilter, status: item?.value });
+                    setListCallReExamming([]);
+                    dispatch(
+                      getListCallReExammingMaster({
+                        ...propsData,
+                        status: item?.value,
+                      } as any)
+                    );
+                  }}
+                  variant="simple"
+                  placeholder="-- Trạng thái --"
+                />
+              </div>
+               <div style={{ width: "200px" }}>
+                <Dropdown4
+                  dropdownOption={[
+                    {
+                    id:1,
+                    label: "Tất cả",
+                    value: 0
+                  }, ...stateLaunchSourceGroups
+                  ]}
+                  values={dataFilter.sourceGroup}
+                  // defaultValue={{
+                  //   id:1,
+                  //   label: "Tất cả",
+                  //   value: 0
+                  // }}
+                  handleSelect={(item: any) => {
+                    setDataFilter({ ...dataFilter, sourceGroup: item?.value });
+                    setListCallReExamming([]);
+                    dispatch(
+                      getListCallReExammingMaster({
+                        ...propsData,
+                        launch_source_group_id: item?.value,
+                      } as any)
+                    );
+                  }}
+                  variant="simple"
+                  placeholder="-- Brand --"
+                />
+              </div>
+                <div style={{ width: "120px" }}>
+                <Dropdown4
+                  dropdownOption={[
+                    {
+                    id:1,
+                    label: "Tất cả",
+                    value: 0
+                  }, ...stateLaunchSource
+                  ]}
+                  values={dataFilter.source}
+                  // defaultValue={{
+                  //   id:1,
+                  //   label: "Tất cả",
+                  //   value: 0
+                  // }}
+                  handleSelect={(item: any) => {
+                    setDataFilter({ ...dataFilter, source: item?.value });
+                    setListCallReExamming([]);
+                    dispatch(
+                      getListCallReExammingMaster({
+                        ...propsData,
+                        launch_source_id: item?.value,
+                      } as any)
+                    );
+                  }}
+                  variant="simple"
+                  placeholder="-- Nguồn --"
+                />
+              </div>
+               <div style={{ width: "100px" }}>
+                <Dropdown4
+                   dropdownOption={[
+                    {
+                    id:1,
+                    label: "Tất cả",
+                    value: "all"
+                  }, ...listF
+                  ]}
+                  values={dataFilter.stateF}
+                //  defaultValue={{
+                //     id:1,
+                //     label: "Tất cả",
+                //     value: "all"
+                //   }}
+                  handleSelect={(item: any) => {
+                    setDataFilter({ ...dataFilter, stateF: item?.value });
+                    setListCallReExamming([]);
+                    dispatch(
+                      getListCallReExammingMaster({
+                        ...propsData,
+                        f_type: item?.value,
+                      } as any)
+                    );
+                  }}
+                  variant="simple"
+                  placeholder="Phân loại"
+                />
+              </div>
+
+               <div style={{ width: "80px" }}>
+                <Dropdown4
+                  dropdownOption={dmYearDoctorSchedules}
+                  values={dataFilter.year}
+                  handleSelect={(item: any) => {
+                    const year = item?.value;
+                    const from_date =  `${year}-01-01 00:00:00` ;
+                    const to_date =  `${year}-12-31 23:59:59`;
+
+                    setDataFilter({
+                      ...dataFilter, from_date: from_date, to_date: to_date,
+                        from_date1: from_date,
+                      to_date1: to_date,
+
+                     });
+                     setSelectedDays(-2);
+                    setListCallReExamming([]);
+                    dispatch(
+                      getListCallReExammingMaster({
+                        ...propsData,
+                        from_date,
+                        to_date,
+                      } as any)
+                    );
+                  }}
+
+                  variant="simple"
+                  placeholder="Năm"
+                />
+              </div>
+              
             </div>
           }
         />
@@ -3783,7 +3882,7 @@ from_date: moment().startOf("day").format("YYYY-MM-DDTHH:mm:ss"), // 00:00:00
       </CModal>
       <CModal
         isOpen={dataAddNote.openAddNote}
-        widths={940}
+        widths={1240}
         title="Ghi chú công việc"
         onCancel={() => {
           setDataAddNote({
@@ -3877,61 +3976,52 @@ from_date: moment().startOf("day").format("YYYY-MM-DDTHH:mm:ss"), // 00:00:00
                     </div>
                   </div>
                 </div>
-
-              <Radio.Group
+   {/* <div style={{maxWidth:"400px",minWidth:"300px"}}>
+                   <Dropdown
+                  dropdownOption={dcdmcschedulesstatus1}
+                  values={dataUpdateStatus.value_text}
+                  defaultValue={dataUpdateStatus.value_text}
+                  handleSelect={(item: any) => {
+                    console.log("item", item);
+                      setSelectedStatus(item.value);
+                 
+                  }}
+                  variant="simple"
+                  placeholder="-- Trạng thái --"
+                /></div> */}
+          <Radio.Group
   onChange={(e) => {
     setSelectedStatus(e.target.value);
-    setDataAddNote({
-      ...dataAddNote,
-      cs_node_content:
-        e.target.value === "new"
-          ? ""
-          : e.target.value === "contact"
-          ? `Đã liên hệ ${stateCount + 1} lần`
-          : e.target.value === "appointment"
-          ? "Đã đặt lịch"
-          : e.target.value === "checkin"
-          ? "Khách hàng đã đến"
-          : "",
-    });
   }}
   value={selectedStatus}
   style={{
-    display: "flex",
+    display: "grid",
+    gridTemplateColumns: "repeat(4, max-content)",
     justifyContent: "start",
     marginTop: "10px",
     gap: "16px",
   }}
 >
-  {dcdmcschedulesstatus.map((option) => {
-    if (option.value === "all") return null; // 👈 Bỏ qua 'all'
-
-    let color = "#000"; // default
-    switch (option.value) {
-      case "new":
-        color = "#B21016";
-        break;
-      case "contact":
-        color = "#007AAE";
-        break;
-      case "appointment":
-        color = "#138535";
-        break;
-      case "checkin":
-        color = "#085820";
-        break;
-      case "canceled":
-        color = "#FF0000";
-        break;
-    }
-
-    return (
-      <Radio key={option.value} value={option.value} style={{ color }}>
-        {option.label}
+  {dcdmcschedulesstatus1
+    .sort((a, b) => a.sequence - b.sequence)
+    .map((item) => (
+      <Radio
+        key={item.value}
+        value={item.value}
+        style={{
+          width: statusWidthMap[item.value] || 200,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "start",
+          whiteSpace: "nowrap",
+          color: statusColorMap[item.value] || "inherit",
+        }}
+      >
+        {item.label}
       </Radio>
-    );
-  })}
+    ))}
 </Radio.Group>
+
 
               </div>
               <div
@@ -3939,11 +4029,13 @@ from_date: moment().startOf("day").format("YYYY-MM-DDTHH:mm:ss"), // 00:00:00
                 style={{
                   marginBottom: "15px",
                   justifyContent: "space-between",
+                  borderTop: "1px solid #ced4da",
+                  paddingTop: "10px",
                 }}
               >
                 <div
                   style={{
-                    fontWeight: 500,
+                    fontWeight: 600,
                     color: "#33333",
                     textTransform: "uppercase",
                   }}
@@ -4302,7 +4394,7 @@ from_date: moment().startOf("day").format("YYYY-MM-DDTHH:mm:ss"), // 00:00:00
       </CModal>
       <CModal
         isOpen={dataUpdateStatus.openUpdateStatus}
-        widths={340}
+        widths={400}
         title="Cập nhật trạng thái"
         onCancel={() => {
           setDataUpdateStatus({
@@ -4313,11 +4405,12 @@ from_date: moment().startOf("day").format("YYYY-MM-DDTHH:mm:ss"), // 00:00:00
           });
         }}
         onOk={async () => {
-          handleUpdateStatus({
-            action: "update_status",
-            id_pk_long: dataUpdateStatus.id_pk_long,
-            value_text: dataUpdateStatus.value_text,
-          });
+          console.log("dataUpdateStatus", dataUpdateStatus.value_text?.value || dataUpdateStatus.value_text );
+           handleUpdateStatus({
+             action: "update_status",
+             id_pk_long: dataUpdateStatus.id_pk_long,
+             value_text: dataUpdateStatus.value_text,
+           });
         }}
         textCancel="Hủy"
         textOK="Cập nhật"

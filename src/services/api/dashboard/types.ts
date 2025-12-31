@@ -17,6 +17,8 @@ export interface ScheduleStatusC {
   key: string;
   value: string;
   value_text: string;
+  display_name: string;
+  sequence: number;
 }
 
 export interface DoctorScheduleTimeC {

@@ -788,20 +788,34 @@ Có đang áp dụng BPTT:</span>
         );
       case 'TDV':
         return (
-          <div className="t-examination_result_tdv">
-            <Typography content="Thuốc điều trị:" />
-            <div className="t-examination_result_tdv_content">
-              <div className="t-examination_result_tdv_content_item">
-                <span>- Lời dặn của Bác sĩ:</span>
-                <Typography content={data?.prescription?.doctor_note} />
+          <div className="t-examination_result_tdv" style={{ border: "none" }}>
+            <div className="t-examination_result_tdv_content" >
+              <div className="t-examination_result_tdv_content_item" style={{display:"flex", flexDirection:"row", gap:"5px",paddingBottom:"5px"}}>
+                <span style={{ fontWeight: "bold" }}>Chẩn đoán:</span>
+                <span>{data?.exams?.diagnose_note }</span>
+              </div>
+            </div>
+            <Typography content="Thuốc điều trị:" styles={{fontSize:"16px",fontWeight:"600"}}/>
+            <div className="t-examination_result_tdv_content" style={{borderTop:"1px solid #ced4da",marginTop:"5px", paddingTop:"5px"}}>
+              <div style={{display:"flex",flexWrap:"wrap"}}>
+                <div className="t-examination_result_tdv_content_item" style={{flex:"0 0 58.333333%", maxWidth:"58.333333%"}}>
+                <span><strong>- Lời dặn của Bác sĩ:</strong> {data?.prescription?.doctor_note} </span>
+                </div>
+                <div className="t-examination_result_tdv_content_item" style={{flex:"0 0 41.666667%", maxWidth:"41.666667%",alignItems:"end",fontStyle:"italic"}}>
+                  <span>Ngày giờ kê đơn thuốc: {moment(data?.prescription?.create_datetime).format('DD/MM/YYYY HH:mm')}</span>
+                <span>Bác sĩ điều trị: <strong> {data?.prescription?.exam_employee?.name}</strong></span>
+              </div>
               </div>
             </div>
             <div className="m-medical_record_chapter">
-              <div className="m-medical_record_chapter_heading">
+              {
+                data?.prescription?.items?.length  > 0 && (<div className="m-medical_record_chapter_heading">
                 <Typography content="VIII. ĐƠN THUỐC:" type="h4" />
-              </div>
+              </div>)
+              }
+              
               <div className="m-medical_record_chapter_content_viii ">
-                {data?.prescription?.items?.length ?
+                {data?.prescription?.items?.length &&
                   <div className="m-medical_record_chapter_content_viii_info">
                     <PublicTable
                       column={columTDV}
@@ -810,7 +824,7 @@ Có đang áp dụng BPTT:</span>
                       listData={data?.prescription?.items}
                     />
                   </div>
-                  : <div><Typography content='Không tìm thấy đơn thuốc' modifiers={['400', 'cg-red', 'center']} /></div>}
+                 }
               </div>
             </div>
           </div>
@@ -1317,7 +1331,7 @@ Có đang áp dụng BPTT:</span>
         <div className="o-categories_customer_right_info" style={{justifyContent:"start", gap:"100px",fontSize:"14px"}}>
           <div className="o-categories_customer_right_info_item" style={{minWidth:"220px"}}>
             <span>Ngày chỉ định:</span>
-            <Typography content={data?.imaging?.servicepoint_create_date ? moment(data?.imaging?.servicepoint_create_date).format('YYYY/MM/DD HH:mm') : '--'} modifiers={['blueNavy', '13x18']} styles={{fontSize:"14px"}}/>
+            <Typography content={data?.imaging?.servicepoint_create_date ? moment(data?.imaging?.servicepoint_create_date).format('DD/MM/YYYY HH:mm') : '--'} modifiers={['blueNavy', '13x18']} styles={{fontSize:"14px"}}/>
           </div>
           <div className="o-categories_customer_right_info_item">
             <span>Mã phiếu:</span>
@@ -1349,7 +1363,7 @@ Có đang áp dụng BPTT:</span>
         }}>
           <div className="o-categories_customer_right_info_item" style={{justifyContent:"start",fontSize:"14px",paddingLeft:"0px"}}>
             <span>Ngày chỉ định:</span>
-            <Typography content={data?.servicepoint_datetime && moment(data?.servicepoint_datetime).format('YYYY/MM/DD HH:mm')} modifiers={['blueNavy', '13x18']} styles={{fontSize:"14px"}}/>
+            <Typography content={data?.servicepoint_datetime && moment(data?.servicepoint_datetime).format('DD/MM/YYYY HH:mm')} modifiers={['blueNavy', '13x18']} styles={{fontSize:"14px"}}/>
           </div>
           <div className="o-categories_customer_right_info_item" style={{justifyContent:"start",fontSize:"14px",paddingLeft:"0px"}}>
             <span>Mã phiếu:</span>
@@ -1369,11 +1383,11 @@ Có đang áp dụng BPTT:</span>
           </div>
           <div className="o-categories_customer_right_info_item"  style={{paddingLeft:"0px"}}>
             <span>Thời gian nhận chỉ định:</span>
-            <Typography content={data?.servicepoint_create_date && moment(data?.servicepoint_create_date).format('YYYY/MM/DD HH:mm')}  modifiers={['blueNavy', '13x18']}  styles={{fontSize:"14px"}}/>
+            <Typography content={data?.servicepoint_create_date && moment(data?.servicepoint_create_date).format('DD/MM/YYYY HH:mm')}  modifiers={['blueNavy', '13x18']}  styles={{fontSize:"14px"}}/>
           </div>
           <div className="o-categories_customer_right_info_item"  style={{paddingLeft:"0px"}}>
             <span>Thời gian duyệt kết quả:</span>
-            <Typography content={data?.approved_datetime && moment(data?.approved_datetime).format('YYYY/MM/DD HH:mm')}  modifiers={['blueNavy', '13x18']} styles={{fontSize:"14px"}}/>
+            <Typography content={data?.approved_datetime && moment(data?.approved_datetime).format('DD/MM/YYYY HH:mm')}  modifiers={['blueNavy', '13x18']} styles={{fontSize:"14px"}}/>
           </div>
           <div className="o-categories_customer_right_info_item"  style={{paddingLeft:"0px"}}>
             <span>Người duyệt kết quả:</span>
@@ -1389,11 +1403,11 @@ Có đang áp dụng BPTT:</span>
           </div>
           <div className="o-categories_customer_right_info_item"  style={{paddingLeft:"0px"}}>
             <span>Thời gian nhận chỉ định:</span>
-            <Typography content={data?.servicepoint_create_date && moment(data?.servicepoint_create_date).format('YYYY/MM/DD HH:mm')}  modifiers={['blueNavy', '13x18']}  styles={{fontSize:"14px"}}/>
+            <Typography content={data?.servicepoint_create_date && moment(data?.servicepoint_create_date).format('DD/MM/YYYY HH:mm')}  modifiers={['blueNavy', '13x18']}  styles={{fontSize:"14px"}}/>
           </div>
           <div className="o-categories_customer_right_info_item"  style={{paddingLeft:"0px"}}>
             <span>Thời gian duyệt kết quả:</span>
-            <Typography content={data?.approved_datetime && moment(data?.approved_datetime).format('YYYY/MM/DD HH:mm')}  modifiers={['blueNavy', '13x18']} styles={{fontSize:"14px"}}/>
+            <Typography content={data?.approved_datetime && moment(data?.approved_datetime).format('DD/MM/YYYY HH:mm')}  modifiers={['blueNavy', '13x18']} styles={{fontSize:"14px"}}/>
           </div>
           <div className="o-categories_customer_right_info_item"  style={{paddingLeft:"0px"}}>
             <span>Người duyệt kết quả:</span>
@@ -1405,11 +1419,11 @@ Có đang áp dụng BPTT:</span>
         <div className="o-categories_customer_right_info o-categories_customer_right_info_pcd"style={{gridTemplateColumns:"repeat(4,1fr)",marginTop:"10px"}}>
           <div className="o-categories_customer_right_info_item" style={{paddingLeft:"0px"}}>
             <span>Thời gian nhận chỉ định:</span>
-                      <Typography content={data?.servicepoint_create_date && moment(data?.servicepoint_create_date).format('YYYY/MM/DD HH:mm')}  modifiers={['blueNavy', '13x18']}  styles={{fontSize:"14px"}}/>
+                      <Typography content={data?.servicepoint_create_date && moment(data?.servicepoint_create_date).format('DD/MM/YYYY HH:mm')}  modifiers={['blueNavy', '13x18']}  styles={{fontSize:"14px"}}/>
           </div>
           <div className="o-categories_customer_right_info_item"  style={{paddingLeft:"0px"}}>
             <span>Thời gian thực hiện:</span>
-            <Typography content={data?.servicepoint_create_date && moment(data?.approved_datetime).format('YYYY/MM/DD HH:mm')}  modifiers={['blueNavy', '13x18']}  styles={{fontSize:"14px"}}/>
+            <Typography content={data?.servicepoint_create_date && moment(data?.approved_datetime).format('DD/MM/YYYY HH:mm')}  modifiers={['blueNavy', '13x18']}  styles={{fontSize:"14px"}}/>
           </div>
          
           <div className="o-categories_customer_right_info_item"  style={{paddingLeft:"0px"}}>
@@ -1422,7 +1436,7 @@ Có đang áp dụng BPTT:</span>
         <div className="o-categories_customer_right_info" style={{}}>
           <div className="o-categories_customer_right_info_item">
             <span>Ngày chỉ định:</span>
-            <Typography content={data?.histopathology?.servicepoint_create_date && moment(data?.histopathology?.servicepoint_create_date).format('YYYY/MM/DD HH:mm')} modifiers={['blueNavy', '13x18']} />
+            <Typography content={data?.histopathology?.servicepoint_create_date && moment(data?.histopathology?.servicepoint_create_date).format('DD/MM/YYYY HH:mm')} modifiers={['blueNavy', '13x18']} />
           </div>
           <div className="o-categories_customer_right_info_item">
             <span>Mã phiếu:</span>
@@ -1434,16 +1448,16 @@ Có đang áp dụng BPTT:</span>
         <div className="t-examination_result_xn_header" style={{display:"flex",justifyContent:"start",alignItems:"center",gap:100, marginTop:0}}>
           <div className="t-examination_result_xn_header_item" style={{minWidth:"200px"}}>
             <span>Thời gian lấy mẫu:</span>
-            <Typography content={data?.take_samples_time ? moment(data?.take_samples_time).format('HH:mm - DD/MM/YYYY') : ''} />
+            <Typography content={data?.take_samples_time ? moment(data?.take_samples_time).format('DD/MM/YYYY HH:mm') : ''} />
           </div>
           <div className="t-examination_result_xn_header_item">
             <span>Thời gian nhập kết quả:</span>
-            <Typography content={data?.approved_time ? moment(data?.approved_time).format('HH:mm - DD/MM/YYYY') : ''} />
+            <Typography content={data?.approved_time ? moment(data?.approved_time).format('DD/MM/YYYY HH:mm') : ''} />
           </div>
            {/* { 
              data?.status !== "done" &&  <div className="t-examination_result_xn_header_item">
              <span>Hẹn trả kết quả lúc:</span>
-             <Typography content={data?.expected_results_time ? moment(data?.expected_results_time).format('HH:mm - DD/MM/YYYY') : ''} />
+             <Typography content={data?.expected_results_time ? moment(data?.expected_results_time).format('DD/MM/YYYY HH:mm') : ''} />
            </div>
              }
          */}
@@ -1504,7 +1518,7 @@ Có đang áp dụng BPTT:</span>
           </div>
           <div className="t-examination_result_xn_header_item">
             <span>Ngày thực hiện:</span>
-            <Typography content={moment(data?.imaging?.approved_date).format('HH:mm DD-MM-YYYY')} />
+            <Typography content={moment(data?.imaging?.approved_date).format('DD/MM/YYYY HH:mm')} />
           </div>
         </div>
       )}
@@ -1520,7 +1534,7 @@ Có đang áp dụng BPTT:</span>
           </div>
           <div className="t-examination_result_xn_header_item">
             <span>Ngày thực hiện: </span>
-            <Typography content={moment(data?.imaging?.approved_date).format('HH:mm DD-MM-YYYY')} />
+            <Typography content={moment(data?.imaging?.approved_date).format('DD/MM/YYYY HH:mm')} />
           </div>
         </div>
       )}
@@ -1536,7 +1550,7 @@ Có đang áp dụng BPTT:</span>
           </div>
           <div className="t-examination_result_gpb_header_item">
             <span>Ngày thực hiện:</span>
-            <Typography content={data?.imaging?.approved_date ? moment(data?.imaging?.approved_date).format('HH:mm DD-MM-YYYY') : '--'} />
+            <Typography content={data?.imaging?.approved_date ? moment(data?.imaging?.approved_date).format('DD/MM/YYYY HH:mm') : '--'} />
           </div>
         </div>
       )}
@@ -1544,7 +1558,7 @@ Có đang áp dụng BPTT:</span>
         <div className="t-examination_result_gpb_header" style={{display:"flex",justifyContent:"start",alignItems:"center",gap:100, marginTop:0}}>
           <div className="t-examination_result_gpb_header_item"style={{minWidth:"220px"}}>
             <span>Ngày khám:</span>
-            <Typography content={data?.in_datetime  ? moment(data?.in_datetime).format('DD/MM/YYYY - HH:mm') : '--'} />
+            <Typography content={data?.in_datetime  ? moment(data?.in_datetime).format('DD/MM/YYYY HH:mm') : '--'} />
           </div>
           <div className="t-examination_result_gpb_header_item">
             <span>Nơi khám:</span>
@@ -1561,7 +1575,7 @@ Có đang áp dụng BPTT:</span>
         <div className="t-examination_result_gpb_header" style={{gridTemplateColumns:"repeat(3,1fr)", paddingLeft:"8px"}}>
           <div className="t-examination_result_gpb_header_item">
             <span>Ngày giờ sàng lọc:</span>
-            <Typography content={data?.survey_datetime ? moment(data?.survey_datetime).format('YYYY/MM/DD HH:mm') : "--"} />
+            <Typography content={data?.survey_datetime ? moment(data?.survey_datetime).format('DD/MM/YYYY HH:mm') : "--"} />
           </div>
           <div className="t-examination_result_gpb_header_item">
             <span>Nơi sàng lọc:</span>
@@ -1574,7 +1588,7 @@ Có đang áp dụng BPTT:</span>
 
           <div className="t-examination_result_gpb_header_item">
             <span>Ngày giờ tiêm:</span>
-           <Typography content={data?.vaccine_datetime  ? moment(data?.vaccine_datetime).format('YYYY/MM/DD HH:mm') : "--"} />
+           <Typography content={data?.vaccine_datetime  ? moment(data?.vaccine_datetime).format('DD/MM/YYYY HH:mm') : "--"} />
           </div>
           <div className="t-examination_result_gpb_header_item">
             <span>Nơi tiêm:</span>
@@ -1587,7 +1601,7 @@ Có đang áp dụng BPTT:</span>
 
           <div className="t-examination_result_gpb_header_item">
             <span>Ngày giờ kiểm tra:</span>
-            <Typography content={data?.check_datetime   ? moment(data?.check_datetime  ).format('YYYY/MM/DD HH:mm') : "--"} />
+            <Typography content={data?.check_datetime   ? moment(data?.check_datetime  ).format('DD/MM/YYYY HH:mm') : "--"} />
           </div>
           <div className="t-examination_result_gpb_header_item">
             <span>Nơi kiểm tra:</span>
@@ -2991,7 +3005,7 @@ Có đang áp dụng BPTT:</span>
     </div>
 
       )}
-      {type !== 'EMR' && type !== 'XNHT' && type !== 'XN' && type !== 'XNSHPT' && type !== 'overview' &&  type !== 'KHAMPK' && type !== 'XNHPV' && type !== 'XNPAP' && type !== 'SLLX'&& type !== 'VACCINE' && type !== 'KHAMTM' && (
+      {type !== 'EMR' && type !== 'XNHT' && type !== 'XN' && type !== 'XNSHPT' && type !== 'overview' &&  type !== 'KHAMPK' && type !== 'XNHPV' && type !== 'XNPAP' && type !== 'SLLX'&& type !== 'VACCINE' && type !== 'KHAMTM'&& type !== 'TDV' && (
         <div className="t-examination_result_header_diagnose_note">
           <span>
             Chẩn đoán:
@@ -3004,7 +3018,7 @@ Có đang áp dụng BPTT:</span>
           >
             {type === 'GPB' && data?.histopathology?.diagnose_note
               || type === 'XQ' && data?.imaging?.diagnose_note
-              || type === 'TDV' && data?.re_exams_card?.diagnose_icd10_text
+              // || type === 'TDV' && data?.re_exams_card?.diagnose_icd10_text
               || type === 'DT' && data?.imaging?.diagnose_note
               || type === 'SA' && data?.imaging?.diagnose_note
                || type === 'NS' && data?.imaging?.diagnose_note
@@ -3549,7 +3563,7 @@ Genotype HPV 18/45
           <div className="t-examination_result_xnshpt_header_row">
             <div className="t-examination_result_xnshpt_header_item">
               <span>Thời gian nhận chỉ định:</span>
-              <Typography content={moment(data?.molecule?.checkin_time).format('HH:mm - DD/MM/YYYY')} />
+              <Typography content={moment(data?.molecule?.checkin_time).format('DD/MM/YYYY HH:mm')} />
             </div>
             <div className="t-examination_result_xnshpt_header_item">
               <span>Người nhận:</span>
@@ -3557,7 +3571,7 @@ Genotype HPV 18/45
             </div>
             <div className="t-examination_result_xnshpt_header_item">
               <span>Thời gian duyệt kết quả:</span>
-              <Typography content={moment(data?.molecule?.checkout_time).format('HH:mm - DD/MM/YYYY')} />
+              <Typography content={moment(data?.molecule?.checkout_time).format('DD/MM/YYYY HH:mm')} />
             </div>
             <div className="t-examination_result_xnshpt_header_item">
               <span>Người duyệt:</span>
